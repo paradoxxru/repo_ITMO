@@ -1,0 +1,27 @@
+p { 
+	font-size: 20px;
+    color: red;
+	/*line-height: 14px;*/
+}
+
+div p a {
+	color: red;
+}
+
+ div > ul {
+ 	color: red;
+ }
+
+ ul ul li
+ ul ul > li
+ {
+ 	color: red;
+ }
+
+ div div div {
+ 	color: red;
+ }
+
+ div + div {
+ 	color: red;
+ }
