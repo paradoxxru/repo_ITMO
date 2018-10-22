@@ -24,5 +24,56 @@
 			</li>
 			<li>Лунтик</li>
 		</ol>
+
+		<div style="font-size: 30px;">test</div>
+		
+		<div class="cercle">
+			cercle
+		</div>
+
+		<div class="triangle"></div>
+
+		<p>ниже делаем треугольник2</p>
+		<div class="triangle2"></div>
+		<!-- этим мы создали пустой элемент.далее в css для класса .triangle мы задаем рамку определенной величины и делаем ее прозрачной.далее задаем размер, который должен занимать элемент, далее задаем рамку
+		с нужной стороны(верх, низ, право или лево) того же размера и окрашиваем ее в нужный цвет -->
+
+		<!-- назначаем один и тот же класс двум разным элементам div и p - получаем разный эффект -->
+		<div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, eaque, rem voluptas voluptate obcaecati, quo quia perferendis error beatae nemo eum optio aspernatur minus! Voluptatibus suscipit in ipsa, quis numquam.</div>
+		<p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum expedita, voluptatem deserunt nostrum voluptates, numquam libero minima blanditiis ducimus. Aliquam explicabo expedita nobis? Eveniet numquam dolore quos neque expedita nulla.</p>
+
+		<div class="overflow">
+			<p>ijeijf;jiejf;j;kjoiducspcisodvvvvvvvvvvvvvvvvvvvvvvpiosduviuspduv</p>
+		</div>
+
+		<div>
+			<p>просто ссылка:
+				<a href="">ссылка</a>
+			</p>
+			<p id="_1s">задаем ссылке 1 св-во display(none):
+				<a href="">ссылка1</a>
+			</p>
+			<p id="_2s">задаем ссылке 2 св-во display(block):
+				<a href="">ссылка2</a>
+			</p>
+			<p id="_3s">задаем ссылке 3 св-во visibility(hidden):
+				<a href="">ссылка3</a>
+			</p>
+		</div>
+		
+		<!--Модальное окно- Чтобы сделать страницу, которая бы затемняла содержимое под ней. Например для меню - когда нажимаем на меню(нажатие здесь не рассматривается) появляется страница, которая оказывается на переднем плане,
+		а "задняя страница" слегка проглядывает из-за нее. на передней странице располагаем меню(div в div-е).
+		Такие страницы обычно пишутся в конце body.
+		Итак делаем модальное окно - 2 вложенных контейнера, один из которых, полупрозрачное перекрытие всего видимого, а второй - непрозрачный блок с контентом. Для выполнения задания необходимо использовать свойства position и top, left, bottom, right-->
+		<div class="overlay">
+			<div class="modelbox">
+				<ul>Menu:
+					<li>элемент</li>
+					<li>элемент</li>
+					<li>элемент</li>
+				</ul> 
+			</div>
+		</div>
+
 	</body>
 </html>

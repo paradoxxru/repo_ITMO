@@ -1,0 +1,72 @@
+html {
+	box-sizing: border-box; /*чтобы свойства width и height задавали размеры не содержимого, а размеры блока*/
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+
+body {
+	box-sizing: inherit;  /*наследуем св-во*/
+	background: #8EB4C4;
+	padding: 0;
+	margin: 0;
+	border: 2px #DB0800;
+}
+
+#wrapper {
+	box-sizing: inherit;
+	padding-top: 2em;  /*отступ. 1em равен текущему размеру шрифта*/
+}
+
+#header {
+	display: flex;
+	position: fixed; /*закрепить заголовок. без прокрутки*/
+	background-color: #8585F5;
+	width: 100%;     /*ширина блока на всю ширину страницы*/
+	top: 0;
+}
+
+a, header {
+	border:1px solid #333333;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#header .logo strong {
+	padding: 10px;
+	display: inline-block;
+}
+
+#header nav {
+	display: flex;
+	flex-grow: 1;
+}
+
+#header nav a {
+	height: inherit;    /*наследуем высоту*/
+	position: absolute; /*относительное позиционирование????*/
+	right: 60px;
+}
+
+#header nav a[href="#menu"]::before, #header nav a[href="#menu"]::after {
+	content: '';
+	position: absolute;
+	background-size: 24px 32px;
+	background-image: url(pic/icon_.png);
+	background-color: #c7b39b;
+	/*float: right;*/
+}
+
+#menu {
+	padding: 5em 20em;
+	position: fixed;
+	left: 0;
+	top: 0;
+}

@@ -1,0 +1,107 @@
+body {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.filling-test {
+	width: 200px;
+	height: 500px;
+	background: #302828b3;
+
+}
+			/*Модальное окно - МЕНЮ*/
+.overlay {
+	position: fixed;
+	background: #b16060b3;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.menu {
+	/*position: absolute;*/
+	font-size: 20px;
+	margin: auto;
+	margin-top: 10em;
+	width: 240px;
+	height: 240px;
+	/*margin: auto;
+	top: 200px;*/
+	/*line-height: 1.5;*/
+}
+.links {
+	display: block;
+	list-style: none;
+	font-family: "Open Sans";
+	text-align: center;
+	line-height: 2;  /*межстрочный интервал*/
+	text-transform: uppercase;  /*все буквы заглавные*/
+	/*letter-spacing: 1em;*/ /*расстояние между буквами*/
+	font-weight: 600; /*Устанавливает насыщенность шрифта. Значение устанавливается от 100 до 900 с шагом 100.*/
+
+}
+
+.links li:not(:first-child) {   /*для всех элементов списка li, являющихся потомками класса links, но
+																			кроме первого элемента li*/
+	border-top: 1px solid #C8A3A3;
+}
+
+.links a, .actions a, .exit-button a {
+	text-decoration: none;  /*убираем подчеркивание ссылок*/
+}	
+
+.actions {						/*возможно стоит объединить с .links*/
+	list-style: none;
+	font-family: "Open Sans";
+	text-align: center;
+	line-height: 2;  /*межстрочный интервал*/
+	text-transform: uppercase;  /*все буквы заглавные*/
+	/*letter-spacing: 1em;*/ /*расстояние между буквами*/
+	font-weight: 600;
+}
+.button-getStarted {
+	display: block;
+	background: #fff;
+	color: #b16060b3;
+	width: 100%;
+	padding: 0 1em;
+	margin: 1em 0;
+}
+.links a, .exit-button a {
+	color: #fff;
+}
+
+.links a:hover, .exit-button a:hover {		/*цвет ссылок первых 4-х кнопок меню при наведении*/
+	color: #B07777;
+}
+.button-logIn:hover {		/*действия при наведении на кнопку(ссылку) LOGIN*/
+	color: #B07777;
+	border: 1px solid #B07777;
+}
+.button-getStarted:hover {		/*действия при наведении на кнопку(ссылку) GET STARTED*/
+	background: #B07777;
+}
+
+.button-logIn {
+	display: block;
+	background: transparent;
+	border: 1px solid #fff;
+	width: 100%;
+	padding: 0 1em;
+	margin: 1em 0;
+	color: #fff;  
+}
+
+.exit-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	text-transform: uppercase;
+	font-family: "Open Sans";
+	font-weight: 600;
+}
