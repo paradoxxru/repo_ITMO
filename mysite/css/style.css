@@ -1,11 +1,11 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
 	padding: 0;
 	border: 0;
 	margin: 0;
-}
-
-* {
-	box-sizing: border-box;
 }
 
 .filling-test {
@@ -17,7 +17,7 @@ body {
 			/*Модальное окно - МЕНЮ*/
 .overlay {
 	position: fixed;
-	background: #b16060b3;
+	background: #b16060f6;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -77,14 +77,14 @@ body {
 }
 
 .links a:hover, .exit-button a:hover {		/*цвет ссылок первых 4-х кнопок меню при наведении*/
-	color: #B07777;
+	color: #B09292;
 }
 .button-logIn:hover {		/*действия при наведении на кнопку(ссылку) LOGIN*/
-	color: #B07777;
-	border: 1px solid #B07777;
+	color: #B09292;
+	border: 1px solid #B09292;
 }
 .button-getStarted:hover {		/*действия при наведении на кнопку(ссылку) GET STARTED*/
-	background: #B07777;
+	background: #B09292;
 }
 
 .button-logIn {
