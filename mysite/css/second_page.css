@@ -1,81 +1,68 @@
-* {
-	box-sizing: border-box;
-}
-
-body {
-	font-family: "Source Sans Pro", Helvetica, sans-serif; 
-	font-size: 14pt;
-	background: #B44848;
-	/*letter-spacing: */
-	margin: 0;
-	/*color: #fff;*/
-}
-
-a {
-	text-decoration: none;
-}
 
 .header {
 	position: fixed;
+	background: #2A2F4A;
 	width: 100%;
-	/*border: 1px solid black;*/
-	padding: 1em;
-	margin: 0 auto;
-	background-color: #b16060f6;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	font-weight: 600;
-
 }
 
-.logo {
-	/*border: 1px solid black;*/
+/*.logo {
 	display: inline-block;
 	font-size: 0.8em;
 	color: #fff;
-}
-.logo strong {
-	/*line-height: 1.65em;*/
+}*/
+/*.logo strong {
 	border-top: 3px solid #fff;
 	border-left: 3px solid #fff;
 	border-bottom: 3px solid #fff;
 	background-color: #fff;
 	color: #b16060f6;
 	padding: 0 0.5em;
-}
-.header a:hover {				/*как сделать чтобы происходили изменения цвета одновременно двух объектов*/
+}*/
+/*.header a:hover {				
 	color: #B09292;
-}
-.logo strong:hover {
+}*/
+/*.logo:hover strong{
 	border-top: 3px solid #B09292;
 	border-left: 3px solid #B09292;
 	border-bottom: 3px solid #B09292;
 	background-color: #B09292;
-}
+}*/
 
 #content {
-	width: 85%;
+	background: #242943;
+	/*width: 90%;*/
 	/*height: 30em;*/
 	/*border: 1px solid black;*/
-	margin: 0 auto;
+	/*margin: 0 auto;*/
 	/*background-color: #3D3852;*/
-	padding: 6em 0 2em 0;
+	padding: 8rem 5%;
+	border-bottom: 1px solid rgba(212, 212, 255, 0.1);
 
 }
 
 h1 {
-	font-size: 2em;
+	display: block; /*если сделать inline, то псевдо элемент h1::after
+	будет подчеркивать сверху картинку идущую за hi */
+	font-size: 2.5rem;
 	color: #fff;
+}
+h1::after {
+	content: "";
+	display: block;
+	/*width: calc(100%-5rem);*/
+	border-bottom: 1px solid #fff;
+	padding-bottom:2rem;
 }
 p {
 	color: #fff;
+	margin-bottom: 2rem; 
 }
 
-.image {
+/*.image {
 	display: block;
 	margin: 2em 0;
 	width: 100%;
-}
+}*/
 .image img {
 	display: block;
 	width: 100%;

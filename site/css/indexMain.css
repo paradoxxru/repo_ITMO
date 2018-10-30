@@ -1,0 +1,286 @@
+* {
+	box-sizing: border-box;
+
+}
+body {
+	margin: 0;
+	color: #fff;
+	font-family: arial;
+}
+
+/*сетка*/
+
+/*.row::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.col-1 {
+	float: left;
+	width: 8.33%;
+}
+.col-2 {
+	float: left;
+	width: 16.66%;
+}
+.col-3 {
+	float: left;
+	width: 25%;
+}
+.col-4 {
+	float: left;
+	width: 33.33%;
+}
+.col-5 {
+	float: left;
+	width: 41.66%;
+}
+.col-6 {
+	float: left;
+	width: 50%;
+}
+.col-7 {
+	float: left;
+	width: 58.33%;
+}
+.col-8 {
+	float: left;
+	width: 66.66%;
+}
+.col-9 {
+	float: left;
+	width: 75%;
+}
+.col-10 {
+	float: left;
+	width: 83.33%;
+}
+.col-11 {
+	float: left;
+	width: 91.66%;
+}
+.col-12 {
+	float: left;
+	width: 100%;
+}*/
+
+/*grid на flexbox*/
+.row {
+	display: flex;
+	align-items: center;
+	/*justify-content: flex-start;*/
+	/*flex-wrap: wrap;*/
+}
+.col-1 {
+	flex-basis: 8.33%;
+	max-width: 8.33%;    
+}
+.col-2 {
+	flex-basis: 16.66%;
+	max-width: 16.66%;
+}
+.col-3 {
+	flex-basis: 25%;
+	max-width: 25%;
+}
+.col-4 {
+	flex-basis: 33.33%;
+	max-width: 33.33%;
+}
+.col-5 {
+	flex-basis: 41.66%;
+	max-width: 41.66%;
+}
+.col-6 {
+	flex-basis: 50%;
+	max-width: 50%;
+}
+.col-7 {
+	flex-basis: 58.33%;
+	max-width: 58.33%;
+}
+.col-8 {
+	flex-basis: 66.66%;
+	max-width: 66.66%;
+}
+.col-9 {
+	flex-basis: 75%;
+	max-width: 75%;
+}
+.col-10 {
+	flex-basis: 83.33%;
+	max-width: 83.33%;
+}
+.col-11 {
+	flex-basis: 91.66%;
+	max-width: 91.66%;
+}
+.col-12 {
+	flex-basis: 100%;
+	max-width: 100%;
+}
+
+header {
+	/*background: #2d284b;*/
+	background-image: url("../pic/banner.jpg");
+
+}
+/*проверить - почему все съезжает вниз если классу .banner указывать margin, а не padding???*/
+/*.header {
+	position: fixed;
+	border: 1px solid black;
+	padding: 1rem;
+	margin: 0 auto;
+	width: 100%;
+}*/
+
+.banner {
+	padding: 8rem 20%;
+}
+
+.banner h1	{
+	border-bottom: 1px solid #fff;
+	padding-bottom: 1rem;
+	/*line-height: 3rem;*/
+}
+
+.banner p {
+	text-transform: uppercase;
+}
+
+.banner a {
+	color: #fff;
+	border: 1px solid;
+	text-decoration: none;
+	padding: 1rem;
+	display: inline-block;
+	/*transform: rotate(90deg);*/
+	/*transition: transform 5s ease;*/
+}
+.banner a:hover {
+	background: #fff;
+	color: black;
+	border: 2px solid #fff;
+	/*transform: rotate(180deg);*/
+}
+
+.text p {
+	float: left;
+	width: 20rem;
+}
+
+.text a {
+	float: left;
+}
+
+/*.clearfix {
+	clear: both;
+}*/
+
+.text::after {
+	content: "";
+	display: block;
+	/*width: 10px;
+	height: 10px;
+	background: #fff;*/
+	clear: both;
+}
+
+/*секция с фото*/
+.photo-block {
+	background-color: black;
+	background-image: url("../pic/pic02.jpg");
+	/*width: 60%;*/        /*отключили пока, из-зм сетки*/
+	/*padding: 5rem;*/
+	/*transform: translate(20px, 40px) scale(1.4);*/  /*посмотреть transform: origin*/
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+.fading {				/*зачем использовать эту "прослойку"*/
+	background: rgba(0, 0, 0, 0.15);
+	height: 100%;
+}
+.mask {
+	background: rgba(127, 255, 212, 0.6);
+	padding: 5rem;
+	transition: background 1s ease 0s;
+	width: 100%;
+	height: 100%;
+}
+.mask:hover {
+	background: rgba(127, 255, 212, 0);  /*можно указать просто none. здесь 0 означает полную прозрачность,
+	но это не opacity*/
+}
+
+
+
+.f-container {
+	display: flex;
+	align-items: baseline;
+	color: black;
+	/*flex-direction: row-reverse;*/
+	flex-direction: row;
+	outline: 1px solid;
+	justify-content: center;
+	/*height: 20px;*/
+}
+/*.f-item {
+	color: black;*/
+}
+.f-item.elem1 {
+	background: #647264;
+	flex-basis: 300px;
+	flex-grow: 8;
+}
+.f-item.elem2 {
+	background: #647344;
+	flex-grow: 2;
+}
+.f-item.elem3 {
+	background: #647764;
+}
+
+/*форма*/
+
+.feedback {
+	background: #242943;
+	border: 1px solid black;
+	padding: 10rem;
+}
+label {
+	display: block;
+	width: 100%;
+	text-transform: uppercase;
+}
+
+input {
+	border: none;
+	background: #2a2f4a;
+	padding: 1rem;
+	outline: none; /*чтоб небыло рамки. в разных браузерах может быть, а может нет*/
+	color: #fff;
+}
+
+/*адаптивность*/
+/*можно писать в grid*/
+@media (min-width: 320px) and (max-width: 767px) {
+.col-1,
+.col-2, 
+.col-3, 
+.col-4, 
+.col-5, 
+.col-6, 
+.col-7, 
+.col-8, 
+.col-9, 
+.col-10,
+.col-11,
+.col-12
+{
+	flex-basis: 100%;
+	max-width: 100%;
+}
+.row {
+	flex-wrap: wrap;
+}
+}

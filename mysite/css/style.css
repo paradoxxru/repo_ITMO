@@ -16,6 +16,7 @@ body {
 }
 			/*Модальное окно - МЕНЮ*/
 .overlay {
+	/*display: none;*/
 	position: fixed;
 	background: #b16060f6;
 	top: 0;
@@ -33,6 +34,9 @@ body {
 	/*margin: auto;
 	top: 200px;*/
 	/*line-height: 1.5;*/
+}
+.menu ul {
+	padding: 0;
 }
 .links {
 	display: block;
@@ -104,4 +108,9 @@ body {
 	text-transform: uppercase;
 	font-family: "Open Sans";
 	font-weight: 600;
+}
+
+/*для тестов*/
+.noList {		/*убрать у списка паддинги - чтобы слева не оставалось поля(для правильной центровки)*/
+	padding: 0;
 }
