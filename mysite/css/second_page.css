@@ -3,53 +3,28 @@
 	position: fixed;
 	background: #2A2F4A;
 	width: 100%;
+	/*z-index: 1;*/ /*чтобы при прокрутки вниз(на второй и третей странице) кнопка меню была все еще
+	 поверх всех блоков(чтобы на нее можно было нажать). так как в блоке форм используется 
+	 абсолбтное позиционирование - элемент ниже по коду с таким позиционированием становиться "ближе" всех
+	 по слою. При задании индекса только здесь класс header будет выше*//*Отключил, так как отказался 
+	 от абсолютного позиционирования*/
 }
-
-/*.logo {
-	display: inline-block;
-	font-size: 0.8em;
-	color: #fff;
-}*/
-/*.logo strong {
-	border-top: 3px solid #fff;
-	border-left: 3px solid #fff;
-	border-bottom: 3px solid #fff;
-	background-color: #fff;
-	color: #b16060f6;
-	padding: 0 0.5em;
-}*/
-/*.header a:hover {				
-	color: #B09292;
-}*/
-/*.logo:hover strong{
-	border-top: 3px solid #B09292;
-	border-left: 3px solid #B09292;
-	border-bottom: 3px solid #B09292;
-	background-color: #B09292;
-}*/
 
 #content {
 	background: #242943;
-	/*width: 90%;*/
-	/*height: 30em;*/
-	/*border: 1px solid black;*/
-	/*margin: 0 auto;*/
-	/*background-color: #3D3852;*/
 	padding: 8rem 5%;
 	border-bottom: 1px solid rgba(212, 212, 255, 0.1);
-
 }
 
 h1 {
-	display: block; /*если сделать inline, то псевдо элемент h1::after
-	будет подчеркивать сверху картинку идущую за hi */
+	display: inline-block;
 	font-size: 2.5rem;
 	color: #fff;
 }
 h1::after {
 	content: "";
 	display: block;
-	/*width: calc(100%-5rem);*/
+	width: calc(100% + 2rem);
 	border-bottom: 1px solid #fff;
 	padding-bottom:2rem;
 }
@@ -58,11 +33,6 @@ p {
 	margin-bottom: 2rem; 
 }
 
-/*.image {
-	display: block;
-	margin: 2em 0;
-	width: 100%;
-}*/
 .image img {
 	display: block;
 	width: 100%;

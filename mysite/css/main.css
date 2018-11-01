@@ -2,13 +2,13 @@
 	box-sizing: border-box;
 }
 body {
-	/*font-family: arial;*/
 	font-family: 'Open Sans', sans-serif;
 	color: #fff;
 	margin: 0;
 }
 #header {
 	background-image: url("../pic/banner.jpg");
+	background-attachment: fixed; /*фоновое изображение вместе с содержимым элемента не будет прокручиваться*/
 }
 a {
 	color: #fff;
@@ -25,13 +25,23 @@ a {
 .banner p{
 	text-transform: uppercase;
 }
+/*для кнопки Get Start со стрелкой*/
 .banner a {
-	/*color: #fff;*/
 	border: 1px solid #fff;
-	padding: 0.5rem;
-	/*text-decoration: none;*/
+	padding: 0;
 	display: inline-block;
 }
+.banner ul {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+}
+.banner li {
+	display: inline-block;
+	padding: 0.5rem 1rem;
+}
+/*конец кнопки*/
 
 .banner .floatfix p {
 	float: left;
@@ -42,14 +52,11 @@ a {
 	float: left;
 }
 
-
+/*"закрываем" flot элемент*/
 .floatfix::after {
 	content: "";
 	clear: both;
 	display: block;
-	/*width: 10px;
-	height: 10px;
-	background: #fff;*/
 }
 
 .logo {
@@ -65,10 +72,7 @@ a {
 	text-transform: uppercase;
 	letter-spacing: 0.2rem;
 }
-/*.logo a {
-	text-decoration: none;
-	color: #fff;
-}*/
+
 .logo a strong {
 	padding: 0.4rem;
 	background: #fff;
@@ -85,17 +89,17 @@ a:hover {
 	background: #9bf1ff;
 }
 
-/*кнопка МЕНЮ*/
+	/*кнопка МЕНЮ*/
 .navigation strong {
 	float: left;
 	padding-right: 0.5rem;
-	/*width: 10rem;*/
 }
 .navigation span {
 	float: right;
 }
 
-	/*блок Main*/
+						/*блок Main*/
+
 .float40 {
 	float: left;
 	width: 40%;
@@ -105,15 +109,9 @@ a:hover {
 	width: 60%;
 }
 .block-content {
-	/*background-image: url("../pic/pic08.jpg");*/
 	background-repeat: no-repeat;
 	background-size: cover;		/*Масштабирует изображение с сохранением пропорций так,
 	 чтобы его ширина или высота равнялась ширине или высоте блока.*/
-	/*background-color: #3C3EAB;*/
-	/*border: 1px solid black;*/
-	/*padding: 8rem;*/
-	/*opacity: 0.3;*/
-	/*z-index: 100; */
 	position: relative;		/*чтобы далее позиционировать ссылку absolut*/
 }
 		/*ссылка внутри каждого блока .block-content, "чтобы блоки были ссылками"*/
@@ -123,20 +121,14 @@ a:hover {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	/*z-index: 1;*/
 }
 
 					/*задние фоны для каждого блока*/
 .section1 .block-content.float40 {
 	background-image: url("../pic/pic01.jpg");
-	/*opacity: 0.3;*/
-	/*z-index: 1;*/
-
 }
 .section1 .block-content.float60 {
 	background-image: url("../pic/pic02.jpg");
-	/*opacity: 0.3;*/
-	/*z-index: 1;*/
 }
 .section2 .block-content.float60 {
 	background-image: url("../pic/pic03.jpg");
@@ -159,72 +151,42 @@ a:hover {
 	transition: background 1s ease 0s;
 }
 
-						/*передние фоны(mask) - пока только первые две*/
-.section1 .block-content.float40 .mask {
+						/*передние фоны(mask)*/
+.section1 .float40 .mask {
 	background: rgba(84, 199, 178, 0.6);
 }
-.section1 .block-content.float60 .mask {
+.section1 .float60 .mask {
 	background: rgba(155, 84, 199, 0.6);
 }
-.section2 .block-content.float60 .mask {
+.section2 .float60 .mask {
 	background: rgba(199, 111, 111, 0.6);
 }
-.section2 .block-content.float40 .mask {
+.section2 .float40 .mask {
 	background: rgba(240, 183, 127, 0.6);
 }
-.section3 .block-content.float40 .mask {
+.section3 .float40 .mask {
 	background: rgba(111, 145, 199, 0.6);
 }
-.section3 .block-content.float60 .mask {
+.section3 .float60 .mask {
 	background: rgba(111, 199, 160, 0.6);
 }
 
 
 
 						/*смена заднего фона ссылки при наведении(убираем фон)*/
-/*почему так не работает???????*/
-/*.block-content:hover .mask{
-	background: none;
-}*/
-/*.block-content:hover .img-links {
-	background: none;
-}*/
-/*section .block-content:hover .img-links {
-	background: none;
-}*/
 
-/*работает только так, когда указываешь конкретно на каждый блок, но хотельсь бы одно правило для всех*/
+#goStart section .block-content:hover .mask {
+	background: none;
+}
 
-.section1 .block-content.float40:hover .mask {
-	background: none;
-}
-.section1 .block-content.float60:hover .mask {
-	background: none;
-}
-.section2 .block-content.float60:hover .mask {
-	background: none;
-}
-.section2 .block-content.float40:hover .mask {
-	background: none;
-}
-.section3 .block-content.float40:hover .mask {
-	background: none;
-}
-.section3 .block-content.float60:hover .mask {
-	background: none;
-}
 
 
 .block-content h3 {
-	/*padding-bottom: 1rem;*/
 	margin: 0;
-	/*z-index: 10001;*/
 }
 .block-content p {
 	display: inline-block;
 	margin: 0;
-	/*z-index: 1001;*/
-	/*border-top: 1px solid #fff;*/
 }
 .block-content p::before {		/*подчеркивание за границы блока p*/
 	content: "";
@@ -322,15 +284,12 @@ a:hover {
 }
 .item-flex {
 	flex-basis: calc(50% - 2rem);
-	/*margin-right: 2rem; */
 }
 label {
 	display: block;
 	margin: 0 0 1rem 0;
 	text-transform: uppercase;
 	letter-spacing: 0.1rem;
-	/*font-weight: 600;*/
-	/*font-size: 0.6rem;*/
 }
 input {
 	display: block;
@@ -342,10 +301,7 @@ input {
 	width: 100%;
 	border: none;
 }
-form input:focus {
-	/*border-color: #9bf1ff;*/
-	box-shadow: 0 0 0 2px #9bf1ff;	/*тень*/
-}
+
 /*для input стоит required(запрет на отправку если поле не заполнено), 
 при этом в браузере поле обрамляется красной рамкой. ниже св-во чтобы рамку красную убрать*/
 input:invalid {
@@ -396,25 +352,40 @@ textarea {
 }
 
 
-/*правая секция контактов*/
+		/*правая секция контактов*/
 
 .right-section section {
-	padding: 4rem 0 2rem 2rem;
-	position: relative;
+	padding: 4rem 0 2rem 3rem;
 }
 .right-section section:not(:last-child) {
 	border-bottom: 1px solid rgba(212, 212, 255, 0.1);
 }
-.contacts {
-	padding: 0 0 2rem 2rem;
-	position: relative;
-}
-.contacts span.fa {
-	position: absolute;
-	left: 0;
-	top: 0;
-}
 
+
+/*св-ва для иконок шрифта awesom(не являющихся ссылками)*/
+.icon-fa {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #242943;
+	background: #fff;
+	font-size: 1.2rem;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+}
+.contacts {
+	padding: 0.5rem 0 2rem 1.5rem;
+}
+.contacts h3 {
+	margin: 0 0 2rem 0;
+}
+.contacts a {
+	border-bottom: 1px dotted #fff;
+}
+.contacts a:hover {
+	border: none;
+}
 			/* - FOOTER - */
 #footer {
 	background: #242943;
@@ -428,47 +399,45 @@ textarea {
 }
 .icon-footer li {
 	display: inline-block;
-	/*width: 20px;*/
-	/*height: 20px;*/
 	padding: 0;
-	margin-right: 4rem;
-	/*border: 1px solid #fff;*/
-	/*border-radius: 50%;*/
-	/*background-color: #fff;*/
-	/*color: #242943;*/
+	margin-right: 2rem;
 }
-/* делаем круг вокруг иконок шрифта awesom и помещаем иконку в центр */
-/*НО КРУГ не является ССЫЛКОЙ - почему???*/
-.icon-cercle-center {
+/*св-ва для иконок шрифта awesom(являющихся ссылками)*/
+.icon-footer a {
 	display: flex;
-	width: 40px;
-	height: 40px;
-	border: 1px solid #fff;
-	border-radius: 50%;
 	justify-content: center;
 	align-items: center;
+	color: #242943;
+	background: #fff;
+	font-size: 1.2rem;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;	
 }
-
-/*.icon-footer a {
-	display: block;
-	width: 100%;
-	height: 100%;
-}*/
+.icon-footer a:hover {
+	background: #9bf1ff;
+}
 
 .copyright li {
 	display: inline-block;
 	padding: 0 1rem 0 0;
-	border-right: 1px solid rgba(212, 212, 255, 0.1);
+	/*border-right: 1px solid rgba(212, 212, 255, 0.1);*/
 	color: rgba(244, 244, 255, 0.2);
 }
-.copyright li:not(:first-child) {     /*для всех потомков li сласса copyright, кроме первого*/
+/*для всех потомков li сласса copyright, кроме первого*/
+.copyright li:not(:first-child) {
 	padding-left: 1rem;
+}
+.copyright li:not(:last-child) {
+	border-right: 1px solid rgba(212, 212, 255, 0.1);
 }
 .copyright a {
 	border-bottom: 1px dotted rgba(212, 212, 255, 0.1);
+	color: rgba(244, 244, 255, 0.2);
 }
 .copyright a:hover {
 	border: none;
+	color: #9bf1ff;
 }
 		/* конец footer */
 
@@ -483,6 +452,8 @@ textarea {
 	right: 0;
 	bottom: 0;
 	left: 0;
+	/*z-index: 2;*/ /*чтобы перекрыть logo+menu, так как использовался z-index 
+	в закрепленном Меню(на 2 и 3 страницах)*/
 }
 /* чтобы срабатывала кнопка Menu и открывалось модальное окно */
 #menu:target {
@@ -499,7 +470,7 @@ textarea {
 .menu ul {
 	padding: 0;
 }
-.links {
+.links, .actions {
 	display: block;
 	list-style: none;
 	font-family: "Open Sans";
@@ -520,15 +491,6 @@ textarea {
 	text-decoration: none;  /*убираем подчеркивание ссылок*/
 }	
 
-.actions {						/*возможно стоит объединить с .links*/
-	list-style: none;
-	font-family: "Open Sans";
-	text-align: center;
-	line-height: 2;  /*межстрочный интервал*/
-	text-transform: uppercase;  /*все буквы заглавные*/
-	/*letter-spacing: 1em;*/ /*расстояние между буквами*/
-	font-weight: 600;
-}
 .button-getStarted {
 	display: block;
 	background: #fff;
@@ -620,5 +582,11 @@ body {
 }
 .icon-footer li {
 	margin-right: 0.5rem;
+}
+.copyright li:not(:first-child) {
+	padding-left: 0;
+}
+.copyright li {
+	padding: 0 0.5rem 0 0;
 }
 }

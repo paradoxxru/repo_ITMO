@@ -123,6 +123,40 @@
 		
 	</section>	
 
+	<!-- grid layout-->
+	<!--почитать вендерные префиксы к grid layout . почитать про grid aria-->
+	<style>
+		.item {
+			background: orange;
+			border: 1px solid black;
+		}
+		.grid-container {
+			display: grid;
+			/*grid-template-columns: 100px 200px;
+			grid-template-rows: 100px 200px;
+			grid-gap: 10px*/
+		}
+		/*используем grid-column и grid-row, вместо grid-template-(так как некоторые браузеры могут не поддерживать grid-template-)*/
+		.item:first-child {
+			grid-column: 1 / 7;
+		}
+		.item:nth-child(2) {
+			grid-column: 1 / 7;
+		}
+		.item:nth-child(3) {
+			grid-column: 1 / 7;
+		}
+		.item:last-child {
+			grid-column: 7 / 10;
+			grid-row: 1 / 4;
+		}
+	</style>
+	<div class="grid-container">
+		<div class="item">one</div>
+		<div class="item">two</div>
+		<div class="item">three</div>
+		<div class="item">four</div>
+	</div>
 
 </body>
 </html>

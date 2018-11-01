@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous"> 
 </head>
 <body>
 						<!-- Header -->
@@ -25,7 +25,7 @@
 					<a href="#menu">
 						<strong>Menu</strong>		<!--если исрользовать тэг p, то все съедет,
 						 так как p блочный-->
-						<span class="fa fa-navicon"></span>
+						<span class="fas fa-bars"></span>
 					</a>
 				</nav>
 			</div>
@@ -35,7 +35,17 @@
 			<h1>Приветствие</h1>
 			<div class="floatfix">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam aliquam iste error, unde quis quibusdam iu.</p>
-				<a href="#goStart">Начать</a>
+				<!--кнопка Get start со стрелкой-->				
+				<a href="#goStart">
+					<ul class="no-list">
+						<li>
+							<span>Get Started</span>
+						</li>
+						<li>
+							<span class="fas fa-long-arrow-alt-right fa-2x"></span>
+						</li>
+					</ul>
+				</a>
 			</div>
 		</div>
 	</header>
@@ -96,7 +106,18 @@
 			<h3>Masa libero</h3>
 			<div>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam veritatis quaerat vero, deserunt ipsum vitae, odio et consequatur perspiciatis, voluptate iure nisi maiores eaque? Quos autem commodi veniam cumque. Odit.</p>
-				<a href="">Начать</a>
+				<!--кнопка Get start со стрелкой-->				
+				<a href="">
+					<ul class="no-list">
+						<li>
+							<span>Get Started</span>
+						</li>
+						<li>
+							<span class="fas fa-long-arrow-alt-right fa-2x"></span>
+						</li>
+					</ul>
+				</a>
+					
 			</div>
 		</div>
 	</section>
@@ -139,30 +160,42 @@
 			<!-- правая секция (контактная информация)-->
 			<section class="right-section col-4">
 				<section>
-					<div class="contacts">
-						<span class="fa fa-envelope"></span>
-						<h3>email</h3>
-						<a href="">myemail@adress.com</a>
+					<div class="row">
+						<div class="icon-fa">
+							<span class="fas fa-envelope"></span>
+						</div>
+						<div class="contacts">	
+							<h3>Email</h3>
+							<a href="">myemail@adress.com</a>
+						</div>	
 					</div>
 				</section>
 				<section>	
-					<div class="contacts">
-						<span class="fa fa-phone"></span>
-						<h3>Phone</h3>
-						<span>+79210000000</span>
+					<div class="row">
+						<div class="icon-fa">
+							<span class="fas fa-phone"></span>
+						</div>
+						<div class="contacts">
+							<h3>Phone</h3>
+							<span>+79210000000</span>
+						</div>	
 					</div>
 				</section>	
 				<section>	
-					<div class="contacts">
-						<span class="fa fa-home"></span>
-						<h3>Adress</h3>
-						<span>
-							190025 St-Petersberg
-							<br>
-							Nevskiy avenue, 36
-							<br>
-							Russian Federation
-						</span>
+					<div class="row">
+						<div class="icon-fa">
+							<span class="fas fa-home"></span>
+						</div>
+						<div class="contacts">
+							<h3>Adress</h3>
+							<span>		
+								190025 St-Petersberg
+								<br>
+								Nevskiy avenue, 36
+								<br>
+								Russian Federation
+							</span>
+						</div>	
 					</div>
 				</section>	
 			</section>
@@ -174,44 +207,21 @@
 		<div class="footer">
 			<section class="icon-footer">
 				<div>
-					<!--<a class="fa fa-linkedin" href=""></a>
-					<a class="fa fa-linkedin" href=""></a>
-					<a class="fa fa-linkedin" href=""></a>-->
 					<ul class="no-list">
 						<li>
-							<div class="icon-cercle-center">
-								<span>
-									<a class="fa fa-twitter" href=""></a>
-								</span>
-							</div>
+							<a class="fab fa-twitter" href=""></a>	
 						</li>
 						<li>
-							<div class="icon-cercle-center">
-								<span>
-									<a class="fa fa-facebook" href=""></a>
-								</span>
-							</div>
+							<a class="fab fa-facebook-f" href=""></a>
 						</li>
 						<li>
-							<div class="icon-cercle-center">
-								<span>
-									<a class="fa fa-instagram" href=""></a>
-								</span>
-							</div>
+							<a class="fab fa-instagram" href=""></a>
 						</li>
 						<li>
-							<div class="icon-cercle-center">
-								<span>
-									<a class="fa fa-github" href=""></a>
-								</span>
-							</div>
+							<a class="fab fa-github" href=""></a>
 						</li>
 						<li>
-							<div class="icon-cercle-center">
-								<span>
-									<a class="fa fa-linkedin" href=""></a>
-								</span>
-							</div>
+							<a class="fab fa-linkedin-in" href=""></a>
 						</li>
 					</ul>
 				</div>
@@ -244,7 +254,7 @@
 					<a href="main.html">Home</a>
 				</li>
 				<li>
-					<a href="">элемент меню2</a>
+					<a href="">empty</a>
 				</li>
 				<li>
 					<a href="second_page.html">About Irma</a>
