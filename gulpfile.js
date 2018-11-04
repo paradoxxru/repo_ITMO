@@ -35,6 +35,7 @@
         //Серия команд
         let all = gulp.series(images, html, css, assets, lessBuild);
         gulp.task('default', all)
+        
         function assets () {
             console.log("assets has been updated");
             return gulp.src([
@@ -73,3 +74,33 @@
             this.emit('end');
         }
         gulp.task('less', lessBuild);
+
+
+        let del = require('del'); //Удаление
+
+        //Удалить public
+        function clean() {
+            console.log("Catalog /public has been cleaned");
+              return del(['../public'], {force: true}) 
+              // Для удаления файлов во внешних директориях параметр force
+              
+        }
+
+        gulp.task('clean', clean);
+
+
+       	let browserSync = require('browser-sync').create();
+
+        //Наблюдатель
+        gulp.task('watch', function() {
+        // Синхронизация с браузером
+        browserSync.init({
+                 server: {
+                     baseDir: "../public/site"
+            }
+        });
+
+        // Наблюдение
+        gulp.watch('./site/** /*.*', all)
+            .on('change', browserSync.reload); //Перезагрузка BS
+        })
