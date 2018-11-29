@@ -28,10 +28,12 @@ a {
 /*для кнопки Get Start со стрелкой*/
 .banner a {
 	border: 1px solid #fff;
-	padding: 0;
+	padding: 0.5rem 1rem;
 	display: inline-block;
+	text-transform: uppercase;
 }
-.banner ul {
+
+/*.banner ul {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -40,7 +42,7 @@ a {
 .banner li {
 	display: inline-block;
 	padding: 0.5rem 1rem;
-}
+}*/
 /*конец кнопки*/
 
 .banner .floatfix p {

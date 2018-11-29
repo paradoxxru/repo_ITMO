@@ -2029,10 +2029,4 @@ console.log(str4.match(pattern));
 */
 
 
-			//Лекция ....(стр 151)
-// JQuery
-//Подключение JQuery
-//Через CDN
-//<script src=”https://code.jquery.com/jquery-3.3.1.min.js”></script>
-//Либо скачать или установить
-//https://jquery.com/download/
+			//дописываем
