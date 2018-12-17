@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" id="svg5012" viewBox="0 0 247.24 164.98" version="1.1">
+ <title id="title5705">bicyclette</title>
+ <g id="layer1" stroke-linejoin="round" transform="translate(-376.79 -715.25)" stroke="#000" stroke-linecap="round">
+  <path id="path5115" d="m528.05 707.69a37.22 38.383 0 1 1 -74.439 0 37.22 38.383 0 1 1 74.439 0z" transform="matrix(-1.1754 0 0 1.176 1156.2 1.8407)" stroke-width="1.7011" fill="#fff"/>
+  <path id="path5680" d="m528.05 707.69a37.22 38.383 0 1 1 -74.439 0 37.22 38.383 0 1 1 74.439 0z" transform="matrix(-.99444 0 0 .99512 1067.8 130.38)" stroke-width="1.0052" fill="none"/>
+  <path id="path5637" d="m537.46 784.35 14.425 7.7089 24.524 36.845c-2.3546 1.1228-4.7092 2.789-7.0639-1.5993l-21.012-30.16-11.779-6.2877z" fill="#fff"/>
+  <path id="path5672" d="m548 748.83-4.8246 20.263-4.503-0.32164 5.7895-20.585z" fill="#fff"/>
+  <path id="path5635" d="m538.97 764.44-17.748 57.7 7.0639 1.2033 16.837-58.147z" stroke-width="2" fill="#fff"/>
+  <path id="path5627" d="m528.05 707.69a37.22 38.383 0 1 1 -74.439 0 37.22 38.383 0 1 1 74.439 0z" transform="matrix(-1.1754 0 0 1.176 998.47 1.5389)" stroke-width="1.7011" fill="#fff"/>
+  <path id="path5629" d="m528.05 707.69a37.22 38.383 0 1 1 -74.439 0 37.22 38.383 0 1 1 74.439 0z" transform="matrix(-.99444 0 0 .99512 909.44 129.55)" stroke-width="1.0052" fill="none"/>
+  <path id="path5653" d="m452.27 759.75c11.153 21.774 19.602 41.955 42.951 60.163l85.77 9.5067-1.0652 5.88-67.535-0.44161c0.303 1.1172 0.47751 2.281 0.47751 3.4913 0 7.5335-6.2422 13.634-13.958 13.634-7.7159 0-13.995-6.1008-13.995-13.634 0-2.7385 0.85458-5.2868 2.2774-7.4235-13.759-13.672-39.318-51.518-40.518-52.424-1.8101-1.3686 5.5944-18.752 5.5944-18.752z" stroke-width="2" fill="#fff"/>
+  <path id="path5678" d="m438.91 729.11 16.764-13.36 25.377 2.7844 0.32164 5.4679-22.2-1.9688-6.7544 10.614z" fill="#fff"/>
+  <path id="path5676" d="m439.28 734.64c-0.90974-0.22743-25.359 8.0739-25.359 8.0739l0.22744 1.8195 26.269-8.5288z" fill="#fff"/>
+  <path id="path5674" d="m442.59 771.21c-1.3646 0-24.374-0.48246-24.374-0.48246-2.7369 0.0785-3.765-2.2323-3.9606-4.0272-1.3352-10.47-1.695-19.703-2.5018-29.339l2.0469-0.11372c0.63241 9.225 1.1023 17.784 2.2743 28.088 0.12458 1.4784 0.24425 3.6306 3.5057 3.3839l23.92 0.18842" fill="#fff"/>
+  <path id="path5631" d="m449.72 749.36-32.773 80.722 6.8841 2.0443 36.105-84.371-3.4228-20.274c-7.3064 0.86849-10.123-6.5539-16.449 0.20257-3.6606 9.1844 6.9595 11.8 9.6551 21.677z" stroke-width="2" fill="#fff"/>
+  <path id="path5656" d="m545.39 685.06a8.6425 8.8699 0 1 1 -17.285 0 8.6425 8.8699 0 1 1 17.285 0z" transform="matrix(-1.1754 0 0 1.176 1129.9 31.113)" stroke-width=".85055" fill="#fff"/>
+  <path id="path5658" d="m502.18 836.48 18.178 19.257-7.4852-0.53493-17.257-19.177z" fill="#fff"/>
+  <path id="path5660" d="m523.57 852.52 0.14765 6.4992-15.118-0.0801 0.53466-6.954z" fill="#fff"/>
+  <path id="path5639" d="m561.61 733.92c5.4799 5.8326 2.7434 10.976-1.0299 13.371-3.9877 2.0556-8.1122 4.2618-11.329 5.4696-9.7868-4.0522-14.753-8.8843-25.774-10.453-4.0604-3.4575-1.1111-4.987 1.0299-6.7388l23.412 0.11851c5.1268-3.1428 9.5605-2.9168 13.691-1.7668z" fill="#fff"/>
+ </g>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+    <dc:publisher>
+     <cc:Agent rdf:about="http://openclipart.org/">
+      <dc:title>Openclipart</dc:title>
+     </cc:Agent>
+    </dc:publisher>
+   </cc:Work>
+   <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+   </cc:License>
+  </rdf:RDF>
+ </metadata>
+</svg>

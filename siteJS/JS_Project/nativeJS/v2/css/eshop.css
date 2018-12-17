@@ -1,0 +1,233 @@
+
+body {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    justify-content: stretch;
+}
+aside {
+    border:1px solid black;
+    margin-right: 20px;
+    min-width: 250px;
+}
+
+section {
+    border:1px solid black;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column; <!--class="sorting" и class="catalog" будут снизу вверх -->
+    flex: auto;
+}
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 4px 5px;
+    font-size: 12px;
+    /*font-weight: 700;*/
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    /*white-space: nowrap;*/
+    vertical-align: middle;
+    background-color: #7776;
+    border-radius: 50%;
+}
+section ul {
+    list-style: none;
+    display: inline;
+    padding: 0 40px 0 10px;
+}
+
+section ul li {
+    display: inline; /*элементы списка в строку*/
+}
+#find {
+    display: inline-block;
+    margin: 0 0 0 5rem;
+}
+#basket {
+    display: inline-block;
+    /*border:1px solid red;*/
+    margin: 0 0 0 5rem;
+}
+
+.catalog {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.catalog>div { /*div-ы, но только прямые потомки класса catalog*/
+    /*border:1px solid red;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin: 10px;
+}
+.catalog__item{
+    border:1px solid green;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+img {
+    width: 200px;
+    height: 200px;
+}
+
+.catalog .full_basket {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.basket__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+}
+.basket__item-name, .basket__item-description {
+    display: block;
+}
+.left_div {
+    max-width: 80%;
+    min-width: 80%;
+}
+.right_div>span {
+    display: block;
+}
+
+.catalog .full-data {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 1rem;
+}
+.flex button {
+    max-width: 100px;
+    margin-top: 1rem;
+}
+.flex div span {
+    display: block;
+}
+
+.small_images img {
+    width: 40px;
+    height: 40px;
+}
+.full_basket h1 {
+    margin: auto;
+}
+
+
+/*
+html {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+body {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    justify-content: stretch;
+}
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #777;
+    border-radius: 10px;
+}
+aside {
+    margin-right: 20px;
+    flex-shrink: 3;
+    min-width: 250px;
+}
+section {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    justify-content: stretch;
+    flex-shrink: 9;
+}
+.filter {
+    margin-bottom: 20px;
+}
+section ul {
+    list-style: none;
+    display: inline;
+}
+section ul li {
+    display: inline;
+}
+.catalog {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+.catalog>div{
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+
+}
+.catalog__item {
+    margin: 10px;
+}
+.catalog__item img {
+    width: 200px;
+    height: 200px;
+}
+*/
+/*изменения*/
+/*
+.sorting span:not(:end-child) {
+    margin-left: 2rem;
+}
+.sorting ul {
+    padding: 0;
+}
+#basket {
+    display: inline-block;
+}
+#basket a:first-child {
+    margin-left: 200px;
+}
+.catalog__item {
+    border: 1px solid rgba(212, 212, 255, 0.3);
+}
+.basket__item-name, .basket__item-description{
+    display: block;
+}
+.catalog .full_basket {
+    margin-top: 4rem;
+    flex-direction: column;
+}
+.basket__item {
+    padding: 1rem 0; 
+}
+*/

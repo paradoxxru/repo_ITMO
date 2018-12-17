@@ -199,22 +199,27 @@ document.addEventListener('DOMContentLoaded',function(e) {
 	console.log(parent);
 	var div = document.createElement('div');
 	var span = document.createElement('span');
-	var button1 = document.createElement('button');
-	var button2 = document.createElement('button');
-	var button3 = document.createElement('button');
-	var button4 = document.createElement('button');
+	//var button1 = document.createElement('button');
+	//var button2 = document.createElement('button');
+	//var button3 = document.createElement('button');
+	//var button4 = document.createElement('button');
 	var example = getExample();//см. ниже следующую задачу
 	span.innerText = example; //см. ниже следующую задачу
-	button1.innerText = 'нажимай1';
-	button2.innerText = 'нажимай2';
-	button3.innerText = 'нажимай3';
-	button4.innerText = 'нажимай4';
+	var answers = getAnswers(example);//см. ниже
+	for (var i=0; i<4; i++) {	
+		var button = document.createElement('button');
+		button.innerText = answers[i];
+		div.appendChild(button);
+		//button2.innerText = 'нажимай2';
+		//button3.innerText = 'нажимай3';
+		//button4.innerText = 'нажимай4';
+	}
 	parent.prepend(div);
-	div.appendChild(span);
-	div.appendChild(button1);
-	div.appendChild(button2);
-	div.appendChild(button3);
-	div.appendChild(button4);
+	div.prepend(span);
+	//div.appendChild(button1);
+	//div.appendChild(button2);
+	//div.appendChild(button3);
+	//div.appendChild(button4);
 });
 
 //Задача 19
@@ -230,11 +235,36 @@ function getExample() {
 //Напишите программу, которая для предыдущего примера генерирует 4 разных варианта ответов
 // (один из них должен быть верный) и выводит их в виде кнопок под вопросом/задачей.
 function getAnswers(str) {
-	var opd1=0;
-	var opd2=0;
-	//тело
-	return arr; //возвращаем массив из 4-х элементов(варианты ответа)
+	var reg = /\d+/g;
+	var arr_str = str.match(reg);
+	correct_answer = parseInt(arr_str[0]) + parseInt(arr_str[1]);
+	var n = Math.round(Math.random()*3);
+	var arr=[];
+	for (var i=0; i<4 ; i++) {
+		if (i == n) {
+			arr[i] = correct_answer;
+		}
+		else arr[i] = Math.round(Math.random()*100);
+	}
+	return arr; //возвращаем массив из 4-х элементов(варианты ответа, один из которых правильный)
 }
+var correct_answer;
+//Задача 21
+//Напишите программу-обработчик для предыдущего задания, которая обрабатывает нажатия на кнопки с вариантами ответов
+// и выводит через alert() результат прохождения теста.
+document.addEventListener('DOMContentLoaded', function(e){
+	document.onclick = function(event) {
+		var click = event.target;
+		var answer = click.innerText;
+		console.log('кликнули на:');
+		console.log(click);
+		console.log('выбран ответ');
+		console.log(answer);
+		if (answer == correct_answer) alert('ответ верный');
+		else alert('вы ошиблись');
+	}
+});	// конец document.addEventListener
+
 
 
 

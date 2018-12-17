@@ -21,7 +21,8 @@ $(document).ready(function() { // ждем формир ДОМ дерева
 		//printGoodsList($('#list'));	
 
 	//получить список категорий со счетчиком товара из списка товаров goods и вывести в html
-	//cats = getCatListFromGoodsWC(goods);
+	//cats = getCatListFromGoodsWC(goods); - так делали раньше
+	//рассмотрим другой подход	
 		//создаем новый ассоц массив(пустой) -у него будет ключ - название категория, значение - кол-во товара
 		var arr = [];
 		//для каждого товара выполняем
@@ -41,7 +42,10 @@ $(document).ready(function() { // ждем формир ДОМ дерева
 		for (arr_category in arr) {
 			//создаем новый html элемент и выводим на экран
 				// <li> Категория <span> Кол-во товара </span> </li>
-				ul.append('<li>' + arr_category + '<span> Кол-во ' + arr[arr_category] + '</span></li>');
+				ul.append('<li class="test">' + 
+					arr_category + 
+					'<span data-action="test_action"> Кол-во ' + 
+					arr[arr_category] + '</span></li>');
 		}
 
 });

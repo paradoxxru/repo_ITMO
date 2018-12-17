@@ -1963,7 +1963,7 @@ r5 = str.match( /ой/ig );
 r6 = str.match( /ой/gi );
 //console.log('r1- '+r1+ ' r2- '+ r2+' r3- '+ r3 + ' r4- '+ r4 + ' r5- '+ r5 + ' r6- '+ r6);
 
-//для автоматич проверки кода можно использовать регулярные выражения!!! - перед публикацией удалять consile.log и тд
+//для автоматич проверки кода можно использовать регулярные выражения!!! - перед публикацией удалять console.log и тд
 
 //Основные метасимволы
 //  ^     начало строки
@@ -2027,12 +2027,93 @@ str4 = '11 + ( 23 + 45 ) + (7 -   876) + ( 23 * 45 ) + ( 23 / 45 )';
 var pattern = /\(\D*(\d+)\s*([+-/*])\s*(\d+)\s*\)/g;
 console.log(str4.match(pattern));
 */
+var str6 = 'Цена: 15000 руб.';
+var reg_pattern = /\d+/g;
+console.log('Цена: 15000 руб.');
+console.log(parseInt(str6.match(reg_pattern)));
+var qwerty = parseInt(str6.match(reg_pattern))
+console.log(typeof(qwerty));
 
-
-			//Лекция ....(стр 151)
+			//Лекция ....(стр 151) - см. файл jquery.js
 // JQuery
 //Подключение JQuery
 //Через CDN
 //<script src=”https://code.jquery.com/jquery-3.3.1.min.js”></script>
 //Либо скачать или установить
 //https://jquery.com/download/
+
+
+			//json
+var emp = {
+	fio: 'Va Va',
+	position: 'SEO',
+	exp: 12
+};
+console.log(emp);
+
+//этот же объект в виде текст строки через json
+var j_emp = JSON.stringify(emp);
+console.log(j_emp);
+
+var emps = [
+	{
+		fio: 'Va Va',
+		position: 'SEO',
+		exp: 12
+	},
+	{
+		fio: 'Vo Vo',
+		position: 'SIO',
+		exp: 8
+	}
+];
+console.log(emps);
+var j_emps = JSON.stringify(emps);
+// получим строку "[{"fio":"Va Va","position":"SEO","exp":12},{"fio":"Vo Vo","position":"SIO","exp":8}]"
+console.log(j_emps);
+
+//обратное преобр
+emps = JSON.parse(j_emps);
+console.log(emps);
+
+//поменяем местами объекты(строки)
+j_emps = '[{"fio":"Vo Vo","position":"SIO","exp":8},{"fio":"Va Va","position":"SEO","exp":12}]'
+var emps2 = JSON.parse(j_emps);
+console.log(emps2);
+
+// Аякс запросы (через Jquery)
+//$.post('http://r2ls.ru/', {}, function(data){}); //1- адрес документа, к которому обращаемся, 
+									//2 - обект {category: 'C1'} (например, можем запросить конкретно что хотим)
+									//Например, сервер умеет отдавать различное количество товаров по параметру count
+									// Задать этот параметр можно следующим образом: {count: 10}
+								//3 - ф-ция, котор будет обрабатывать ответ от сервера(после ответа сервера)
+
+//внутри data будет содержаться текст строка (json строка)
+// в data - содержится текст всей страницы(в том числе с тегами, на странице их просто нет)
+$.post('http://r2ls.ru/', {category: 'Cat-4'}, function(data){ // category: 'Cat-4' - не работает
+	console.log(data);
+	data = JSON.parse(data); //преобразуем в массив обектов
+	console.log(data);
+}); 
+//http://r2ls.ru/1.html  - будет ошибка(из-за крос доменных запросов) - отклониться браузером
+/*$.post('http://r2ls.ru/1.html', {}, function(data){
+	console.log(data);
+	data = JSON.parse(data); //преобразуем в массив обектов
+	console.log(data);
+}); */
+/*
+$.post('http://qaru.site/questions/1253/how-to-sort-an-array-of-objects-by-multiple-fields', {}, function(data){
+	console.log(data);
+});
+*/
+
+		//Хранение данных
+//cookie - это св-во объекта documrnt - это массив данных(строка), к которому можно обращаться
+//document.cookie
+
+
+//сессия (в cookie храниться номер сессии)
+
+//localStorage
+//localStorage.cart - добавили св-во cart в локальное хранилище(будет доступно на всех страницах)
+//localStorage.cart;
