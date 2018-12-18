@@ -52,7 +52,7 @@ section ul li {
     margin: 0 0 0 5rem;
 }
 
-.catalog {
+.catalog, .basket {
     display: -webkit-flex;
     display: flex;
     flex-direction: row;
@@ -60,7 +60,7 @@ section ul li {
     justify-content: center;
     flex-wrap: wrap;
 }
-.catalog>div { /*div-ы, но только прямые потомки класса catalog*/
+.catalog>div, .basket>div { /*div-ы, но только прямые потомки класса catalog*/
     /*border:1px solid red;*/
     display: flex;
     flex-direction: column;
@@ -78,7 +78,7 @@ img {
     height: 200px;
 }
 
-.catalog .full_basket {
+.basket .full_basket {
     display: flex;
     flex-direction: column;
     width: 100%;

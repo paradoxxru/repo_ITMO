@@ -41,9 +41,9 @@ function eventSortByWeightUp() {
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=WeidhtDown(сортировка по убыванию веса)
-function eventSortByWeidhtDown() {
+function eventSortByWeightDown() {
 	catalog.empty();//.innerHTML = '';
-	goods = sort(goods, sortWeidhtDown);
+	goods = sort(goods, sortWeightDown);
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=PopularityUp(сортировка по возрастанию популярности)
@@ -86,7 +86,7 @@ function sortWeightUp(a,b) {
 	return a.weight <= b.weight;
 }
 //правило сортировки по убыванию веса
-function sortWeidhtDown(a,b) {
+function sortWeightDown(a,b) {
 	return a.weight >= b.weight;
 }
 //правило сортировки по возрастанию популярности
@@ -162,9 +162,9 @@ function fillingFilterByWeight() {
 }
 ////ф-ция, заполняющая список по популярности <ul class="filter__popularity">
 function fillingFilterByPopularity() {
-	var number_lowPopularity = 0; //для подсчета товаров с популярностью до 9
+	var number_lowPopularity = 0; //для подсчета товаров с популярностью до 30
 	for (var i in goods) {
-		if (goods[i].popularity < 9)
+		if (goods[i].popularity < 30)
 			number_lowPopularity ++;
 	}
 	//создаем элементы html
@@ -379,7 +379,7 @@ function calcSummInfoBasket(click) {
 			$('#sum_weight').text('Общий вес: ' + totalWeight);
 			$('#sum_cost2').text('Общая стоимость : ' + totalCost);
 	}	
-	//меняем стоимость элемента и его кол-во(если мы в корзине)
+	//меняем стоимость элемента и его кол-во(если мы в корзине и нажили на +/-)
 	if ($(click).parent().prev().attr('data-cost') != undefined) {	//то есть нажали на + или -
 		var el_id = $(click).parent().parent().prev().attr('id');
 		console.log('el_id: '+el_id);
@@ -452,7 +452,7 @@ function plusItemBasket(click) {
 	//вызываем ф-цию, считающую и выводящую инфу по полной стоимости, весу, кол-ве
 	calcSummInfoBasket(click);
 }
-//
+//ф-ция запрашивает еще раз массив товаров с сервера и выводит в каталог
 function printFullListGoods() {
 	console.log('вывести в каталог все товары');
 	$.post('http://r2ls.ru/', {seed:1}, function(data){ // AJAX запрос
@@ -499,7 +499,7 @@ var filter_popularity; // будет содержать ссылку на эле
 var cats; //будет содержать названия катигорий товаров и кол-во товара данной категории
 var basket = []; // ассоц.массив товаров в корзине. будет содержать ключ-имя товарова, значение - объект с полями:
                  //count- кол-во, cost- цена, weight- вес, idElement- id товара
-var actions = { //объект действий при клике на разные ссылки - его поля соответствуют значениям атрибутов data-action
+var actions = { //объект действий при клике на разные элементы - его поля соответствуют значениям атрибутов data-action
 	show_basket: showBasket,	//значение полей это ссылки на ф-ции
 	put_in_basket: putInBasket,
 	show_one_item: showOneItem,
@@ -544,7 +544,7 @@ $(document).ready(function(e){
 		//обрабатываем клик по элементу с id=WeightUp(если кликнули по сортировке -"по увеличению веса")
 		$('#WeightUp').click(eventSortByWeightUp);
 		//обрабатываем клик по элементу с id=WeidhtDown(если кликнули по сортировке -"по уменьшению веса")
-		$('#WeidhtDown').click(eventSortByWeidhtDown);
+		$('#WeightDown').click(eventSortByWeightDown);
 		//обрабатываем клик по элементу с id=PopularityUp(если кликнули по сортировке -"по увелич. популярности")
 		$('#PopularityUp').click(eventSortByPopularityUp);
 		//обрабатываем клик по элементу с id=PopularityUp(если кликнули по сортировке -"по уменьш. популярности")

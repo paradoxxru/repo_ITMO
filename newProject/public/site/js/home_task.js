@@ -1,0 +1,1 @@
+function calcSumm(...a){return summ=0,a.forEach(function(a){summ+=a}),summ}function upperFirstStr(a){var b="",c=a.length;for(i=0;i<c;i++)b+=0==i?a[i].toUpperCase():a[i].toLowerCase();return b}console.log(upperFirstStr("sd KJH j HKky iug"));
