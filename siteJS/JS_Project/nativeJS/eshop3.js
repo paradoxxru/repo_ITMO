@@ -43,36 +43,42 @@ function printOneElement(el) { //принимает элемент, которы
 //ф-ция, обрабатывающая клик по элементу с id=CostUp(сортировка по возрастанию цены)
 function eventSortByCostUp() {
 	catalog.innerHTML = ''; //сначала стираем "каталог"
+	result_search.innerHTML = '';
 	goods = sort(goods, sortCostUp); //сортировка по возраст цены
 	printCatalogList(goods, catalog); //выводим уже отсортированный массив товаров
 }
 //ф-ция, обрабатывающая клик по элементу с id=CostDown(сортировка по убыванию цены)
 function eventSortByCostDown() {
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	goods = sort(goods, sortCostDown);
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=WeightUp(сортировка по возрастанию веса)
 function eventSortByWeightUp() {
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	goods = sort(goods, sortWeightUp);
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=WeidhtDown(сортировка по убыванию веса)
 function eventSortByWeidhtDown() {
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	goods = sort(goods, sortWeidhtDown);
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=PopularityUp(сортировка по возрастанию популярности)
 function eventSortByPopularityUp() {
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	goods = sort(goods, sortPopularityUp);
 	printCatalogList(goods, catalog);
 }
 //ф-ция, обрабатывающая клик по элементу с id=PopularityDown(сортировка по убыванию популярности)
 function eventSortByPopularityDown() {
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	goods = sort(goods, sortPopularityDown);
 	printCatalogList(goods, catalog);
 }
@@ -273,6 +279,7 @@ function showBasket() {
 	console.log('работает action - вывод корзины');
 	//удаляем содержимое каталлога
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	//выводим в каталог товары из корзины
 	var div_parent = document.createElement('div');
 	div_parent.className = 'full_basket';
@@ -378,6 +385,7 @@ function showOneItem() {
 	var id_item = click.parentElement.attributes.getNamedItem('id').value;//берем у родителя значение атрибута id
 	console.log(id_item);
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	for (i in goods) {
 		if (goods[i].idnumber == id_item) {
 			var div1 = document.createElement('div');
@@ -425,6 +433,7 @@ function printCategory() {
 	console.log('работает action- вывод в каталог выбранной категории товаров');
 	//чистим каталог
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	//определяем по какой категории кликнули
 	var goods_category = click.attributes.getNamedItem('data-category').value;
 	//выводим товары по выбранной категории в каталог
@@ -437,6 +446,7 @@ function printCost() {
 	console.log('работает action- вывод в каталог товаров по стоимости больше/меньше 10000');
 	//чистим каталог
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	//определяем по какой категории кликнули
 	var goods_cost = click.attributes.getNamedItem('data-price').value;
 	console.log(goods_cost);
@@ -458,6 +468,7 @@ function printCost() {
 function printWeight() {
 	console.log('работает action- вывод в каталог товаров по весу больше/меньше 10кг');
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	var data_weight = click.attributes.getNamedItem('data-weight').value;
 	console.log(data_weight);
 	if (data_weight == 'less-10') {
@@ -477,6 +488,7 @@ function printWeight() {
 function printPopularity(){
 	console.log('работает action- вывод в каталог товаров по популярности(от 0 до 9 или от 9 до 35)');
 	catalog.innerHTML = '';
+	result_search.innerHTML = '';
 	var data_popularity = click.attributes.getNamedItem('data-popularity').value;
 	console.log(data_popularity);
 	if (data_popularity == 'less-9') {
@@ -602,6 +614,7 @@ function printFullGoods() {
 		}
 		console.log(goods);
 		catalog.innerHTML = '';
+		result_search.innerHTML = '';
 		//вывести все имеющиеся товары(первоначальное состояние страницы) в каталог (<div class="catalog">)
 		printCatalogList(goods, catalog);
 		console.log('проверка массива goods после перезапроса');
@@ -624,15 +637,150 @@ function delElementBasket() {
 	console.log(basket);
 	showBasket();
 }
-//ф-ция поиска товара
-function searchItem() {
+//ф-ция поиска товара 
+//ф-ция вызывается из html документа!!!
+// вот таким способом - <input type="button" name="enter" value="GO" onclick="searchItem()">
+function searchItem() { 
 	console.log('мы в поиске товара');
-	var test2 = document.getElementById('search').value;
+	var user_input = document.getElementById('search').value;
 	//var test = document.search.value;
-	console.log('что ввели: ' + test2);
+	console.log('что ввели: ' + user_input);
+	var reg =  new RegExp(user_input , 'i'); //создаем регулярное выражение вида /наша переменная/i
+	console.log('reg'); console.log(user_input);
+	//общий массив совпадений
+	var search_arr = []; //массив всех совпадений
+	goods.forEach(function(el) {
+		if (el.description.match(reg) || el.name.match(reg)) {
+			var el_search = {};	
+			el_search.description = el.description;
+			el_search.name = el.name;
+			el_search.cost = el.cost;
+			el_search.weight = el.weight;
+			el_search.popularity = el.popularity;
+			el_search.category = el.category;
+			el_search.idnumber = el.idnumber;
+			el_search.image = el.image;
+			el_search.reg = user_input;
+			if(el.description.match(reg))
+				el_search.fieldDescript = "yes";
+			if(el.name.match(reg))
+				el_search.fieldName = "yes";
+			search_arr.push(el_search);
+		}
+	});
+	console.log('получили общий массив совпадений');
+	console.log(search_arr);
+
+	// вызываем ф-цию вывода по поиску
+	printResultSearch(search_arr); 
+}
+//ф-ция выводящая результат поиска
+function printResultSearch(arr) {		//принимаем массив совпадений
+	console.log('сейчас выведем результаты поиска');
+	catalog.innerHTML = '';
+	result_search.innerHTML = '';
+	var h1 = document.createElement('h1');
+	h1.innerText = 'Результаты поиска';
+	result_search.appendChild(h1);
+	var h3_1 = document.createElement('h3');
+	//считаем кол-во совпадений по имени и описанию
+	var len_name = 0;
+	var len_descrip = 0;
+	for (var i in arr) {
+		if (arr[i].fieldName == "yes"){
+			len_name++;
+		}
+		if (arr[i].fieldDescript == "yes")
+			len_descrip++;
+	}
+	h3_1.innerText = 'По имени ( '+ len_name +' совпадений:)'
+	result_search.appendChild(h3_1);
+	var div_byname = document.createElement('div');
+	div_byname.className = 'result_search__byName flex';
+	result_search.appendChild(div_byname);
+	var h3_2 = document.createElement('h3');
+	h3_2.innerText = 'По описанию ( ' + len_descrip + ' совпадений:)';
+	result_search.appendChild(h3_2);
+	var div_bydescr = document.createElement('div');
+	div_bydescr.className = 'result_search__bydescr flex';
+	result_search.appendChild(div_bydescr);
+	//вызываем ф-цию вывода элементов массива в соответстующие div-ы(если нашли по имени то в 
+	// <div class="result_search__byName flex"> , если по описанию то 
+	//в <div class="result_search__byDescription flex">)
+	printSearchElements(div_byname, div_bydescr, arr);
+}
+//
+function printSearchElements(parent1, parent2 , arr) {	
+	arr.forEach(function(el) {
+		var reg = new RegExp(el.reg, 'i');
+
+		var div1_item = document.createElement('div');
+		div1_item.className = 'result_search__item';
+		var div1 = document.createElement('div');
+		div1.id = el.idnumber;
+		div1.className = 'small_images';
+		var img1 = document.createElement('img');
+		img1.src = el.image;
+		img1.className = 'do-action';
+		img1.setAttribute('data-action', 'show_one_item');
+		div1.appendChild(img1);
+		div1_item.appendChild(div1);
+		var div2 = document.createElement('div');
+		div2.id = el.idnumber;
+		var span1 = document.createElement('span');
+		span1.className = 'do-action';
+		span1.setAttribute('data-action', 'show_one_item');
+		//span1.innerText = 'Название: ' + el.name;
+		var span2 = document.createElement('span');
+		span2.className = 'do-action';
+		span2.setAttribute('data-action', 'show_one_item');
+		//span2.innerText = 'Описание: ' + el.description;
+
+		var span3 = document.createElement('span');
+		span3.className = 'do-action';
+		span3.setAttribute('data-action', 'show_one_item');
+		span3.innerText = 'Вес: ' + el.weight;
+		var span4 = document.createElement('span');
+		span4.className = 'do-action';
+		span4.setAttribute('data-action', 'show_one_item');
+		span4.innerText = 'Популярность: ' + el.popularity;
+		var span5 = document.createElement('span');
+		span5.className = 'do-action';
+		span5.setAttribute('data-action', 'show_one_item');
+		span5.innerText = 'Цена: ' + el.cost;
+		var button = document.createElement('button');
+		button.innerText = 'Добавить в корзину';
+		button.setAttribute('data-action', 'put_in_basket');
+		div2.appendChild(span1);
+		div2.appendChild(span2);
+		div2.appendChild(span3);
+		div2.appendChild(span4);
+		div2.appendChild(span5);
+		div2.appendChild(button);
+		div1_item.appendChild(div2);
+		
+		if (el.fieldName == "yes") {
+			var new_str =el.name.replace(reg, "<b>"+el.reg.toUpperCase()+"</b>");
+			span1.innerHTML = "Название: " + new_str;
+			console.log('строка по имени теперь');
+			console.log(span1.innerHTML);
+			span2.innerText = 'Описание: ' + el.description;
+			var new_vid = div1_item.cloneNode(true); //создаем глубокую(со всеми вложенными элементами)
+			// копию элемента div1_item(иначе при совпадении и в имени и в описании не вывести div1_item
+			// в два разных div-а)
+			parent1.appendChild(new_vid);
+		}
+		if (el.fieldDescript == "yes") {
+			var new_str =el.description.replace(reg, "<b>"+el.reg.toUpperCase()+"</b>");
+			span2.innerHTML = "Описание: " + new_str;
+			span1.innerText = 'Название: ' + el.name;
+			parent2.appendChild(div1_item);
+		}
+	});
 }
 
 var catalog; //глобально. будет содержать ссылку на элемент <div class="catalog">
+var result_search; // будет содержать ссылку на элемент <div class="result_search">
 var filter_categories; //глобально. будет содержать ссылку на элемент <ul class="filter__categories">
 var filter_cost;	//глобально. будет содержать ссылку на элемент <ul class="filter__cost">
 var filter_weight; //будет содержать ссылку на элемент <ul class="filter__weight">
@@ -655,7 +803,6 @@ var actions = { //объект действий при клике на разн�
 	full_goods: printFullGoods,
 	del_element_basket: delElementBasket
 	}
-//var goods_test;
 var goods; //массив объектов(товаров) - будем получать через AJAX запрос
 
 document.addEventListener('DOMContentLoaded', function(e){
@@ -664,17 +811,22 @@ document.addEventListener('DOMContentLoaded', function(e){
 	//clearCatalogListHTML();	 // очистить каталог товаров в html //будем использовать другой метод очистки(см. ниже)
 	catalog = document.getElementsByClassName('catalog')[0];
 	catalog.innerHTML = ''; //очищаем все в <div class="catalog">
+	result_search = document.getElementsByClassName('result_search')[0];
+	result_search.innerHTML = ''; //очищаем все в <div class="result_search flex">
 	$.post('http://r2ls.ru/', {seed:1}, function(data){ // AJAX запрос
 		goods = JSON.parse(data); //преобразуем в массив обектов и помещаем в переменную goods
 		//console.log(goods_test);
 		//преобразуем массив к используемому мной
 		for (var i=0; i<goods.length; i++) {
-			goods[i].popularity = Math.round(Math.random()*35);
+			//goods[i].popularity = Math.round(Math.random()*35);
 			goods[i].image = 'images/'+(i+1)+'.svg';
 			goods[i].idnumber = 'id'+i;
 			//goods[i].description = RndText.sentences(4, 3, 9); //из подключенного модуля. генерируем 4 предложения,
 											//в каждом случайное кол-во слов(от 3 до 9)
 		}
+		goods[0].name = "gowww";
+		goods[9].name = "go2";
+		goods[8].name = "go4";
 		console.log(goods);
 
 		//вывести все имеющиеся товары(первоначальное состояние страницы) в каталог (<div class="catalog">)

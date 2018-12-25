@@ -8,11 +8,14 @@
 <body>
     <aside>
         <div class = "reset_filter">
-            <p>Сбросить фильтры <a href="#" data-action="full_goods">X</a></p>
+            <p>Сбросить фильтры
+                <a href="#" class="do-action" data-action="full_goods">X</a>
+            </p>
         </div>
         <div class="filter">
             <p>По категории</p>
             <ul class="filter__categories">
+                <!-- Шаблон вывод фильтра по категориям -->
                 <li><a href="#" data-category="Категория 1">Категория 1</a> <span class="badge">20</span></li>
                 <li><a href="#" data-category="Категория 2">Категория 2</a> <span class="badge">12</span></li>
                 <li><a href="#" data-category="...">...</a> <span class="badge">32</span></li>
@@ -33,6 +36,7 @@
                 <li><a href="#" data-popularity="less-9">Не популярные(от 0 до 9)</a> <span class="badge">1</span></li>
                 <li><a href="#" data-popularity="more-9">Популярные(от 9 до 35)</a> <span class="badge">1</span></li>
             </ul>
+            <!--<p><a href="#" data-action="filter" data-type="greater" data-filter="cost" data-value="-1">Показать все товары</a></p>-->
         </div>
     </aside>
     <section class="main">
@@ -40,10 +44,10 @@
             <span>Стомость</span>
             <ul>
                 <li>
-                    <a id='CostUp' href="#">↑</a> <!--по возрастанию цены -->
+                    <a id="CostUp" href="#">↑</a>
                 </li>
                 <li>
-                    <a id='CostDown' href="#">↓</a> <!--по убыванию цены -->
+                    <a id="CostDown" href="#">↓</a>
                 </li>
             </ul>
             <span>Вес</span>
@@ -52,7 +56,7 @@
                     <a id="WeightUp" href="#">↑</a>
                 </li>
                 <li>
-                    <a id="WeidhtDown" href="#">↓</a>
+                    <a id="WeightDown" href="#">↓</a>
                 </li>
             </ul>
             <span>Популярность</span>
@@ -67,10 +71,10 @@
             <div id="find">
                 <span>Поиск: </span>
                 <input type="text" id="search">
-                <input type="button" name="enter" value="GO" onclick="searchItem()">
+                <input type="button" id="SearchButton" name="enter" value="Search"> <!-- onclick="searchItem()">  -->
             </div>
             <div id="basket">
-                <a href="#" data-action="show_basket">Корзина</a>
+                <a href="#" class="do-action" data-action="show_basket">Корзина</a>
                 <span id="summ_goods">0</span>
                 <span id="summ_cost">0</span>
             </div>
@@ -79,22 +83,15 @@
             <div class="catalog__item">
                 <span class="catalog__item-name">Название товара</span>
                 <img class="catalog__item-preview" src="images/im1.svg" alt="">
-                <spa class="catalog__item-cost">10 000р</spa>
+                <span class="catalog__item-cost">10 000р</span>
             </div>
-            <div class="catalog__item">
-                <span class="catalog__item-name">Название товара</span>
-                <img class="catalog__item-preview" src="images/im1.svg" alt="">
-                <spa class="catalog__item-cost">10 000р</spa>
-            </div>
-            <div class="catalog__item">
-                <span class="catalog__item-name">Название товара</span>
-                <img class="catalog__item-preview" src="images/im1.svg" alt="">
-                <spa class="catalog__item-cost">10 000р</spa>
-            </div>  
+        </div>
+        <div class="basket">
+            <p>test</p>
         </div>
         <div class="result_search flex">
             <h1>Результат поиска</h1>
-            <h3>По имени</h2>
+            <h3>По имени</h3>
             <div class="result_search__byName flex">
                 <div class="result_search__item">
                     <div class="small_images">
@@ -123,7 +120,7 @@
                     </div>
                 </div>    
             </div>
-            <h3>По описанию</h2>
+            <h3>По описанию</h3>
             <div class="result_search__byDescription flex">
                 <div class="result_search__item">
                     <div class="small_images">
@@ -155,8 +152,6 @@
         </div>
     </section>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <!--<script type="text/javascript" src="goods.js"></script>-->
-    <script type="text/javascript" src="modul_for_eshop.js"></script>
-    <script type="text/javascript" src="eshop3.js"></script>
+    <script src="eshop_jquery_v3.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 var catalog; //будет содержать ссылку на элемент <div class="catalog">
-var class_basket;
+var class_basket; //будет содержать ссылку на элемент <div class="basket">
+var result_search; // будет содержать ссылку на элемент <div class="result_search">
 var filter_categories; //будет содержать ссылку на элемент <ul class="filter__categories">
 var filter_cost;	//будет содержать ссылку на элемент <ul class="filter__cost">
 var filter_weight; //будет содержать ссылку на элемент <ul class="filter__weight">
@@ -7,23 +8,25 @@ var filter_popularity; // будет содержать ссылку на эле
 var cats; //массив будет содержать названия катигорий товаров и кол-во товара данной категории
 var basket = []; // ассоц.массив товаров в корзине. будет содержать ключ-имя товарова, значение - объект с полями:
                  //count- кол-во, cost- цена, weight- вес, idElement- id товара
-var actions = {//объект действий при клике на разные элементы - его поля соответствуют значениям атрибутов data-action
-	filter: filterBy,
-	show_basket: showBasket,	//значение полей это ссылки на ф-ции
-	put_in_basket: putInBasket,
-	show_one_item: showOneItem,
-	minus_ItemBasket: minusItemBasket,
-	plus_ItemBasket: plusItemBasket,
-	del_element_basket: delElementBasket,
-	full_goods: printFullListGoods,
-}
+// var actions = {//объект действий при клике на разные элементы - его поля соответствуют значениям атрибутов data-action
+// 	filter: filterBy,
+// 	show_basket: showBasket,	//значение полей это ссылки на ф-ции
+// 	put_in_basket: putInBasket,
+// 	show_one_item: showOneItem,
+// 	minus_ItemBasket: minusItemBasket,
+// 	plus_ItemBasket: plusItemBasket,
+// 	del_element_basket: delElementBasket,
+// 	full_goods: printFullListGoods,
+// }
 var goods; //массив объектов(товаров) - будем получать через AJAX запрос
 
 $(document).ready(function(event) {
 	catalog = $('.catalog').first();
 	class_basket = $('.basket').first();
+	result_search = $('.result_search').first();
 	catalog.empty();
 	class_basket.empty();
+	result_search.empty();
 	$.post('http://r2ls.ru/', {seed:1}, function(data){ // AJAX запрос
 		goods = JSON.parse(data); //преобразуем в массив обектов и помещаем в переменную goods
 		//преобразуем массив к используемому мной
@@ -31,6 +34,9 @@ $(document).ready(function(event) {
 			goods[i].image = 'images/'+(i+1)+'.svg';
 			goods[i].idnumber = 'id'+i;
 		}
+		//goods[0].name = "gowww";
+		//goods[9].name = "go2";
+		//goods[8].name = "go4";
 		console.log(goods);
 		//вывести все имеющиеся товары(первоначальное состояние страницы) в каталог (<div class="catalog">)
 		printCatalogList(goods, catalog);
@@ -73,20 +79,34 @@ $(document).ready(function(event) {
 	$('#PopularityUp').click(eventSortByPopularityUp);
 	//обрабатываем клик по элементу с id=PopularityUp(если кликнули по сортировке -"по уменьш. популярности")
 	$('#PopularityDown').click(eventSortByPopularityDown);
+			//обработчик клика по кнопки поиска
+	//.........
+	$('#SearchButton').on('click', searchItem);
 
 			//обработка всех кликов по элементам с классом do-action
-	$(document).on('click', '.do-action', function(event) { //.on означает все действия(клик, 
-	 //наведение мышью и тд), далее определяются условия отбора('click', '.do-action') - значит отбирать
-	 //элементы на которых произошел клик и которые имеют класс do-action
-		console.log('this');
-		console.log(this);
-		var action_click = $(this).attr('data-action');//берем значение атрибута data-action
-		console.log('data-action сейчас:' + action_click);
-		actions[action_click](this); //берем значение поля объекта(это ссылка на ф-цию) и вызываем ф-цию
-									//передаем this - это действие клик	
-	});
+	$(document).on('click','.do-action[data-action=show_basket]', showBasket); // то есть при клике на
+	// элемент с классом do-action и который иимеет атрибут data-action равный show_basket запустится
+	// ф-ция showBasket. В этой ф-ции слик будет доступен по this
+	$(document).on('click','.do-action[data-action=filter]', filterBy);
+	$(document).on('click','.do-action[data-action=put_in_basket]', putInBasket);
+	$(document).on('click','.do-action[data-action=show_one_item]', showOneItem);
+	$(document).on('click','.do-action[data-action=minus_ItemBasket]', minusItemBasket);
+	$(document).on('click','.do-action[data-action=plus_ItemBasket]', plusItemBasket);
+	$(document).on('click','.do-action[data-action=del_element_basket]', delElementBasket);
+	$(document).on('click','.do-action[data-action=full_goods]', printFullListGoods);
 
+	//добавить обработчик на searchItem
 
+	// $(document).on('click', '.do-action', function(event) { // .on означает все действия(клик, 
+	// 	//наведение мышью и тд), далее определяются условия отбора('click', '.do-action') - значит отбирать
+	// 	//элементы на которых произошел клик и которые имеют класс do-action
+	// 	console.log('this');
+	// 	console.log(this);
+	// 	var action_click = $(this).attr('data-action');//берем значение атрибута data-action
+	// 	console.log('data-action сейчас:' + action_click);
+	// 	actions[action_click](this); //берем значение поля объекта(это ссылка на ф-цию) и вызываем ф-цию
+	// 								//передаем this - это действие клик	
+	// });
 }); // конец document.ready
 
 //ф-ция выводит в "каталог" переданный в нее массив
@@ -199,11 +219,11 @@ function fillingFilterByPopularity() {
 		var li = $('<li>').appendTo(filter_popularity);
 		if (i==0) {
 			li.append($('<a>',{href: '#',class: 'do-action', 'data-action': 'filter', 'data-type': 'less',
-				'data-filter': 'popularity', 'data-value': '30', text: 'не популярные(до 30)'}));
+				'data-filter': 'popularity', 'data-value': '30',	text: 'не популярные(до 30)'}));
 			li.append($('<span>',{class: 'badge', text: number_lowPopularity}));
 		} else {
 			li.append($('<a>',{href: '#',class: 'do-action', 'data-action': 'filter', 'data-type': 'more',
-				'data-filter': 'popularity', 'data-value': '30', text: 'популярные(от 30 до 100)'}));
+				'data-filter': 'popularity', 'data-value': '30',	text: 'популярные(от 30 до 100)'}));
 			li.append($('<span>',{class: 'badge', text: (goods.length - number_lowPopularity)}));
 		}
 	}
@@ -212,6 +232,7 @@ function fillingFilterByPopularity() {
 function eventSortByCostUp() {
 	catalog.empty();//.innerHTML = ''; //сначала стираем "каталог"
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortCostUp); //сортировка по возраст цены
 	printCatalogList(goods, catalog); //выводим уже отсортированный массив товаров
 }
@@ -219,6 +240,7 @@ function eventSortByCostUp() {
 function eventSortByCostDown() {
 	catalog.empty();//.innerHTML = '';
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortCostDown);
 	printCatalogList(goods, catalog);
 }
@@ -226,6 +248,7 @@ function eventSortByCostDown() {
 function eventSortByWeightUp() {
 	catalog.empty();//.innerHTML = '';
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortWeightUp);
 	printCatalogList(goods, catalog);
 }
@@ -233,6 +256,7 @@ function eventSortByWeightUp() {
 function eventSortByWeightDown() {
 	catalog.empty();//.innerHTML = '';
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortWeightDown);
 	printCatalogList(goods, catalog);
 }
@@ -240,6 +264,7 @@ function eventSortByWeightDown() {
 function eventSortByPopularityUp() {
 	catalog.empty();//.innerHTML = '';
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortPopularityUp);
 	printCatalogList(goods, catalog);
 }
@@ -247,6 +272,7 @@ function eventSortByPopularityUp() {
 function eventSortByPopularityDown() {
 	catalog.empty();//.innerHTML = '';
 	class_basket.empty();
+	result_search.empty();
 	goods = sort(goods, sortPopularityDown);
 	printCatalogList(goods, catalog);
 }
@@ -292,7 +318,8 @@ function sortPopularityDown(a,b) {
 //ф-ция обрабатывающая фильтрации и выводящая полученный результат в каталог
 //(фильтрации по категории, весу(больше/меньше 10кг), популярности(популярные или нет), 
 // стоимости(от 10000руб/ до 10000 руб))
-function filterBy(click) {
+function filterBy() {
+	var click = this; //this доступен в этой ф-ции(это элемент на который кликнули)
 	console.log('мы в ф-ции фильтрации');
     var data_type = $(click).attr('data-type'); // для фильтрации - тип сравнения: больше значения, меньше значения, равно значению
     var data_filter = $(click).attr('data-filter'); // имя поля, по которому фильтруем: цена, вес и т.д.
@@ -307,6 +334,7 @@ function filterBy(click) {
     }
     catalog.empty();
     class_basket.empty();
+    result_search.empty();
     printCatalogList(filter_goods, catalog);
 }
 //ф-ция фильтрации принимает 1)исходный массив, 2)значение data_filter(по какому полю фильтруем: цена, вес,
@@ -341,14 +369,25 @@ function isMore(elem, dvalue) {
 //cost- цена, weight- вес, idElement- id товара)
 //+ выводит общее кол-во товаров в корзине и общую стоимость товаров в корзине + надо сделать общий вес(с помощью
 //отдельной ф-ции)
-function putInBasket(click) {
-	console.log('работает action- положить товар в корзину')
-	var name = $(click).prev().find('.catalog__item-name').text();//$(click).prev() - взяли у клика 
+function putInBasket() {
+	var click = this;
+	console.log('работает action- положить товар в корзину');
+	if ($(click).prev().hasClass('catalog__item')) { //если у предыдущего элемента есть класс catalog__item
+													// (то есть кликнули из каталога)
+		var name = $(click).prev().find('.catalog__item-name').text();//$(click).prev() - взяли у клика 
 	//предыдущий сиблинг(можно вместо prev() использовать siblings()). Далее .find('.catalog__item-name')
 	// ищем элемент с этим классом. Далее .text() берем контент(то есть получили Имя товара)
+		var cost = $(click).prev().find('.catalog__item-cost').text();// получили цену
+		var weight = $(click).prev().find('.catalog__item-weight').text(); // получили вес
+	}
+	if ($(click).parent().hasClass('result_search__item')) { // то есть кликнули из <div class="result_search__item">
+		var name = $(click).prev().find('.result_search__item-name').text();
+		var cost = $(click).prev().find('.result_search__item-cost').text();// получили цену
+		var weight = $(click).prev().find('.result_search__item-weight').text(); // получили вес
+	}
+	name = name.substr(0,1).toUpperCase() + name.substr(1,name.length).toLowerCase();
 	console.log('name товара, который надо положить в корзину: ' + name);
-	var cost = $(click).prev().find('.catalog__item-cost').text();// получили цену
-	var weight = $(click).prev().find('.catalog__item-weight').text(); // получили вес
+	
 	var id = $(click).siblings().attr('id'); //получили id
 	var reg_pattern = /\d+/g; // регулярное выражение - ищет число в строке
 	if (basket[name] == undefined) 
@@ -407,11 +446,14 @@ function calcSummInfoBasket(click) {
 	}
 }
 //ф-ция вывода товаров из массива корзины в <div class="basket">
-function showBasket(click) {
+function showBasket() {
+	//this здесь доспупен(это элемент на который кликнули)
 	console.log('работает action - вывод корзины');
+	console.log('this'); console.log(this);
 	//удаляем содержимое каталлога(<div class="catalog">) и корзины(<div class="basket">)
 	catalog.empty();
 	class_basket.empty();
+	result_search.empty();
 	//выводим в <div class="basket"> товары из массива корзины
 	var parent_div = $('<div>',{class: 'full_basket'}).appendTo(class_basket);
 	var h1 = $('<h1>',{text: 'КОРЗИНА'}).appendTo(parent_div);
@@ -452,11 +494,12 @@ function showBasket(click) {
 		.add ($('<span>',{id: 'sum_weight', text: 'Общий вес'}))
 	}).appendTo(class_basket);
 	//вызов ф-ции для подсчета и вывода общей стоимости и общего веса, токже общего кол-ва товара в корзине
-	calcSummInfoBasket(click);
+	calcSummInfoBasket(this);	//передаем this, так как в showBasket он доступен
 }
 //ф-ция удаляет товар из корзины + выводит обновленную инфу по общей стоимости, кол-ву, весе, и стоимости по 
 //изменяемому товару(с помощью отдельной ф-ции)
-function minusItemBasket(click) {
+function minusItemBasket() {
+	var click = this;
 	console.log('надо бы удалить элемент из корзины');
 	var id_goods = $(click).parent().parent().prev().attr('id'); //получили id
 	console.log(id_goods);
@@ -479,7 +522,8 @@ function minusItemBasket(click) {
 }
 ////ф-ция добавляет товар в корзину + выводит обновленную инфу по общей стоимости, кол-ву, весе, и стоимости по 
 //изменяемому товару(с помощью отдельной ф-ции)
-function plusItemBasket(click) {
+function plusItemBasket() {
+	var click = this;
 	console.log('мы в plusItemBasket');
 	//получить id
 	var id_goods = $(click).parent().parent().prev().attr('id');
@@ -508,7 +552,8 @@ function plusItemBasket(click) {
 	calcSummInfoBasket(click);
 }
 //при нажатии на X в корзине удаляет этот элемент из массива корзины(и выводим в каталок "новую" корзину)
-function delElementBasket(click) {
+function delElementBasket() {
+	var click = this;
 	console.log('удалить элемент из корзины');
 	var del_el = $(click).parent().next().attr('id');
 	console.log(del_el);
@@ -517,19 +562,21 @@ function delElementBasket(click) {
 			delete basket[key];
 	}
 	console.log(basket);
-	showBasket(click);
+	showBasket();
 }
 //ф-ция выводит в каталог полную инфу о товаре на который кликнули(идентификация по всему div-ву)
-function showOneItem(click) {
+function showOneItem() {
+	var click = this;
 	console.log('работает action- показ выбранного товара');
 	var id_item = $(click).parent().attr('id');
 	console.log(id_item);
 	catalog.empty();
 	class_basket.empty();
+	result_search.empty();
 	for (var i in goods) {
 		if (goods[i].idnumber == id_item) {
 			var div_full_data = $('<div>',{class: 'full-data'}).appendTo(catalog);
-			var div_id = $('<div>', {id: id_item,
+			var div_id = $('<div>', {id: id_item, class: 'catalog__item',
 					append: $('<span>',{class: 'catalog__item-name', text: goods[i].name})
 					.add ($('<span>',{text: goods[i].description}))
 					.add ($('<span>',{class: 'catalog__item-weight', text: 'Вес: '+ goods[i].weight+' кг.'}))
@@ -557,7 +604,107 @@ function printFullListGoods() {
 		console.log(goods);
 		catalog.empty();
 		class_basket.empty();
+		result_search.empty();
 		//вывести все имеющиеся товары(первоначальное состояние страницы) в каталог (<div class="catalog">)
 		printCatalogList(goods, catalog);
 	});  // конец $.post
+}
+//ф-ция поиска товаров (будем искать совпадения только по имени и описанию)
+function searchItem() {
+	console.log('мы в поиске товара');
+	var user_input = $('#search').get(0).value;//или $('#search')[0].value; //Тоже что и document.getElementById('search').value
+	console.log('что ввели: ' + user_input);
+
+	var reg =  new RegExp(user_input , 'i'); //создаем регулярное выражение вида /наша переменная/i
+	console.log('reg'); console.log(user_input);
+	//общий массив совпадений
+	var search_arr = []; //массив всех совпадений
+	goods.forEach(function(el) {
+		if (el.description.match(reg) || el.name.match(reg)) {
+			var el_search = {};	
+			el_search.description = el.description;
+			el_search.name = el.name;
+			el_search.cost = el.cost;
+			el_search.weight = el.weight;
+			el_search.popularity = el.popularity;
+			el_search.category = el.category;
+			el_search.idnumber = el.idnumber;
+			el_search.image = el.image;
+			el_search.reg = user_input;
+			if(el.description.match(reg))
+				el_search.fieldDescript = "yes";
+			if(el.name.match(reg))
+				el_search.fieldName = "yes";
+			search_arr.push(el_search);
+		}
+	});
+	console.log('получили общий массив совпадений');
+	console.log(search_arr);
+
+	// вызываем ф-цию вывода по поиску
+	printResultSearch(search_arr); 
+}
+//ф-ция выводящая результат поиска
+function printResultSearch(arr) {		//принимаем массив совпадений
+	//считаем кол-во совпадений по имени и описанию
+	var len_name = 0;
+	var len_descrip = 0;
+	for (var i in arr) {
+		if (arr[i].fieldName == "yes"){
+			len_name++;
+		}
+		if (arr[i].fieldDescript == "yes")
+			len_descrip++;
+	}
+	console.log('сейчас выведем результаты поиска');
+	catalog.empty();
+	class_basket.empty();
+	result_search.empty();
+	result_search.append($('<h1>', {text: 'Результаты поиска'})
+						.add($('<h3>', {text: 'По имени ( '+ len_name +' совпадений:)'})));
+	var div_byname = $('<div>', {class: 'result_search__byName flex'}).appendTo(result_search);
+	result_search.append($('<h3>', {text: 'По описанию ( ' + len_descrip + ' совпадений:)'}));
+	var div_bydescr = $('<div>', {class: 'result_search__bydescr flex'}).appendTo(result_search);
+
+	//вызываем ф-цию вывода элементов массива в соответстующие div-ы(если нашли по имени то в 
+	// <div class="result_search__byName flex"> , если по описанию то 
+	//в <div class="result_search__byDescription flex">)
+	printSearchElements(div_byname, div_bydescr, arr);
+}
+//
+function printSearchElements(parent1, parent2 , arr) {	
+	arr.forEach(function(el) {
+		var reg = new RegExp(el.reg, 'i');
+
+		var div_item = $('<div>', {class: 'result_search__item',
+							append: $('<div>', {id: el.idnumber , class: 'small_images',
+							append: $('<img>', {class: 'do-action', 'data-action': 'show_one_item', src: el.image})})
+						});
+		var span1 = $('<span>', {class: 'result_search__item-name do-action', 'data-action': 'show_one_item'});
+		var span2 = $('<span>', {class: 'do-action', 'data-action': 'show_one_item'});
+		var div = $('<div>', {id: el.idnumber, class: 'search-info',
+						append:span1
+						.add(span2)
+						.add($('<span>', {class: 'result_search__item-weight do-action', 'data-action': 'show_one_item', text: 'Вес: '+el.weight}))
+						.add($('<span>', {class: 'do-action', 'data-action': 'show_one_item', text: 'Популярность: '+el.popularity}))
+						.add($('<span>', {class: 'result_search__item-cost do-action', 'data-action': 'show_one_item', text: 'Цена: '+el.cost}))
+					}).add($('<button>', {class: 'do-action', 'data-action': 'put_in_basket', text: 'Добавить в корзину'}))
+					.appendTo(div_item);
+		
+		if (el.fieldName == "yes") {
+			var new_str =el.name.replace(reg, "<b>"+el.reg.toUpperCase()+"</b>");
+			span1.html(new_str);
+			span2.text('Описание: ' + el.description);
+			var clone_div = div_item.clone(true); //создаем глубокую(со всеми вложенными элементами)
+			// копию элемента div_item(иначе при совпадении и в имени и в описании не вывести div_item
+			// в два разных div-а)
+			parent1.append(clone_div);
+		}
+		if (el.fieldDescript == "yes") {
+			var new_str =el.description.replace(reg, "<b>"+el.reg.toUpperCase()+"</b>");
+			span2.html("Описание: " + new_str);
+			span1.text(el.name);
+			parent2.append(div_item);
+		}
+	});
 }
