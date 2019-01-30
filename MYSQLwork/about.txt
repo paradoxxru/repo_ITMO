@@ -1,0 +1,31 @@
+show databases; // показать все базы
+
+create database shopdb; //создать базу с именем shopdb
+
+use shopdb; //сменить базу(использовать базу)
+
+create table comp (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	cost float default 0.0,
+	name varchar(50) default "PRODUCT",
+	count int default 0,
+	case_id int default 0,
+	PRIMARY KEY (id)
+);
+//create table - создать таблицу
+//comp - имя таблицы
+//id - имя столбца
+// INT - тип данных
+//UNSIGNED - беззнакокое(не может быть отрицат)
+// NOT NULL - не может быть неопределено
+// AUTO_INCREMENT - если неопределено, то установить какое-то(берет последнее наибольшее значение и увелич на 1)
+//default 0.0 - дефолтное значение
+//varchar(50) - набор символов(строка)(максимум 50 символов)
+//PRIMARY KEY - уникальный идентификатор
+
+show tables; //показывает все таблицы в базе(в базе, в которой сейчас работаем)
+
+select * from comp; //показать все из таблицы comp
+
+insert into comp values(NULL, 100, "Первый", 1, 0); // вставить(создать) экземпляр одной сущности(создать строку)
+//в скобках указываем значения(id, цена, имя, кол-во, case_id)

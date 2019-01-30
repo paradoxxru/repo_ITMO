@@ -1,0 +1,11 @@
+{
+  "name": "Pack1",
+  "autoload": {
+    "psr-4": {
+      "Pack1\\": "pack1/",
+      "Pack1\\Pack2\\": "pack1/pack2",
+      "Pack1\\Pack3\\": "pack1/pack3",
+      "XForms\\" : "XForms"
+    }
+  }
+}

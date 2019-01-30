@@ -59,7 +59,7 @@ $(document).ready(function(event) {
 				//обработка списка фильтрации по популярности
 		filter_popularity = $('.filter__popularity').first(); 
 		filter_popularity.html('');
-		//заполняем фильтр по весу <ul class="filter__weight">
+		//заполняем фильтр по популярности <ul class="filter__popularity">
 		fillingFilterByPopularity();
 	});  // конец $.post
 
@@ -95,7 +95,6 @@ $(document).ready(function(event) {
 	$(document).on('click','.do-action[data-action=del_element_basket]', delElementBasket);
 	$(document).on('click','.do-action[data-action=full_goods]', printFullListGoods);
 
-	//добавить обработчик на searchItem
 
 	// $(document).on('click', '.do-action', function(event) { // .on означает все действия(клик, 
 	// 	//наведение мышью и тд), далее определяются условия отбора('click', '.do-action') - значит отбирать
@@ -674,7 +673,7 @@ function printResultSearch(arr) {		//принимаем массив совпа�
 //
 function printSearchElements(parent1, parent2 , arr) {	
 	arr.forEach(function(el) {
-		var reg = new RegExp(el.reg, 'i');
+		var reg = new RegExp(el.reg, 'ig');
 
 		var div_item = $('<div>', {class: 'result_search__item',
 							append: $('<div>', {id: el.idnumber , class: 'small_images',
