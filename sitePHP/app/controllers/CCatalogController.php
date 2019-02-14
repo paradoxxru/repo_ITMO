@@ -3,6 +3,8 @@
 require_once('../app/controllers/IPageController.php');
 require_once('../app/dataio/CConfParser.php');		//почему подключаем только здесь, а в CCartController
 require_once('../app/product/CFruitProduct.php'); // не подключаем (а если 1-я запрашиваемая страница будет Корзина) ???????????
+//require_once('../app/dataio/CConfParserForCart.php');
+
 class CCatalogController implements IPageController
 {
 	public function setPermissions($permissions) { //разрешения
@@ -15,7 +17,7 @@ class CCatalogController implements IPageController
 		// }
 		//из конфигурац файла считываем инфу
 		$parser = CConfParser::getInstance('../app/config/db_product.yaml'); //создает объект нужного класса
-		$parser->read(); //читаем из файла в массив
+		$parser->read(); //читаем из файла во внутренний массив($params)
 
 		//$product = $parser->getParam(0); //берем первый элемент из массива
 		//var_dump($product);
@@ -29,6 +31,18 @@ class CCatalogController implements IPageController
   //       echo "массив goods: ";echo "<br>";
   //       var_dump($goods);
   //       echo "</pre>";
+
+		//парсер для файла корзины
+		// $parser_for_cart = CConfParser::getInstance('../app/config/cart.yaml');
+		// $parser_for_cart->read();
+		// //массив корзины
+		// $arr_cart = $parser_for_cart->getAllParams();
+		// echo "<pre>";
+  //       echo "массив arr_cart: ";echo "<br>";
+  //       var_dump($arr_cart);
+  //       echo "</pre>";
+
+
 		
 		$path_to_template = "../app/views/catalog.php";
 		include($path_to_template);

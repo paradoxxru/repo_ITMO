@@ -9,6 +9,28 @@
 </head>
 <body>
     <aside>
+        <?php
+        require_once ("../app/user.php"); // видимо нужно перенести в самое начало документа
+        $user = new User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
+        if(isset($_GET['logout'])) //если нажали выход, то logout
+            $user->logout();
+
+        require_once ("../app/dataio/CUserCart.php");
+        $userCart = new CUserCart($user->getLogin());//создаем объект-корзину, определяя для какого пользователя
+        //(аноним или нет) и читаем из файла корзины в массив корзины + собираем инфу о полной стоимости и кол-ву
+        //запцскаем мотод обработки экшинов
+        $userCart->actionsWithCart($goods);
+        //считаем кол-во, сумму и вес
+        $userCart->calcSummaryInfo();
+        
+        // echo "путь до файла: ";echo "<br>";
+        // echo $userCart->getPath();echo "<br>";
+        // echo "массив корзины в файле catalog.php: ";echo "<br>";
+        // echo "<pre>";
+        // var_dump($userCart->getArrCart());
+        // echo "</pre>";
+        
+    ?>
         <div class="filter">
             <p>По категории</p>
             <ul class="filter__categories">
@@ -68,52 +90,70 @@
                     <a id="VogueDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=vogue">↓</a>
                 </li>
             </ul>
-            <?php require_once('../app/dataio/CInfoSession.php') ;
-                    CInfoSession::setInfoSession();
-                    CInfoSession::getInfoSession($goods);
+            <?php //require_once('../app/dataio/CInfoSession.php') ;
+                   // CInfoSession::setInfoSession();
+                   // CInfoSession::getInfoSession($goods);
             ?>
             <a
                 href="/index.php?q=cart"
                 id="Cart"
                 data-action="open-cart">Корзина
                 <?php 
-                    echo "( ". CInfoSession::$col." шт. На сумму: ".CInfoSession::$sum." )";
+                    //echo "( ". CInfoSession::$col." шт. На сумму: ".CInfoSession::$sum." )";
+                    echo "( ".$userCart->getCol()." шт. На сумму: ".$userCart->getSum()." )";
                 ?>
             </a>
-            <?php 
-                if(isset($_SESSION['login'])) $str = $_SESSION['login'];
-                else $str = 'Вход';
-            ?>
-            <a
-                href="/index.php?q=entrance"
-                id="UserLogin"
-                data-action="open-cart"><?php echo $str;?>
-            </a>
-        </div>
-        <div class="catalog">
+            <?php
+            // require_once ("../app/user.php");
+            // $user = new User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
             
+            // if(isset($_GET['logout'])) 
+            //     $user->logout();
+            ?>
+        <?php  
+            if($user->isAuth()) {
+                $str = $user->getName();
+                echo "<a href='/index.php?q=cabinet' id='UserCabinet'>".$str."</a>";
+            }
+            else {
+                //$str = 'Вход';
+                echo "<a href='/index.php?q=entrance' id='UserLogin' data-action=''>Вход</a>";
+            }
+        ?>
+        <!--
+        <a
+            href="/index.php?q=entrance"
+            id="UserLogin"
+            data-action=""><?php //echo $str;?>
+        </a>
+        -->
+        <?php
+            if($user->isAuth())
+                echo "<a href='/index.php?q=catalog&logout=1' style='padding-left:20px;'>Выход</a>";
+        ?>
+        </div>
+        <!--
+        <div class="catalog">  
         </div>
         <div class="cart">
-
         </div>
+        -->
         <div class="goods">
             <h1>Товар подробно</h1>
             <?php
                 //найти товар по id - получить id из GET массива и сравнить с id-ми элементов массива
                 // этим мы получим запрашиваемый подробно товар
-                $id = $_GET['id'];
-                //echo "запрашиваемый товар имеет id= ".$id;
-       
-                //foreach ($goods as $key => $item) {
-                foreach($goods as $item) {
-                    //if($key == $id) {
-                    if($item['id'] == $id) {
-                        //создать объект
-                        $product = new CFruitProduct();//new CFruitProduct($id); //создаем
-                        $product->fromArray($item); //заполняем значениями
-                        //определить раздел куда вводить
-                        //вывести по шаблону
-                        $product->render('product_page'); //определили куда выводить('product_page') и выводим
+                if(isset($_GET['id'])) {
+                    foreach($goods as $item) {
+                        //if($key == $id) {
+                        if($item['id'] == $_GET['id']) {
+                            //создать объект
+                            $product = new CFruitProduct();//new CFruitProduct($id); //создаем
+                            $product->fromArray($item); //заполняем значениями
+                            //определить раздел куда вводить
+                            //вывести по шаблону
+                            $product->render('product_page'); //определили куда выводить('product_page') и выводим
+                        }
                     }
                 }
             ?>

@@ -9,6 +9,48 @@
 </head>
 <body>
 <aside>
+    <?php
+        require_once ("../app/user.php"); // видимо нужно перенести в самое начало документа
+        $user = new User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
+        // if(isset($_GET['logout'])) //если нажали выход, то logout
+        //     $user->logout();
+#вставляем
+            if (!empty($_POST['login']) ) {
+                if(!strpos($_POST['login'],':') ) {//проверяем чтобы логин не содержал двоеточия
+                    $login = $_POST['login'];
+                    $pass = md5($_POST['password']);
+                    if(isset($_POST['name']) && isset($_POST['mail']) ) { //если значения name и mail в POST переданы(то есть была выбрана регистрация и заполнены поля), то регистрация
+                        if(!strpos($_POST['name'],':') && !strpos($_POST['mail'],':')) {//проверяем чтобы не содержали двоеточия 
+                            $otherParams = [];
+                            $otherParams['name'] = $_POST['name'];
+                            $otherParams['mail'] = $_POST['mail'];
+                            //регистрация
+                            $user->registerUser($login, $pass, $otherParams);
+                        } else
+                            print("<script language=javascript>window.alert('недопустимые данные ввода');</script>");
+                    }
+                    else   //если name и mail не введены значит пытаемся авторизоваться 
+                        $user->login($login, $pass);
+                }
+                else {//если логин содержит двоеточие
+                    print("<script language=javascript>window.alert('недопустимые данные ввода');</script>");
+                }
+            }
+            if (!empty($_GET['logout'])) { //если нажали на выход - установилось значение logout=1(см.ниже)
+                                          // следовательно проверяем если значение в $_GET['logout'] есть, то
+                $user->logout(); // то выходим
+            }
+
+#конец вставки
+        require_once ("../app/dataio/CUserCart.php");
+        $userCart = new CUserCart($user->getLogin());//создаем объект-корзину, определяя для какого пользователя
+        //(аноним или нет) и читаем из файла корзины в массив корзины + собираем инфу о полной стоимости и кол-ву
+        //запцскаем мотод обработки экшинов
+        $userCart->actionsWithCart($goods);
+        //считаем кол-во, сумму и вес
+        $userCart->calcSummaryInfo();
+        
+    ?>
     <div class="filter">
         <p>По категории</p>
         <ul class="filter__categories">
@@ -68,54 +110,27 @@
                 <a id="VogueDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=vogue">↓</a>
             </li>
         </ul>
-        <?php require_once('../app/dataio/CInfoSession.php') ;
-                    CInfoSession::setInfoSession();
-                    CInfoSession::getInfoSession($goods);
-        ?>
         <a
             href="/index.php?q=cart"
             id="Cart"
             data-action="open-cart">Корзина
             <?php 
-            echo "( ". CInfoSession::$col." шт. На сумму: ".CInfoSession::$sum." )";
+                echo "( ".$userCart->getCol()." шт. На сумму: ".$userCart->getSum()." )";
             ?>
         </a>
-        <?php
-            require_once ("../app/user.php");
-            $user = new User();
-            if (!empty($_POST['login'])) { 
-                $login = $_POST['login'];
-                $pass = md5($_POST['password']);
-                if (!$user->login($login, $pass)) { // пытаемся авторизовать и затем проверяем получилось ли
-                    echo "<p>Ошибка авторизации: неверный пароль.</p>";
-                }
+        <?php  
+            if($user->isAuth()) {
+                $str = $user->getName();
+                echo "<a href='/index.php?q=cabinet' id='UserCabinet'>".$str."</a>";
             }
-            if (!empty($_GET['logout'])) //если нажали на выход - установилось значение logout=1(см.ниже)
-                                    // следовательно проверяем если значение в $_GET['logout'] есть, то
-                logOut(); // то выходим
-
-
-            // if(isset($_SESSION['login']) )// || isset($_POST['login']) )
-            //     $str = $_SESSION['login'];
-            // else 
-            //     $str = 'Вход';
-            if($user->isAuth())
-                $str = $user->getLogin();
-            else
-                $str = 'Вход';
+            else {
+                //$str = 'Вход';
+                echo "<a href='/index.php?q=entrance' id='UserLogin' data-action=''>Вход</a>";
+            }
         ?>
-        <a
-            href="/index.php?q=entrance"
-            id="UserLogin"
-            data-action=""><?php echo $str;?>
-        </a>
-        <?php //если залогинен, то выводим ссылку на выход
-            // if(isset($_SESSION['login'])) {
-            //     if($user->isLogin())
-            //         echo "<a href='/index.php?q=entrance&logout=1'>Выход</a>";
-            // }
+        <?php 
             if($user->isAuth())
-                echo "<a href='/index.php?q=entrance&logout=1'>Выход</a>";
+                echo "<a href='/index.php?q=entrance&logout=1' style='padding-left:20px;'>Выход</a>";
         ?>
     </div>
     <!--
@@ -130,42 +145,67 @@
     -->
     <div class="entrance">
         <?php
+        // ниже в input-ах pattern=/^[^:]+$/ - это регулярное выражение чтобы пользователь не ввел двоеточие(:)
+        //пока не рабботает...
+        if(!$user->isAuth()) {
             echo "
-                <form method='post' action='/index.php?q=entrance'>
-                    <div>
-                        <label for='Login'>Логин</label>
-                        <input id='Login' name='login' placeholder='Ведите логин'>
+                <form class='formLogin' method='post' action='/index.php?q=entrance'>
+                    <div class='input-fields'>    
+                        <div>
+                            <label for='Login'>Логин</label>
+                            <input id='Login' name='login' placeholder='Ведите логин' required>
+                        </div>
+                        <div>
+                            <label for='Password'>Пароль</label>
+                            <input id='Password' name='password' type='password' placeholder='Ведите пароль' required>
+                        </div>";
+            if(isset($_GET['registration'])) {
+                if($_GET['registration'] == 1) {
+                    $str_in = 'Регистрация';
+                    echo "
+                        <div>
+                            <label for='Name'>Имя</label>
+                            <input id='Name' name='name' placeholder='Ведите Имя' required>
+                        </div>
+                        <div>
+                            <label for='Mail'>Почта</label>
+                            <input id='Mail' type='email' name='mail' placeholder='Ведите почту' required>
+                        </div>";
+                }
+            } else $str_in = 'Войти';
+            echo "     
                     </div>
-                    <div>
-                        <label for='Password'>Пароль</label>
-                        <input id='Password' name='password' type='password' placeholder='Ведите пароль'>
+                    <div class='action-button'>    
+                        <button>".$str_in."</button>
                     </div>
-                    <button>Войти</button>
-                </form>
-            ";
-            // if (!empty($_POST['login'])) { 
-            //     $login = $_POST['login'];
-            //     $pass = md5($_POST['password']);
-            //     if (!$user->login($login, $pass)) { // пытаемся авторизовать и затем проверяем получилось ли
-            //         echo "<p>Ошибка авторизации: неверный пароль.</p>";
-            //     }
-            // }
-            // // if (!empty($_GET['logout'])) //если нажали на выход - установилось значение logout=1(см.ниже)
-            // //                         // следовательно проверяем если значение в $_GET['logout'] есть, то
-            // //     logOut(); // то выходим
+                </form>";
+            if(!isset($_GET['registration'])) {
+                echo "
+                <div>
+                    <a href='/index.php?q=entrance&registration=1'>Зарегистрироваться</a>
+                </div>";
+            }
+        } else {
+            echo "<div class='entrance_message'>
+                    <h3>Вы вошли как ".$user->getName()."</h3>
+                    <h4>Приятных покупок</h4>
+                    <a href='/index.php'>Начать покупки</a>
+                </div>";
+        }        //
+            
 
-            echo "<pre>";
-            echo "массив GET: ";echo "<br>";
-            var_dump($_GET);
-            echo "</pre>";
-            echo "<pre>";
-            echo "массив POST: ";echo "<br>";
-            var_dump($_POST);
-            echo "</pre>";
-            echo "<pre>";
-            echo "массив SESSION: ";echo "<br>";
-            var_dump($_SESSION);
-            echo "</pre>";
+            // echo "<pre>";
+            // echo "массив GET: ";echo "<br>";
+            // var_dump($_GET);
+            // echo "</pre>";
+            // echo "<pre>";
+            // echo "массив POST: ";echo "<br>";
+            // var_dump($_POST);
+            // echo "</pre>";
+            // echo "<pre>";
+            // echo "массив SESSION: ";echo "<br>";
+            // var_dump($_SESSION);
+            // echo "</pre>";
         ?>
     </div>
 </section>

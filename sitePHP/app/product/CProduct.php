@@ -73,7 +73,8 @@ abstract class CProduct
     /**
      *
      */
-    public function render($view) { //принимать параметр(какое представление взять)
+    public function render($view, $value = []) { //принимать параметр(какое представление взять) +
+                                                //$value = [] - если не передано значение, то по умолчанию будет пустой массив. $value нужен в app/views/product/cart.php чтобы выводить кол-во и стоимость товара в корзине
         //$view= catalog
         //$view= cart
         //$view= product_page

@@ -29,3 +29,713 @@ select * from comp; //показать все из таблицы comp
 
 insert into comp values(NULL, 100, "Первый", 1, 0); // вставить(создать) экземпляр одной сущности(создать строку)
 //в скобках указываем значения(id, цена, имя, кол-во, case_id)
+
+
+
+ALTER TABLE comp    //изменить таблицу comp
+    ADD CONSTRAINT comp_cpu  //добавить связь с таблицей cpu(просто название связи)
+    FOREIGN KEY(cpu_id) 	//поле которое ссылается
+    REFERENCES cpu(id)	//таблица(cpu) и поле(id) на которое ссылаемся
+	
+	запрос к таблице comp - выдать запись где id=1 and id_cpu=2
+select * from comp
+	where id=1 and id_cpu=2
+запрос кешируется......
+или ООП подход 
+select: comp
+	where:
+	id_cpu=2
+	id=1
+	
+	в консоле
+mysql -u root -p -h localhost shopdb; - подлк к базе из консоли windows(mysql - то что нужно запустить,-u это значит user, 
+-p это значит что хотим ввести пароль для пользователя, -h после этого параметра указывается host(адрес сервера куда подключаемся))
+
+далее в строке: create database eshopdb;  - создать базу(eshopdb) в базе(shopdb)
+
+drop database eshopdb;  - удаление базы данных
+
+создаем базу с указанием кодировки
+CREATE DATABASE my_db CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+создать пользователя и наделить его правами
+CREATE USER 'ivan'@'localhost' IDENTIFIED BY '123';  где ivan -логин пользователя, IDENTIFIED BY '123' - значит идентифицировать пользователя паролем 123
+localhost - здесь адрес с которого он может подключаться(здесь разрешаем только локальное подключение,если '%' то ото всюду).
+
+GRANT ALL PRIVILEGES ON  my_db.* TO 'ivan'@'localhost';
+ALL PRIVILEGES - полные права
+my_db.* - то есть права на все таблицы в базе my_db
+TO 'ivan'@'localhost' - указываем какому пользователю даем права и откуда он подключается
+
+
+для mysql 8
+создать
+CREATE USER 'ivan'@'localhost' IDENTIFIED WITH mysql_native_password BY '123';
+дать права
+GRANT ALL PRIVILEGES ON  my_db.* TO 'ivan'@'localhost' with grant option;
+
+Вход под новым пользователем:
+mysql -u ivan -p  my_db
+
+заполнить базу
+1) импорт из вне(из другой консоли не входя в консоль mysql)
+shell>   mysql -u ivan -p db_name < input_file
+
+2)импорт из локального хранилища
+mysql> source C:\scripts\my_commands.sql; 
+mysql> source ..\scripts\my_commands.sql;
+
+
+Простой запрос
+SELECT col1,col2,col3 FROM table_name1,table_name2 WHERE expression
+
+Пример запроса без исходной таблицы
+SELECT 2+2, REPEAT('x',5), DATE_ADD('2001-01-01',INTERVAL 7 DAY), 1/0;
+	2+2 - рперация
+	REPEAT('x',5) - ф-ция
+
+	алеасы -  или as  или ``
+SELECT 2+2 as name, REPEAT('x',5), DATE_ADD('2001-01-01',INTERVAL 7 DAY) `date`, 1/0;
+то есть в результате выведется не DATE_ADD('2001-01-01',INTERVAL 7 DAY) , а псевдоним data
+вместо 2+2 будет name
+
+CREATE TABLE user 
+(
+   user_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   login varchar(24) NOT NULL,
+   user_name varchar(24) NOT NULL,
+   pass_hex varchar(32) NOT NULL,
+   PRIMARY KEY (user_id) 
+);
+
+CREATE TABLE tokens 
+(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   user_id INT UNSIGNED NOT NULL,
+   token varchar(32) NOT NULL,
+   PRIMARY KEY (id) 
+);
+
+						Лекция3
+
+mysql -u ivan -p -h 192.168.1.35  - подключиться из сторонней консоли к удаленной базе
+DROP table comp, cpu;
+mysql -u root eshopdb < eshopdb.sql
+CREATE DATABASE my_db CHARACTER SET utf8 COLLATE utf8_general_ci;
+source eshopdb.sql; - если делать импорт дампа в свою(существующую базу) уже из базы
+
+select * from comp; - запрос из базы чтобы посмотреть содержимое таблицы(comp)
+
+смена кодировки
+SET CHARACTER SET 'utf8';
+
+добавление данных
+INSERT INTO ......
+
+после селект идут названия столбцов и их правила отображения
+select 2, '*', 2 , 2*2;
+select 2 as operand1, '*' operator, 2  operand2, 2*2 result;
+
+desc cpu;  - вывести структуру таблицы cpu
+
+select * from cpu t1, cpu t2; - обращаемся к одний таблице cpu ОДНА
+
+select name,frequency from cpu; - выбрать только поля имя и частоту из табл cpu
+или тоже самое
+select cpu.name, cpu.frequency FROM cpu;
+или тоже самое через псевдоним(у нас С)
+select C.name, C.frequency FROM cpu as C;
+
+вывести в частоте отдельно тысячи и остаток
+идем последовательно
+select C.name, FLOOR(C.frequency/1000) FROM cpu as C;
+select C.name, FLOOR(C.frequency/1000) as fr FROM cpu as C; - fr это псевдоним
+select C.name, FLOOR(C.frequency/1000) as mil, C.frequency%1000 as freq FROM cpu as C;
+
+//в CONCAT перечисляем значения(значения полей) которые хотим объединить (это будет отделльный столбец)
+//as 'concat' - псевдоним для столбца конкатинации(в кавычках, так как ф=ция называется CONCAT, чтобы mysql не "ввелся в заблуждение")
+select 
+	C.name, 
+	FLOOR(C.frequency/1000) as mil, 
+	C.frequency%1000 as freq,
+	CONCAT(C.name, 
+			" ",
+			FLOOR(C.frequency/1000),
+			" ",
+			C.frequency%1000
+	) as 'concat'
+FROM cpu as C;
+
+
+select * FROM comp;
+
+вевести все записи где установлен только первый процессор
+select * From comp WHERE cpu_id = 1;
+
+выбрать компы у которых цена больше 10тр
+select * From comp WHERE cost>10000;
+
+вевести все записи где установлен только первый процессор и у которых цена больше 10тр
+select * From comp WHERE cpu_id = 1 AND cost>10000;		//можно использовать && вместо AND
+
+выбрать сборки где имя='зор'
+select * FROM comp WHERE name = "зор";
+
+выбрать все сборки имя которых начинаются с 'зор'
+select * FROM comp WHERE name like "зор%";
+
+имя 'зор' ИЛИ цена > 27000
+select * FROM comp WHERE name like "зор%" OR cost > 27000;
+
+вывести таблицу, где будет название и суммарная стоимость по каждому из отфильтрованных (а фильтр: цена > 2700 И имя начинается с 'зор')
+select 
+	name,
+	count*cost as total_cost
+FROM comp
+WHERE
+	name like "зор%"
+	AND cost>2700;
+	
+
+	Изменение таблиц (ALTER TABLE)
+добавим столбец - указываем тип объекта(TABLE), имя таблицы, ADD COLUMN - команда добавить столбец, далее описание столбца
+self_cost - будет себистоимость
+ALTER TABLE comp ADD COLUMN self_cost INT UNSIGNED NOT NULL DEFAULT 0;
+
+	изменить значение строки(строк) таблицы
+UPDATE comp SET self_cost = ROUND(cost/2000)*1000 WHERE cost>10000;
+то есть - обновить таблицу comp, SET - установить в поле self_cost значение, вычесленное по формуле, причем только в тех строках
+где цена >10000
+
+
+вывести таблицу, где будет название,цена, себистоимость и доход от продажи(цена - себистоимость) из отфильтрованных 
+(а фильтр: цена > 2700 И имя начинается с 'зор')
+select 
+	name,
+	cost,
+	self_cost,
+	cost - self_cost as revenue
+FROM comp
+WHERE
+	name like "зор%"
+	AND cost>2700;
+	
+	добавить доход от реализации всего кол-ва по отфильтрованной позиции
+select 
+	name,
+	count,
+	cost,
+	self_cost,
+	cost - self_cost as revenue,
+	(cost - self_cost)*count as rev_all
+FROM comp
+WHERE
+	name like "зор%"
+	AND cost>2700;	
+	
+	вывести еще процент наценки от себистоимости ((cost - self_cost)/self_cost)*100
+select 
+	name,
+	count,
+	cost,
+	self_cost,
+	cost - self_cost as revenue,
+	(cost - self_cost)*count as rev_all,
+	CONCAT(
+		((cost - self_cost)/self_cost)*100,
+		" %") as '%'
+FROM comp
+WHERE
+	name like "зор%"
+	AND cost>2700;	
+	
+	вывести столбец - и по if определять - если cpu_id=1, то выводить intel, если cpu_id=2, то AMD
+конструкция IF(<условие>,<если истина>,<если лож>)
+убрать поле %, но 
++добавить условие(фильтр) в WHERE - выводить те, у которых процент прибыли > 60%
+select 
+	name,
+	count,
+	cost,
+	self_cost,
+	cost - self_cost as revenue,
+	(cost - self_cost)*count as rev_all,
+	IF(cpu_id=1,'Intel','AMD') as CPU_brend
+FROM comp
+WHERE
+	name like "зор%"
+	AND cost>2700
+	AND ((cost - self_cost)/self_cost)*100 > 60;
+	
+	
+							Лекция 4
+	
+присоединение таблиц - "левые присоединения"	
+//В SELECT указываем столбци, которые надо вывести(из двух таблиц) .далее указываем левую таблицу(FROM comp), 
+затем правило присоединения(LEFT JOIN) и правую таблицу (cpu), далее on comp.cpu_id = cpu.id
+(присоединяем по этому условию), далее "фильтр" WHERE 
+
+SELECT comp.name, comp.cpu_id,
+		cpu.id, cpu.name
+FROM comp		
+LEFT JOIN cpu
+	on comp.cpu_id = cpu.id
+WHERE 
+	comp.cost >= 29000;
+	
+	//это полное объединение.из этого объединения строится объединение выше
+	(то есть сначала объединяется так, а затам срабатывает условие on comp.cpu_id = cpu.id)
+	То есть каждая запись из первой таблици соединяется с каждой записью во второй(можно перебрать все варианты соединений)
+SELECT comp.name, comp.cpu_id,
+		cpu.id, cpu.name
+FROM comp, cpu		
+WHERE 
+	comp.cost >= 29000;
+	
+	//то же что и первое объединение
+SELECT comp.name, comp.cpu_id,
+		cpu.id, cpu.name
+FROM comp, cpu		
+WHERE 
+	comp.cost >= 29000 AND comp.cpu_id = cpu.id;
+
+//LIMIT - ограничение(выведет только первые 10 элементов запроса)
+SELECT comp.name, comp.cpu_id,
+		cpu.id, cpu.name
+FROM comp		
+LEFT JOIN cpu
+	on comp.cpu_id = cpu.id
+WHERE 
+	comp.cost > 1000
+LIMIT 10;
+
+//можно указать в LIMIT второй параметр - это будет начало отсчета(от какого элемента начинать выводить)
+//но этот параметр указывается первым
+SELECT comp.name, comp.cpu_id,
+		cpu.id, cpu.name
+FROM comp		
+LEFT JOIN cpu
+	on comp.cpu_id = cpu.id
+WHERE 
+	comp.cost > 1000
+LIMIT 2, 10;
+
+//сортировка вывода - ORDER BY comp.cost ASC . (где ASC по возрастанию, DESC по убыванию)
+SELECT comp.name, comp.cpu_id, comp.cost,
+		cpu.id, cpu.name
+FROM comp		
+LEFT JOIN cpu
+	on comp.cpu_id = cpu.id
+WHERE 
+	comp.cost > 1000
+ORDER BY comp.cost ASC
+LIMIT 2, 10;
+
+
+//////
+CREATE TABLE `case`
+(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   weight INT UNSIGNED NOT NULL,
+   cost INT UNSIGNED NOT NULL,
+   powerBP INT UNSIGNED NOT NULL,
+   PRIMARY KEY (id) 
+);
+
+//заполнение стоки данными
+Insert into `case`
+	values (NULL,15,1500,600),(NULL,17,2500,800);
+	
+//апдейт таблицы comp - заполним значения case_id псевдо случайными значениями(исходя из того, что у нас всего два корпуса %2, если 5 корпусов, то %5)
+UPDATE comp SET case_id = (id+cpu_id)%2+1;
+
+					
+					Лекция 5
+					
+//таблица винчестеров
+CREATE TABLE disk
+(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   value int UNSIGNED NOT NULL,
+   weight INT UNSIGNED NOT NULL,
+   cost INT UNSIGNED NOT NULL,
+   PRIMARY KEY (id) 
+);
+
+//промежуточная таблица для связи дисков и сборок
+CREATE TABLE CompDisk
+(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY (id) 
+);
+//добавить столбцы
+ALTER TABLE Disk ADD COLUMN count INT UNSIGNED NOT NULL DEFAULT 0;
+
+ALTER TABLE CompDisk ADD COLUMN comp_id INT UNSIGNED NOT NULL;
+ALTER TABLE CompDisk ADD COLUMN disk_id INT UNSIGNED NOT NULL;
+или так
+ALTER TABLE CompDisk ADD COLUMNS comp_id INT UNSIGNED NOT NULL, disk_id INT UNSIGNED NOT NULL;
+
+
+//заполнение стоки данными(добавляем две строки в таблицу Disk)
+Insert into Disk
+	values (NULL,1000,200,6000,20),(NULL,1500,300,8000,25);
+	
+//заполнить промежуточную таблицу(указываем связь между сборкой(comp) и диском)
+//пусть в сборке с id=1 стоит два диска(с id=1 и c id=2), а во второй сборке(id=2) стоит один диск(с id=2)
+Insert into CompDisk
+	values (NULL,1,1),(NULL,1,2),(NULL,2,2);
+или
+указать те поля которые заполнять
+Insert into CompDisk (comp_id, disk_id) values
+	(1,1),
+	(1,2),
+	(2,2)
+;
+
+//дозапишем
+Insert into Disk
+	values (NULL,3000,500,10000,4),(NULL,320,100,1000,17),(NULL,250,80,800,25);
+	
+Insert into CompDisk (comp_id, disk_id) values
+	(1,3),
+	(1,2),
+	(2,4),
+	(3,1),
+	(5,3)
+;
+
+//изменить параметров существующего столбца
+ALTER TABLE `case` ALTER COLUMN power DROP DEFAULT;
+ALTER TABLE `case` ALTER COLUMN weight SET NOT NULL;
+ALTER TABLE `case` MODIFY cost INT UNSIGNED NOT NULL;
+
+//добавим строки
+Insert into `case` values
+	(NULL, 450,1600,450),
+	(NULL, 600,2560,800),
+	(NULL, 200,800, 350)
+;
+//установить значение веса в таблице case у строк с id=1 и id=2
+UPDATE `case` SET weight =  300 WHERE id=1;
+UPDATE `case` SET weight =  330 WHERE id=2;
+
+//поменять цену - например уменьшить на 50 все цены
+UPDATE `case` SET cost = cost - 50;
+
+//(id+cpu_id)%5 - это от 0 до 4
+UPDATE comp SET case_id = (id+cpu_id)%5+1;  - проставляем новые значения case_id в таблице comp(так теперь у нас 5 корпусов)
+
+//вывод для проверки
+select case_id FROM comp
+limit 10;
+
+
+//объединение таблиц
+
+//вывести табл в которой название сборки и сумма гигабайт
+SELECT comp.name, disk.`value` FROM comp
+	LEFT JOIN compdisk ON comp.id=compdisk.comp_id
+	LEFT JOIN disk ON disk.id=compdisk.disk_id
+WHERE comp.id =1005;
+
+update compdisk set comp_id = 1005; - так как у нас смещение айдишников в табл comp(они начинаются с 1005) - но поменяются все значения столбца comp_id
+
+
+delete from compdisk where id>1;
+
+insert into compdisk value (NULL, 1006, 1);
+insert into compdisk value (NULL, 1006, 2);
+
+//
+SELECT 
+	comp.name as COMP, 
+	disk.`value`,
+	disk.weight as DWeight,
+	cpu.name as CPU,
+	cpu.weight as CWeight
+FROM comp
+	LEFT JOIN compdisk ON comp.id=compdisk.comp_id
+	LEFT JOIN disk ON disk.id=compdisk.disk_id
+	LEFT JOIN cpu ON comp.cpu_id = cpu.id
+WHERE comp.id =1006;
+
+//соеденим строки ......
+SELECT 
+	comp.name as COMP, 
+	SUM(disk.`value`) as `Value`,
+	COUNT(disk.`value`) as `Count`,
+	disk.weight as DWeight,
+	cpu.name as CPU,
+	cpu.weight as CWeight
+FROM comp
+	LEFT JOIN compdisk ON comp.id=compdisk.comp_id
+	LEFT JOIN disk ON disk.id=compdisk.disk_id
+	LEFT JOIN cpu ON comp.cpu_id = cpu.id
+WHERE comp.id =1006;
+
+
+				Лекция 6
+				
+//namePC nameCPU weight(пока только cpu) selfcost(себистоимость - пока только cpu)	cost(стоимость сборки)
+SELECT
+	comp.name as NAME_PC,
+	cpu.name as CPU,
+	cpu.weight as Weight,
+	cpu.cost as selfcost,
+	comp.cost as Cost
+FROM comp
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LIMIT 5;
+
+////namePC power(case) weight(пока только корпуса) selfcost(себистоимость - пока только корпуса)	cost(стоимость сборки)
+SELECT 
+	comp.name as NAME_PC,
+	`case`.powerBP as `Power`,
+	`case`.weight as Weight,
+	`case`.cost as Selfcost,
+	comp.cost as Cost
+FROM comp
+LEFT JOIN `case` ON comp.case_id = `case`.id
+LIMIT 6;
+	
+// теперь вывести данные по cpu и case(будем складывать веса и себестоимости)
+SELECT
+	comp.name as Name,
+	comp.cost as Cost,
+	cpu.name as CPU,
+	`case`.powerBP as `Power`,
+	cpu.weight WeightCPU,
+	cpu.cost as CostCPU,
+	`case`.weight as WeightCase,
+	`case`.cost as CostCase,
+	(cpu.weight + `case`.weight) as SumWeight,
+	(cpu.cost + `case`.cost) as `SumSelfcost(CPU,Case)`
+FROM comp
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON comp.case_id = `case`.id
+LIMIT 5;
+
+//name(сборки) cost(сборки) cpu power weight(суммарный) selfcost(суммарная) incoming(доход с продажи: comp.cost - selfcost(суммарная))
+SELECT
+	comp.name as Name,
+	comp.cost as Cost,
+	cpu.name as CPU,
+	`case`.powerBP as `Power`,
+	(cpu.weight + `case`.weight) as SumWeight,
+	(cpu.cost + `case`.cost) as `SumSelfcost(CPU,Case)`,
+	comp.cost - (cpu.cost + `case`.cost) as incoming
+FROM comp
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON comp.case_id = `case`.id
+LIMIT 5;
+
+// подключим к сборке Диски
+// name cost(сборки) id(диска) value(диска) weight selfcost 
+SELECT
+	comp.name as NamePC,
+	comp.cost as Cost,
+	compdisk.disk_id,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LIMIT 10;
+
+// добавить суммарную инфу (группировка GROUP BY и групповая операция суммирования(сумма по столбцам) SUM)
+SELECT
+	comp.name as NamePC,
+	comp.cost as Cost,
+	compdisk.disk_id,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	SUM(disk.`value`),
+	SUM(disk.weight),
+	SUM(disk.cost)
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+GROUP BY comp.id
+LIMIT 10;
+
+//объединим все характеристики
+SELECT
+	comp.name as NamePC,
+	comp.cost as Cost,
+	`case`.powerBP as `Power`,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	SUM(disk.`value`) as sumValueDisks,
+	(cpu.weight + `case`.weight) as Wcpu_case,
+	(cpu.cost + `case`.cost) as Ccpu_case,
+	(cpu.weight + `case`.weight) + SUM(disk.weight) as SumWeight,
+	(cpu.cost + `case`.cost) + SUM(disk.cost) as `Selfcost(CPU,Case,Disks)`
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON `case`.id = comp.case_id
+GROUP BY comp.id
+LIMIT 10;
+
+//ф-ция IFNULL(<значение><значение по умолчанию>) - если в <значение> NULL, то вернет <значение по умолч>
+//то есть если в сборке нет какого-то диска, то суммарный вес все равно посчитается(то же самое и с cpu)
+//это защита от NULL
+SELECT
+	comp.name as NamePC,
+	comp.cost as Cost,
+	`case`.powerBP as `Power`,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	SUM(disk.`value`) as sumValueDisks,
+	(cpu.weight + `case`.weight) as Wcpu_case,
+	(cpu.cost + `case`.cost) as Ccpu_case,
+	IFNULL(cpu.weight, 0) + IFNULL(`case`.weight, 0) + IFNULL(SUM(disk.weight), 0) as SumWeight,
+	IFNULL(cpu.cost,0) + IFNULL(`case`.cost,0) + IFNULL(SUM(disk.cost),0) as `Selfcost(CPU,Case,Disks)`
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON `case`.id = comp.case_id
+GROUP BY comp.id
+LIMIT 10;
+
+//создадим из всего таблицу(в php)
+// COUNT(DISTINCT compdisk.id) - при групповой операции(GROUP BY) подсчитает кол-во compdisk.id - то есть подсчет кол-ва дисков в сборке
+(DISTINCT - отберет только уникальные)
+SELECT
+	comp.name as NamePC,
+	`case`.powerBP as `Power`,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	COUNT(DISTINCT compdisk.id) as `CountDisk`,
+	SUM(disk.`value`) as sumValueDisks,
+	(cpu.weight + `case`.weight) as Wcpu_case,
+	(cpu.cost + `case`.cost) as Ccpu_case,
+	IFNULL(cpu.weight, 0) + IFNULL(`case`.weight, 0) + IFNULL(SUM(disk.weight), 0) as SumWeight,
+	IFNULL(cpu.cost,0) + IFNULL(`case`.cost,0) + IFNULL(SUM(disk.cost),0) as `cost(CPU,Case,Disks)`
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON `case`.id = comp.case_id
+GROUP BY comp.id
+LIMIT 10;
+
+
+			Лекция 7
+			
+//отдельный класс, ответственный за получение запросов и ответов
+//так же есть отдельный класс отвечающий за логику
+//смотреть файл Complist.php
+
+SELECT
+	comp.name as NamePC,
+	`case`.powerBP as `Power`,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	COUNT(DISTINCT compdisk.id) as `CountDisk`,
+	SUM(disk.`value`) as sumValueDisks,
+	(cpu.weight + `case`.weight) as Wcpu_case,
+	(cpu.cost + `case`.cost) as Ccpu_case,
+	IFNULL(cpu.weight, 0) + IFNULL(`case`.weight, 0) + IFNULL(SUM(disk.weight), 0) as SumWeight,
+	IFNULL(cpu.cost,0) + IFNULL(`case`.cost,0) + IFNULL(SUM(disk.cost),0) as `cost(CPU,Case,Disks)`
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON `case`.id = comp.case_id
+WHERE comp.cost >25000	- WHERE применяется до группировки, и не видит SUM и его псевдонима(sumValueDisks), только disk.`value`
+GROUP BY comp.id
+HAVING comp.cost >1000	- HAVING применяется после группировки
+LIMIT 10;
+
+
+SELECT
+	comp.name as NamePC,
+	`case`.powerBP as `Power`,
+	disk.`value` as ValueDisk,
+	disk.weight as WeightDisk,
+	disk.cost as SelfCostDisk,
+	COUNT(DISTINCT compdisk.id) as `CountDisk`,
+	SUM(disk.`value`) as sumValueDisks,
+	(cpu.weight + `case`.weight) as Wcpu_case,
+	(cpu.cost + `case`.cost) as Ccpu_case,
+	IFNULL(cpu.weight, 0) + IFNULL(`case`.weight, 0) + IFNULL(SUM(disk.weight), 0) as SumWeight,
+	IFNULL(cpu.cost,0) + IFNULL(`case`.cost,0) + IFNULL(SUM(disk.cost),0) as `cost(CPU,Case,Disks)`
+FROM comp
+LEFT JOIN compdisk ON comp.id = compdisk.comp_id
+LEFT JOIN disk ON compdisk.disk_id = disk.id
+LEFT JOIN cpu ON comp.cpu_id = cpu.id
+LEFT JOIN `case` ON `case`.id = comp.case_id
+WHERE comp.cost >25000	
+GROUP BY comp.id
+HAVING comp.cost >25000
+LIMIT 10;
+
+
+//	создать таблицы user и order
+create table user (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	login varchar(25),
+	password varchar(25),
+	email varchar(25),
+	phone varchar(25),
+	PRIMARY KEY (id)
+);
+
+create table orders (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	user_id INT UNSIGNED NOT NULL,
+	goods_id INT UNSIGNED NOT NULL,
+	total_cost INT UNSIGNED NOT NULL,
+	createdon Timestamp DEFAULT CURRENT_TIMESTAMP,	//DEFAULT CURRENT_TIMESTAMP - текущее время по умолчанию
+	status_id INT UNSIGNED NOT NULL,
+	payment_method_id INT UNSIGNED NOT NULL,
+	PRIMARY KEY (id)
+);
+
+//изменить столбец password (чтобы влезал хэш пароля)
+alter table user  MODIFY password VARCHAR(32) NOT NULL;
+
+//заполнить таблицу user(будет два пользователя, вместо пароля его хэш)
+INSERT INTO user VALUES(NULL, "admin", '202cb962ac59075b964b07152d234b70', 'admin@localhost', '555-55-55');
+INSERT INTO user VALUES(NULL, "ivan", 'd8578edf8458ce06fbc5bb76a58c5ca4', 'ivan@mail.ru', '777-77-77');
+
+//удалить goods_id
+alter table orders drop column goods_id;
+
+//очистить таблицу (иначе не даст изменить параметры столбца createdon на NOT NULL)
+TRUNCATE table orders;
+		
+//сделать createdon NOT NULL
+alter table orders MODIFY createdon Timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+//заполнить табл заказов(будет два заказа для одного и 1 заказ для другого пользователя)
+INSERT INTO orders VALUES
+		(NULL, 1, 35000, CURRENT_TIMESTAMP, 1, 1),
+		(NULL, 1, 15000, CURRENT_TIMESTAMP, 1, 2),
+		(NULL, 2, 55000, CURRENT_TIMESTAMP, 2, 1);
+		
+//запрос
+SELECT 
+	user.id as 'ID User',
+	user.login as Login,
+	user.email as Email,
+	user.phone as Phone,
+	orders.user_id,
+	orders.total_cost,
+	orders.createdon,
+	orders.status_id,
+	orders.payment_method_id
+FROM user
+LEFT JOIN orders ON orders.user_id = user.id;
+
+	

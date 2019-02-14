@@ -6,6 +6,7 @@ require_once("../app/controllers/CProductController.php");//класс, отве
 require_once("../app/controllers/CSortController.php");
 require_once("../app/controllers/CFilterController.php");
 require_once("../app/controllers/CEntranceController.php");
+require_once("../app/controllers/COrderController.php");
 
 // класс для определения по строке запроса, какой раздел сайта необходимо отобразить
 class CRouter
@@ -18,7 +19,8 @@ class CRouter
 			'product' => "CProductController",
 			'sortby' => "CSortController",
 			'filter' => "CFilterController",
-			'entrance' => "CEntranceController"
+			'entrance' => "CEntranceController",
+			'order' => "COrderController"
 		];
 		// название раздела прилетит в GET параметре
 		//index.php?q=catalog

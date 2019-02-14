@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ESHOP</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous"> 
+</head>
+<body>
+	<div class="header">
+		<div class="inner-header">
+			<div class="wrapper">
+				<header>
+					<ul class="hdr-list">
+						<li>
+							<a href="index.html"><img src="img/baraholka6.jpg" alt="logo"></a>
+						</li>
+						<li class="about">
+							интернет-магазин<br/>Все для Каждого
+						</li>
+						<li>
+							<a href="index.html" class="bascket">
+								<span class="sf18">255</span> товаров <br>на сумму <span class="sf18">81000</span> руб.
+							</a>
+						</li>
+					</ul>
+					<div class="info-block">
+						<ul class="net-icons">
+							<li><a href="index.html" class="fab fa-twitter"></a></li>
+							<li><a href="index.html" class="fab fa-facebook-f"></a></li>
+							<li><a href="index.html" class="fab fa-instagram"></a></li>
+						</ul>
+						<span class="tel">+7 921 335 95 89</span>
+						<ul class="registration">
+							<li><a href="#entrance">Войти</a></li>
+							<li><a href="index.html">Регистрация</a></li>
+						</ul>
+					</div>
+				</header>
+			</div>
+		</div>
+	</div><!--end class="header"-->
+	<section>
+		<div class="wrapper slider-border">
+			<div id="slider-wrap">
+				<ul id="gallery">
+					<li>
+						<a href=""><img src="img/tomat.jpg"></a>
+					</li>
+					<li>
+						<a href=""><img src="img/coffe.jpg"></a>
+					</li>
+					<li>
+						<a href=""><img src="img/tomat.jpg"></a>
+					</li>
+					<li>
+						<a href=""><img src="img/coffe.jpg"></a>
+					</li>
+					<li>
+						<a href=""><img src="img/tomat.jpg"></a>
+					</li>
+				</ul>
+			</div>
+			<div id="gallery-controls">
+				<a href="#" id="control-prev">
+					<img src="img/gallery/prev.png">
+				</a>
+				<a href="#" id="control-next">
+					<img src="img/gallery/next.png">
+				</a>
+			</div>
+			<!--
+			<div class="slider">
+				<ul>
+					<li><img src="img/tomat.jpg" alt=""></li>
+					<li><img src="img/coffe.jpg" alt=""></li>
+					<li><img src="img/tomat.jpg" alt=""></li>
+					<li><img src="img/coffe.jpg" alt=""></li>
+					<li><img src="img/tomat.jpg" alt=""></li>
+				</ul>
+			</div>
+			-->
+		</div>
+	</section>
+	<section>
+			<main>
+				<div class="wrapper row">
+					<section class="filter-section col-2">
+						<div class="filter flex-column">
+							<b>Фильрация :</b>
+							<p>По категории</p>
+        					<ul class="filter__categories">
+								<li>
+									<a href=''>Категория 1</a><span class='badge'>24</span>
+								</li>
+								<li>
+									<a href=''>Категория 2</a><span class='badge'>9</span>
+								</li>
+								<li>
+									<a href=''>Категория 3</a><span class='badge'>11</span>
+								</li>
+        					</ul>
+        					<p>По стоимости</p>
+        					<ul class="filter__cost">
+					            <li>
+					                <a href="/index.php?q=filter&datafilter=cost&filtertype=less&filtervalue=10000" data-price="less-10000">До 10 000р</a>
+					                <span class="badge">16</span>
+					            </li>
+					            <li>
+					                <a href="/index.php?q=filter&datafilter=cost&filtertype=more&filtervalue=10000" data-price="more-10000">От 10 000р</a>
+					                <span class="badge">32</span>
+					            </li>
+        					</ul>
+        					<p><a href="/index.php?q=catalog">Показать все товары</a></p>
+						</div>
+					</section>
+					<div class="content_sorting col-10">
+						<div class="flex-column">
+							<section class="sorting-section">
+								<div class="sorting row">
+									<b>Сортировать : </b>
+							        <span>Стомость</span>
+							        <ul>
+							            <li>
+							                <a id="CostUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=cost">↑</a>
+							            </li>
+							            <li>
+							                <a id="CostDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=cost">↓</a>
+							            </li>
+							        </ul>
+							        <span>Вес</span>
+							        <ul>
+							            <li>
+							                <a id="WeightUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=weight">↑</a>
+							            </li>
+							            <li>
+							                <a id="WeightDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=weight">↓</a>
+							            </li>
+							        </ul>
+							        <span>Популярность</span>
+							        <ul>
+							            <li>
+							                <a id="VogueUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=vogue">↑</a>
+							            </li>
+							            <li>
+							                <a id="VogueDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=vogue">↓</a>
+							            </li>
+							        </ul>
+							    </div>
+							</section>
+							<section class="content-section">
+								<h1>Каталог</h1>
+    							<div class="catalog">
+									<div class="catalog__item">
+									    <span class="catalog__item-name">Помидоры</span>
+									    <img class="catalog__item-preview" src="img/tomat.jpg" alt="">
+									    <span class="catalog__item-cost"><b>Цена: </b>159</span>
+									    <span class="catalog__item-id"><b>ID: </b>29</span>
+									    <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
+									    <a href="/index.php?q=catalog&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a> 
+									</div>
+									<div class="catalog__item">
+									    <span class="catalog__item-name">кофе</span>
+									    <img class="catalog__item-preview" src="img/coffe.jpg" alt="">
+									    <span class="catalog__item-cost"><b>Цена: </b>2500</span>
+									    <span class="catalog__item-id"><b>ID: </b>4</span>
+									    <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
+									    <a href="/index.php?q=catalog&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a>   
+									</div>
+									<div class="catalog__item">
+									    <span class="catalog__item-name">сельдь</span>
+									    <img class="catalog__item-preview" src="img/tomat.jpg" alt="">
+									    <span class="catalog__item-cost"><b>Цена: </b>250</span>
+									    <span class="catalog__item-id"><b>ID: </b>21</span>
+									    <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
+									    <a href="/index.php?q=catalog&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a> 
+									</div>
+									<div class="catalog__item">
+									    <span class="catalog__item-name">дрова</span>
+									    <img class="catalog__item-preview" src="img/coffe.jpg" alt="">
+									    <span class="catalog__item-cost"><b>Цена: </b>1700</span>
+									    <span class="catalog__item-id"><b>ID: </b>7</span>
+									    <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
+									    <a href="/index.php?q=catalog&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a>   
+									</div>
+									<div class="catalog__item">
+									    <span class="catalog__item-name">дрова</span>
+									    <img class="catalog__item-preview" src="img/coffe.jpg" alt="">
+									    <span class="catalog__item-cost"><b>Цена: </b>1700</span>
+									    <span class="catalog__item-id"><b>ID: </b>7</span>
+									    <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
+									    <a href="/index.php?q=catalog&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a>   
+									</div>
+    							</div>	
+							</section>
+						</div><!--end "flex-column"-->
+					</div><!-- end "content_sorting"-->
+				</div>
+			</main>
+	</section>
+	<!-- форма и контакты -->
+	<section class="feedback">
+		<div class="wrapper">
+			<div class="all-contacts row">
+				<!-- левая секция (ввод данных)-->
+				<section class="contacts-left_section col-8">
+					<form>					
+						<!-- flex контейнер 1.2.a (поля ввода)-->
+						<div class="input-fields row">
+							<!-- ввод имени-->
+							<div class="item-flex">
+								<label for="nameField">Name</label>
+								<input type="text" name="username" id="nameField" placeholder="введите имя" required=""> <!--*в чем разница между placeholder и value - почему если указан value, то он светиться внутри поля вместо placeholder -->
+							</div>
+							<!-- ввод почты-->
+							<div class="item-flex">
+								<label for="emailField">Email</label>
+								<input type="email" name="emailField" id="emailField" placeholder="введите почту" required="">
+							</div>
+							<!-- ввод сообщения -->
+							<div class="message">
+								<label>Message</label>
+								<textarea name="message" id="message" rows="8"></textarea>
+							</div>
+						</div>
+						<!-- flex контейнер 1.2.b (кнопки действий)-->
+						<div class="action-button row">
+							<div>
+								<input class="send-message" type="submit" name="" value="send message">
+							</div>
+							<div>
+								<input class="clear-form" type="reset" value="clear">
+							</div>
+						</div>
+					</form>
+				</section>
+				<!-- правая секция (контактная информация)-->
+				<section class="contacts-right_section col-4">
+					<div>
+						<div class="row">
+							<div class="icon-fa">
+								<span class="fas fa-envelope"></span>
+							</div>
+							<div class="contacts">	
+								<h3>Email</h3>
+								<a href="">myemail@adress.com</a>
+							</div>	
+						</div>
+					</div>
+					<div>	
+						<div class="row">
+							<div class="icon-fa">
+								<span class="fas fa-phone"></span>
+							</div>
+							<div class="contacts">
+								<h3>Phone</h3>
+								<span>+79210000000</span>
+							</div>	
+						</div>
+					</div>	
+					<div>	
+						<div class="row">
+							<div class="icon-fa">
+								<span class="fas fa-home"></span>
+							</div>
+							<div class="contacts">
+								<h3>Adress</h3>
+								<span>		
+									190025 St-Petersberg
+									<br>
+									Nevskiy avenue, 36
+									<br>
+									Russian Federation
+								</span>
+							</div>	
+						</div>
+					</div>	
+				</section>
+				
+			</div>	
+		</div>
+	</section>
+	<div class="footer">
+		<div class="inner-footer">
+			<div class="wrapper">
+				<footer>
+					<ul class="net-icons">
+						<li><a class="fab fa-twitter" href=""></a></li>
+						<li><a class="fab fa-facebook-f" href=""></a></li>
+						<li><a class="fab fa-instagram" href=""></a></li>
+						<li><a class="fab fa-vk" href=""></a></li>
+					</ul>
+				</footer>
+			</div>	
+		</div>
+	</div>
+	<!-- модальное окно - Входа и Регистрации-->
+	<div class="overlay" id="entrance">
+		<div class="form-entrance flex-column">
+			<form class="entrance" method="post" action="index.html">
+				<div>
+					<label for="login">Логин: </label><input id='login' type="text" name="login">
+				</div>
+				<div>
+					<label for="pass">Пароль: </label><input id='pass' type="password" name="pass">
+				</div>
+				<button class="entrance-button">Вход</button>
+			</form>
+			<div class="exit-button">
+				<a href="">Exit</a>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
