@@ -299,7 +299,7 @@ FROM comp, cpu
 WHERE 
 	comp.cost >= 29000 AND comp.cpu_id = cpu.id;
 
-//LIMIT - ограничение(выведет только первые 10 элементов запроса)
+//LIMIT 10 - ограничение(выведет только первые 10 элементов запроса)
 SELECT comp.name, comp.cpu_id,
 		cpu.id, cpu.name
 FROM comp		
@@ -342,7 +342,7 @@ CREATE TABLE `case`
    PRIMARY KEY (id) 
 );
 
-//заполнение стоки данными
+//заполнение строки данными
 Insert into `case`
 	values (NULL,15,1500,600),(NULL,17,2500,800);
 	
@@ -654,7 +654,7 @@ LEFT JOIN cpu ON comp.cpu_id = cpu.id
 LEFT JOIN `case` ON `case`.id = comp.case_id
 WHERE comp.cost >25000	- WHERE применяется до группировки, и не видит SUM и его псевдонима(sumValueDisks), только disk.`value`
 GROUP BY comp.id
-HAVING comp.cost >1000	- HAVING применяется после группировки
+HAVING comp.cost >1000	- HAVING применяется после группировки(работает быстрее)
 LIMIT 10;
 
 
@@ -738,4 +738,523 @@ SELECT
 FROM user
 LEFT JOIN orders ON orders.user_id = user.id;
 
+
+			Лекция 8
+			
+//
+ALTER TABLE user ADD COLUMN `name` varchar(50);
+
+UPDATE user set `name` = 'ivan ivanov'
+WHERE user.id = 2;
+
+UPDATE user set `name` = 'admin adminov'
+WHERE user.id = 1;
+
+
+			//для проекта
+//создаем новую базу для проекта, создаем пользователя, наделяем его правами
+CREATE DATABASE myshopdb CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON  myshopdb.* TO 'admin'@'localhost';	
+//создаем таблицу товаров
+CREATE TABLE goods (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	name varchar(50) default "PRODUCT",
+	cost INT UNSIGNED NOT NULL,
+	weight float default 0.0,
+	`count` int UNSIGNED default 0,
+	vogue int UNSIGNED default 0,
+	category varchar(50),
+	description TEXT,
+	img varchar(50),
+	receipt_data DATE,
+	PRIMARY KEY (id)
+);
+//изменить значение столбца weight с float на int и записывать граммы(иначе при алгебраических опарациях будет неточность)
+//а при выводе делить на 1000 и получать килограммы
+ALTER TABLE goods MODIFY weight int NOT NULL;
+
+//таблица пользователи
+CREATE TABLE `user` (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	login varchar(25) NOT NULL,
+	password varchar(32) NOT NULL,
+	email varchar(25) NOT NULL,
+	phone varchar(25) NOT NULL,
+	name varchar(50) NOT NULL,
+	addres varchar(50) NOT NULL DEFAULT "empty",
+	PRIMARY KEY(id)
+);
+
+пользователи
+1) 
+INSERT INTO `user`
+	VALUES (NULL, 'anna', '202cb962ac59075b964b07152d234b70', 'annita@ya.ru', '89219247022', 'Анна Федорова', 'СПБ Литейный д.34 кв.6');
+2)
+INSERT INTO `user`
+	VALUES (NULL, 'roma', '202cb962ac59075b964b07152d234b70', 'roman@ya.ru', '89117250013', 'Роман Евдокимов', 'СПБ Светлановский пр. д.34 кв.6');
 	
+	
+//таблица корзины
+CREATE TABLE cart (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	goods_id int UNSIGNED NOT NULL,
+	goods_count int UNSIGNED NOT NULL,
+	user_id int UNSIGNED NOT NULL,
+	status int UNSIGNED NOT NULL,
+	PRIMARY KEY(id)
+);	
+корзина
+1) INSERT INTO cart VALUES 
+				(NULL, 1, 3, 2, 1),
+				(NULL, 1, 1, 1, 1),
+				(NULL, 2, 2, 2, 1),
+				(NULL, 4, 1, 2, 1),
+				(NULL, 3, 4, 1, 1);
+
+//запрос на поиск товаров в корзине пользователей(по user_id)
+SELECT
+	goods.id as 'id товара', 
+	goods.name as 'Название', 
+	goods.cost as 'цена товара',
+	goods.weight as weight,
+	goods.vogue as vogue,
+	goods.category as 'категория товара',
+	goods.description as description,
+	goods.img as path_to_img,
+	goods.receipt_data,
+	cart.goods_id,
+	cart.goods_count as 'количество в корзине',
+	(goods.cost * cart.goods_count) as 'summ_cost',
+	cart.user_id
+FROM goods
+LEFT JOIN cart ON goods.id = cart.goods_id
+LEFT JOIN `user` ON `user`.id = cart.user_id
+WHERE user_id = 2;
+
+//короткий запрос для проверки подсчетов
+SELECT
+	goods.id as 'id товара', 
+	goods.name as 'Название', 
+	goods.cost as 'цена товара',
+	goods.weight as weight,
+	cart.goods_count as 'count_in_cart',
+	(goods.cost * cart.goods_count) as 'summ_cost',
+	cart.user_id
+FROM goods
+LEFT JOIN cart ON goods.id = cart.goods_id
+LEFT JOIN `user` ON `user`.id = cart.user_id
+WHERE user_id = 2;
+
+//запрос на подсчет общей суммы,веса и кол-ва
+SELECT
+	SUM(goods.cost * cart.goods_count) as 'total_cost',
+	SUM(cart.goods_count) as 'total_count',
+	SUM(goods.weight * cart.goods_count) as 'total_weight'
+FROM goods
+LEFT JOIN cart ON goods.id = cart.goods_id
+LEFT JOIN `user` ON `user`.id = cart.user_id
+WHERE user_id = 2;	
+		
+//запрос на поиск товара с определенным id(получаем из get параметра) в корзине пользователя
+SELECT
+	goods.id,
+	goods.name,
+	`cart`.goods_count
+FROM goods
+LEFT JOIN `cart` ON `cart`.goods_id = goods.id
+LEFT JOIN `user` ON `user`.id = `cart`.user_id
+WHERE user_id = 2 AND goods_id = 1;		
+(user_id берем из $this->user_id , а goods_id из $_GET['id'])
+
+//изменение значения user.goods_count(+1) если нажали добавить в корзину и товар такой есть
+UPDATE `cart` SET goods_count = goods_count +1
+WHERE user_id = 2 AND goods_id = 1; 
+
+//добавление товара в корзину(если такого еще не было в корзине)
+//(user_id берем из $this->user_id , а goods_id из $_GET['id'] , goods_count = 1)
+INSERT INTO cart VALUES (NULL, 4, 1, 2, 1);
+
+//удаление товара из корзины
+DELETE FROM cart WHERE user_id = 2 AND goods_id = 3;
+
+//очистить корзину
+TRUNCATE table cart;
+
+товары
+1) Картридж для Xerox 3225
+цена: 3500
+вес: 0.5
+кол-во: 4
+популярность: 6
+категория: расходные материалы
+описание: Для лазерного принтера(черный). совместимые модели: Xerox Phaser 3052, Xerox Phaser 3260, Xerox WorkCentre 3215, Xerox WorkCentre 3225. Ресурс: 4100 страниц. В наборе 2шт.
+фото: images/goods/xerox3225.jpg
+дата поступления: 18.12.2018
+
+INSERT INTO goods
+	values (NULL,'Картридж для Xerox 3225', 3500, 0.5, 4, 6, 'расходные материалы', 
+			'Для лазерного принтера(черный). совместимые модели: Xerox Phaser 3052, Xerox Phaser 3260, Xerox WorkCentre 3215, Xerox WorkCentre 3225. Ресурс: 4100 страниц. В наборе 2шт.',
+			'images/goods/xerox3225.jpg', '2018.12.20');
+//изменить значение веса(в граммы)
+UPDATE goods SET weight = 500
+WHERE goods.id = 1;
+//поменять имя
+UPDATE goods SET name = 'Картридж Xerox 3225'
+WHERE goods.id = 1;
+
+2) Картридж для Xerox 3220
+цена: 2900
+вес: 0.4
+кол-во: 2
+популярность: 3
+категория: расходные материалы
+описание: Для лазерного принтера(черный). совместимые модели: Xerox WorkCentre 3210, Xerox WorkCentre 3220 . Ресурс: 3000 страниц.
+фото: images/goods/xerox3220.jpg
+дата поступления: 2018.11.24
+
+INSERT INTO goods
+	values (NULL, 'Картридж для Xerox 3220', 2900, 0.4, 2, 3, 'расходные материалы',
+	'Для лазерного принтера(черный). совместимые модели: Xerox WorkCentre 3210, Xerox WorkCentre 3220 . Ресурс: 3000 страниц.',
+	'images/goods/xerox3220.jpg', '2018.11.24');
+//изменить значение веса(в граммы)
+UPDATE goods SET weight = 400
+WHERE goods.id = 2;
+//поменять имя
+UPDATE goods SET name = 'Картридж Xerox 3220'
+WHERE goods.id = 2;
+
+3) Картридж для HP Pro 400
+цена: 5100
+вес: 0.7
+кол-во: 2
+популярность: 7
+категория: расходные материалы
+описание: Для лазерного принтера(черный). совместимые модели: HP LaserJet Pro 400 M401, HP LaserJet Pro 400 M425 . Ресурс: 2700 страниц.
+фото: images/goods/hp80a.jpg
+дата поступления: 13.07.2018
+
+INSERT INTO goods
+	values (NULL, 'Картридж для HP Pro 400', 5100, 0.7, 2, 7, 'расходные материалы',
+	'Для лазерного принтера(черный). совместимые модели: HP LaserJet Pro 400 M401, HP LaserJet Pro 400 M425 . Ресурс: 2700 страниц.',
+	'images/goods/hp80a.jpg', '2018.07.13');
+//изменить значение веса(в граммы)
+UPDATE goods SET weight = 700
+WHERE goods.id = 3;
+//поменять имя
+UPDATE goods SET name = 'Картридж HP 400'
+WHERE goods.id = 3;
+
+4) Оперативная память Kingston
+цена: 1500
+вес: 0.1
+кол-во: 10
+популярность: 3
+категория: комплектующие
+описание: Тип памяти DDR3. Тактовая частота 1333 МГц. Пропускная способность 10600 МБ/с. Объем 1 модуль 2 ГБ
+фото: images/goods/ram_kingston.jpg
+дата поступления: 24.01.2019
+
+INSERT INTO goods
+	values (NULL, 'Оперативная память Kingston', 1500, 0.1, 10, 3, 'комплектующие',
+	'Тип памяти DDR3. Тактовая частота 1333 МГц. Пропускная способность 10600 МБ/с. Объем 1 модуль 2 ГБ.',
+	'images/goods/ram_kingston.jpg', '2019.01.24');
+//изменить значение веса(в граммы)
+UPDATE goods SET weight = 100
+WHERE goods.id = 4;
+//поменять имя
+UPDATE goods SET name = 'память Kingston'
+WHERE goods.id = 4;
+
+5) Оперативная память Silicon
+цена: 2500
+вес: 100
+кол-во: 6
+популярность: 2
+категория: комплектующие
+описание: Тип памяти DDR3. Тактовая частота 1333 МГц. Пропускная способность 10600 МБ/с. Объем 1 модуль 4 ГБ
+фото: images/goods/ram_silicon.jpg
+дата поступления: 2019.01.24
+
+INSERT INTO goods
+	values (NULL, 'Оперативная память Silicon', 2500, 100, 6, 2, 'комплектующие', 
+	'Тип памяти DDR3. Тактовая частота 1333 МГц. Пропускная способность 10600 МБ/с. Объем 1 модуль 4 ГБ.',
+	'images/goods/ram_silicon.jpg', '2019.01.24');
+//поменять имя
+UPDATE goods SET name = 'память Silicon'
+WHERE goods.id = 5;
+
+6) Диск SSD ADATA
+цена: 2900
+вес: 200
+кол-во: 6
+популярность: 2
+категория: комплектующие
+описание: Тип SSD. Объем 240 ГБ. Скорость записи/Скорость чтения 450/520 МБ/с. Подключение SATA 6Gbit/s. Поддержка секторов размером 4 КБ. Тип флэш-памяти TLC 3D NAND. Назначение для ноутбука и настольного компьютера. Форм-фактор 2.5 дюймов.
+фото: images/goods/ssd_adata.jpg
+дата поступления: 2019.02.12
+
+INSERT INTO goods
+	values (NULL, 'Диск SSD ADATA', 2900, 200, 6, 2, 'комплектующие',
+	'Тип SSD. Объем 240 ГБ. Скорость записи/Скорость чтения 450/520 МБ/с. Подключение SATA 6Gbit/s. Поддержка секторов размером 4 КБ. Тип флэш-памяти TLC 3D NAND. Назначение для ноутбука и настольного компьютера. Форм-фактор 2.5 дюймов.',
+	'images/goods/ssd_adata.jpg', '2019.02.12');
+
+7) Диск SSD Sumsung
+цена: 3100
+вес: 250
+кол-во: 3
+популярность: 4
+категория: комплектующие
+описание: Тип SSD. Объем 256 ГБ. Скорость записи/Скорость чтения 460/570 МБ/с. Подключение SATA 6Gbit/s. Поддержка секторов размером 4 КБ. Тип флэш-памяти TLC 3D NAND. Назначение для ноутбука и настольного компьютера. Форм-фактор 2.5 дюймов.
+фото: images/goods/ssd_sumsung.jpg
+дата поступления: 2019.02.09
+
+INSERT INTO goods
+	values (NULL, 'Диск SSD Sumsung', 3100, 250, 3, 4, 'комплектующие', 
+	'Тип SSD. Объем 256 ГБ. Скорость записи/Скорость чтения 460/570 МБ/с. Подключение SATA 6Gbit/s. Поддержка секторов размером 4 КБ. Тип флэш-памяти TLC 3D NAND. Назначение для ноутбука и настольного компьютера. Форм-фактор 2.5 дюймов.',
+	'images/goods/ssd_sumsung.jpg', '2019.02.09');
+
+8) Диск HDD Seagate
+цена: 7600
+вес: 1.6
+кол-во: 1
+популярность: 7
+категория: комплектующие
+описание: Объем 4Тб. Объем кэш-памяти 64Мб. Скорость вращения шпинделя 5900 rpm. Максимальная скорость передачи данных 180 Мбайт/с. Интерфейс SATA III. Пропускная способность интерфейса 6 Гбит/с.
+фото: images/goods/hdd_seagate.jpg
+дата поступления: 06.12.2018
+
+9) Диск HDD WD
+цена: 7800
+вес: 1.5
+кол-во: 1
+популярность: 8
+категория: одежда
+описание: Объем 3Тб. Объем кэш-памяти 64Мб. Скорость вращения шпинделя 5400 rpm. Максимальная скорость передачи данных 210 Мбайт/с. Интерфейс SATA III. Пропускная способность интерфейса 6 Гбит/с.
+фото: images/goods/hdd_western.jpg
+дата поступления: 06.11.2018
+
+10) Детский комбинезон
+цена: 2400
+вес: 0.7
+кол-во: 1
+популярность: 2
+категория: одежда
+описание: б/у. Отличное состояние. Состав: 100% полиэстер. Утеплитель: 300 гр. Подкладка: 100% полиэстер, 180 гр. флис. Бренд: Lappi Kids. Цвет синий.
+фото: images/goods/overalls.jpg
+дата поступления: 07.12.2018
+
+11) Валенки детские
+цена: 700
+вес: 0.4
+кол-во: 1
+популярность: 3
+категория: одежда
+описание: б/у. Отличное состояние. Высшее качество. Полностью экологичные.
+фото: images/goods/felt_boots.jpg
+дата поступления: 06.12.2018
+
+12) Краги детские
+цена: 800
+вес: 0.1
+кол-во: 1
+популярность: 6
+категория: одежда
+описание: б/у. Отличное состояние. Зимние краги для детей выполнены из ткани Blazer Membrane, подклад хлопок. 3-5 лет (22-8-12). Цвет желтый.
+фото: images/goods/mittens.jpg
+дата поступления: 01.11.2018
+
+13) Сандали детские
+цена: 250
+вес: 0.1
+кол-во: 1
+популярность: 2
+категория: одежда
+описание: б/у. Отличное состояние. Синие сандалии Jook из натуральной замши. Стелька и подкладка из натуральной кожи. Регулируемые по ширине ножки ремешки «велкро». Фактурная полимерная подошва.
+фото: images/goods/sandals.jpg
+дата поступления: 29.01.2019
+
+14) Fairy
+цена: 390
+вес: 0.7
+кол-во: 4
+популярность: 7
+категория: бытовая химия
+описание: Средство для мытья посуды. Fairy разработали специальную формулу, протестированную с дерматологами, которая не только отлично справится с жиром, но и придаст мягкости Вашим рукам.
+фото: images/goods/fairy.jpg
+дата поступления: 04.01.2019
+
+15) Finnish
+цена: 1900
+вес: 1.8
+кол-во: 3
+популярность: 9
+категория: бытовая химия
+описание: Моющее средство для посудомоечной машины Finish. 100 штук. Страна производителя Финляндия.
+фото: images/goods/finnish.jpg
+дата поступления: 04.01.2019
+
+16) Sif
+цена: 200
+вес: 0.6
+кол-во: 2
+популярность: 6
+категория: бытовая химия
+описание: Чистящее средство-крем. Универсальное средство. Подходит для металлических поверхностей, стеклокерамики, эмалированных поверхностей, кухонных плит, грилей.
+фото: images/goods/sif.jpg
+дата поступления: 05.01.2018
+
+17) Fahrenheit
+цена: 3750
+вес: 0.2
+кол-во: 1
+популярность: 7
+категория: косметика
+описание: Аромат: Кожаные древесные. Производство: Франция. Для: мужчин. Объем, мл: 150
+фото: images/goods/fehrenheit.jpg
+дата поступления: 01.02.2019
+
+18) Aqva
+цена: 2600
+вес: 0.11
+кол-во: 1
+популярность: 4
+категория: косметика
+описание: Аромат: кедр из вирджинии, амбра.  Производство: Бельгия. Для: женщин. Объем, мл: 100
+фото: images/goods/aqva.jpg
+дата поступления: 07.02.2019
+
+19) Кроватка детская
+цена: 17000
+вес: 17
+кол-во: 1
+популярность: 3
+категория: мебель
+описание: б/у. Отличное состояние. Материал дерево. Цвет белый. Для матраса размером 60x120 см. Размеры (ШxДxВ) 72x125x109 см.
+фото: images/goods/crib.jpg
+дата поступления: 06.01.2019
+
+20) Стульчик для кормления
+цена: 3600
+вес: 5.6
+кол-во: 1
+популярность: 4
+категория: мебель
+описание: б/у. Отличное состояние. Polly Progres5 — это единственный стульчик, который "растет" вместе с ребенком с самого рождения до 3 лет.
+фото: images/goods/Chair.jpg
+дата поступления: 06.01.2019
+
+21) Шкаф
+цена: 5900
+вес: 25
+кол-во: 1
+популярность: 2
+категория: мебель
+описание: б/у. Отличное состояние. Шкаф 3-х дверный с зеркалом.
+фото: images/goods/cupboard.jpg
+дата поступления: 23.11.2017
+
+22) Drops D3
+цена: 390
+вес: 0.1
+кол-во: 9
+популярность: 9
+категория: витамины
+описание: Суточная доза, 5 капель, содержит 10 микрограмм D 3 -витамина. Основное вещество, входящее в состав - колекальциферол.
+фото: images/goods/drop_d3.jpg
+дата поступления: 03.01.2019
+
+23) Faberlic черника
+цена: 560
+вес: 0.1
+кол-во: 3
+популярность: 5
+категория: витамины
+описание: Концентрат сухой для приготовления безалкогольного напитка Черника плюс.
+фото: images/goods/bads.jpg
+дата поступления: 03.01.2019
+
+24) Сыр Vallio
+цена: 560
+вес: 1.9
+кол-во: 2
+популярность: 9
+категория: продукты питания
+описание: Содержание жира 17%. Производство Финляндия. Срок годности уточняйте.
+фото: images/goods/vallio.jpg
+дата поступления: 01.02.2019
+
+25) Сыр Hermanni
+цена: 520
+вес: 1.8
+кол-во: 3
+популярность: 7
+категория: продукты питания
+описание: Производство Финляндия. Срок годности уточняйте. Мягкий сливочный сыр, с характерным насыщенным вкусом. Не содержит лактозы и консервантов.
+фото: images/goods/hermany.jpg
+дата поступления: 01.02.2019
+
+26) Кофе Gevalia
+цена: 480
+вес: 0.95
+кол-во: 6
+популярность: 8
+категория: продукты питания
+описание: Производство Финляндия. Растворимый кофе. Размер упаковки: 16x6x21(см).Срок годности: 18 месяцев.
+фото: images/goods/coffe_gevalia.jpg
+дата поступления: 01.02.2019
+
+27) Кофе Paulig
+цена: 570
+вес: 0.95
+кол-во: 7
+популярность: 7
+категория: продукты питания
+описание: Кофе молотый Paulig Presidentti Original. Вид зерен арабика. Обжарка светлая. Помол средний. Срок хранения 24 месяца.
+фото: images/goods/coffe_paulig.jpg
+дата поступления: 01.02.2019
+
+28) Салями Kotimainen
+цена: 1100
+вес: 0.5
+кол-во: 3
+популярность: 8
+категория: продукты питания
+описание: Portti Kotimainen Meetvursti — салями в нарезке, вакуумная упаковка. Срок хранения 6 месяца.
+фото: images/goods/Kotimainen.jpg
+дата поступления: 11.02.2019
+
+29) Салями Montorsi
+цена: 690
+вес: 0.25
+кол-во: 2
+популярность: 4
+категория: продукты питания
+описание: Колбаса Montorsi Салями Эмилиано сыровяленая, 250г. Состав: свинина, соль, декстроза, специи, антиокислитель: аскорбиновая.
+фото: images/goods/Montorsi.jpg
+дата поступления: 11.02.2019
+
+30) Салями Gettiran
+цена: 720
+вес: 0.3
+кол-во: 3
+популярность: 5
+категория: продукты питания
+описание: Состав: Свинина (ЕС), соль, сахароза, специи (кориандр, черный перец, горчичное семя, белый перец), экстракты специй, декстроза, антиокислитель (Е316)
+фото: images/goods/gettiran.jpg
+дата поступления: 11.02.2019
+
+
+//запросы для class CRequestGoods
+
+SELECT 
+	goods.name as name,
+	goods.cost as cost,
+	goods.weight as weight,
+	goods.`count` as count,
+	goods.vogue as vogue,
+	goods.category as category,
+	goods.description as description,
+	goods.img as img,
+	goods.receipt_data as receipt_data
+FROM goods

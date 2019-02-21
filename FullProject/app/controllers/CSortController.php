@@ -9,16 +9,14 @@ class CSortController implements IPageController
 	public function setPermissions($permissions) { //разрешения
 		// TODO: Implement setPermissions() method.
 	}
-	public function render() { // - формирование страницы
-		//из конфигурац файла считываем инфу
-		$parser = \app\dataio\CConfParser::getInstance('../app/config/db_product.yaml'); //создает объект нужного класса
-		$parser->read(); //читаем из файла в массив
-
-		// Из конфига получаем все товары в виде массива
-		$goods = $parser->getAllParams();
+	public function render($pdo) { // - формирование страницы
+		//нужно подключить класс запросов, выполнить запрос и получить массив-ответ
+		$request = new \app\request\CRequestGoods($pdo);
+		//получаем массив всех товаров
+		$arr_goods = $request->getArray();
 		
 		//произвести сортировку
-		$new_goods = self::sorting($goods, self::getSortRule());
+		$new_goods = self::sorting($arr_goods, self::getSortRule());
 		//$new_goods = self::sorting($goods, 'ruleSortWeightUp');
 
 		$path_to_template = "../app/views/sortby.php";

@@ -7,16 +7,17 @@ class CFilterController implements IPageController
 	public function setPermissions($permissions) { //разрешения
 		// TODO: Implement setPermissions() method.
 	}
-	public function render() { //формирование страницы
-		$parser = \app\dataio\CConfParser::getInstance('../app/config/db_product.yaml'); //создает объект нужного класса
-		$parser->read(); //читаем из файла
-		//получаем все товары в виде массива
-		$goods = $parser->getAllParams();
+	public function render($pdo) { //формирование страницы
+		//нужно подключить класс запросов, выполнить запрос и получить массив-ответ
+		$request = new \app\request\CRequestGoods($pdo);
+		//получаем массив всех товаров
+		$arr_goods = $request->getArray();
+
 		//производим фильтрацию (НУЖНО ли проверять на "непустые значения $_GET")
 		$type = $_GET['filtertype'];	//тип фильтра(равно, больше, меньше)
 		$value = $_GET['filtervalue'];	//значение с которым сравнивать(конкретная категория, стоимость от/до 1000)
 		$data = $_GET['datafilter'];	//значение по которому сравнивать(категория, стоимость)
-		$new_goods = self::filtration($goods, $data, $value, $type);//self::getRule($type));
+		$new_goods = self::filtration($arr_goods, $data, $value, $type);//self::getRule($type));
 
 		$path_to_template = "../app/views/filter.php"; //определили куда выводить
 		include($path_to_template); // выводим

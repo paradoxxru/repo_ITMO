@@ -1,7 +1,11 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 //запросы MYSQL
 require_once('config.php');
+
+session_start(); //запускаем сессию
 
 //создание подключения к базе данных
 //DPO - это класс для подключения баз данных
@@ -291,9 +295,87 @@ foreach ($comps as $comp) {
 }
 echo "</table>";
 
-
+//лекция 8
 // сформировать таблицы user и orders и вывести в html
- 
+$str = "
+SELECT 
+	user.id as ID_User,
+	user.login as Login,
+	user.email as Email,
+	user.phone as Phone,
+	orders.user_id as order_userID,
+	orders.total_cost as total_cost,
+	orders.createdon as createdon,
+	orders.status_id as status,
+	orders.payment_method_id as payment_method
+FROM user
+LEFT JOIN orders ON orders.user_id = user.id;
+";
+
+echo "таблица User + Orders<br>";
+?>
+<table style="border:1px solid black;">
+	<tr>
+		<th>User ID</th>
+		<th>Login</th>
+		<th>Email</th>
+		<th>Phone</th>
+		<th>order user_id</th>
+		<th>order total_cost</th>
+		<th>order data</th>
+		<th>status</th>
+		<th>payment_method_id</th>
+	</tr>
+<?php
+$result7 = $pdo->query($str)->fetchAll();
+foreach ($result7 as $row) {
+		echo "<tr>"
+			."<td style='border:1px solid black;'>{$row['ID_User']}</td>"
+			."<td style='border:1px solid black;'>{$row['Login']}</td>"
+			."<td style='border:1px solid black;'>{$row['Email']}</td>"
+			."<td style='border:1px solid black;'>{$row['Phone']}</td>"
+			."<td style='border:1px solid black;'>{$row['order_userID']}</td>"
+			."<td style='border:1px solid black;'>{$row['total_cost']}</td>"
+			."<td style='border:1px solid black;'>{$row['createdon']}</td>"
+			."<td style='border:1px solid black;'>{$row['status']}</td>"
+			."<td style='border:1px solid black;'>{$row['payment_method']}</td>"
+			."</tr>";
+}
+echo "</table>";
+
+
+
+					//реализация авторизации
+
+	//все что ниже закомменчено лежит в config.php
+// require_once"vendor/autoload.php";
+// $db_name = 'eshopdb';
+// $db_user = 'ivan';
+// $db_user_pass = '123';
+// $db_host = 'localhost';
+
+require_once('config.php');
+
+//далее
+// try {
+// 	$pdo = new PDO("mysql:host={$db_host};dbname={$db_name}",
+// 				$db_user,
+// 				$db_user_pass);
+// } catch (Exception $e) {
+// 	die("<h1>Error</h1>");
+// }
+// но это было написано ранее
+
+$user = new \app\Auth\User($pdo);
+// echo $user->getUserName()."<br>";
+// $user->login('admin', '123');
+// echo $user->getUserName()."<br>";
+if(isset($_GET['action']) && $_GET['action'] === 'logout') $user->logout();
+if($user->isAuth()) {
+    include "./view/auth/logout.php";
+} else {
+    include "./view/auth/login.php";
+}
 
 
 $pdo = null; //чистим переменную, освобождаем память

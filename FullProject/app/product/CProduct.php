@@ -1,8 +1,7 @@
 <?php
 namespace app\product;
 
-//require_once ("../app/product/WordGenerator.php");
-abstract class CProduct
+class CProduct  //был abstract 
 {
     private $weight = 0;
     private $cost = 0;
@@ -13,22 +12,25 @@ abstract class CProduct
     private $count = 0;
     private $img = "";
     private $id = 0;
+    private $receipt_data = "";
+    private $count_in_cart = 0;
+    private $summ_cost = 0;
 
 
-    public function fillRandom() {
-        $this->weight = rand(1,2) > 1
-            ? rand(1, 20)/10
-            : rand(1, 20);
-        $this->cost = rand(1,2) > 1
-            ? rand(1, 20) * 100
-            : rand(1, 20) * 1000;
-        $this->vogue = rand(1,100);
-        $this->count = rand(1, 50);
-        $this->category = WordGenerator::randomCategory();
-        $this->name = WordGenerator::randomSentence(rand(2,4), WordGenerator::UL);
-        $this->description = WordGenerator::randomText(rand(4, 10), WordGenerator::ULP);
-        $this->img = "im" . rand(1, 6) . ".svg";
-    }
+    // public function fillRandom() {
+    //     $this->weight = rand(1,2) > 1
+    //         ? rand(1, 20)/10
+    //         : rand(1, 20);
+    //     $this->cost = rand(1,2) > 1
+    //         ? rand(1, 20) * 100
+    //         : rand(1, 20) * 1000;
+    //     $this->vogue = rand(1,100);
+    //     $this->count = rand(1, 50);
+    //     $this->category = WordGenerator::randomCategory();
+    //     $this->name = WordGenerator::randomSentence(rand(2,4), WordGenerator::UL);
+    //     $this->description = WordGenerator::randomText(rand(4, 10), WordGenerator::ULP);
+    //     $this->img = "im" . rand(1, 6) . ".svg";
+    // }
     // public function __construct($id = false)
     // {
     //     if($id !== false) {
@@ -65,17 +67,7 @@ abstract class CProduct
         return false;
     }
 
-//    public function __toString()
-//    {
-//        // TODO: Implement __toString() method.
-//        return $this->name;
-//    }
-
-    /**
-     *
-     */
-    public function render($view, $value = []) { //принимать параметр(какое представление взять) +
-                                                //$value = [] - если не передано значение, то по умолчанию будет пустой массив. $value нужен в app/views/product/cart.php чтобы выводить кол-во и стоимость товара в корзине
+    public function render($view) { //принимать параметр(какое представление взять)
         //$view= catalog
         //$view= cart
         //$view= product_page
@@ -96,8 +88,8 @@ abstract class CProduct
     {
         foreach($arr as $key => $val)
         {
-            if(property_exists($this, $key)) $this->$key = $val;
-//            $this->$key = $val;
+            if(property_exists($this, $key)) 
+                $this->$key = $val;
         }
     }
 }

@@ -7,7 +7,7 @@
     	 echo $this->name;
     	?>
 	</span>
-    <img class="filterby__item-preview" src="assets/images/<?php echo $this->img; ?>" alt="">
+    <img class="filterby__item-preview" src="assets/<?php echo $this->img; ?>" alt="">
     <span class="filterby__item-cost"><?php echo "<b>Цена: </b>". $this->cost; ?></span>
     <span class="filterby__item-weight"><?php echo "<b>Вес: </b>". $this->weight; ?></span>
     <span class="filterby__item-vogue"><?php echo "<b>Популярность: </b>". $this->vogue; ?></span>

@@ -1,179 +1,141 @@
 <?php
 ?>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="assets/css/eshop.css">
+	<meta charset="UTF-8">
+	<title>ESHOP</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous"> 
 </head>
 <body>
-<aside>
-    <?php
-        //require_once ("../app/user.php"); 
-        $user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
+	<?php
+		//$user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
+		$user = new \app\auth\CUser($pdo);
         if(isset($_GET['logout'])) //если нажали выход, то logout
             $user->logout();
 
-        //require_once ("../app/dataio/CUserCart.php");
-        $userCart = new \app\dataio\CUserCart($user->getLogin());//создаем объект-корзину, определяя для какого пользователя
-        //(аноним или нет) и читаем из файла корзины в массив корзины + собираем инфу о полной стоимости и кол-ву
+        $userCart = new \app\dataio\CUserCart($pdo,$user->getLogin(),$user->getUserId());
         //запцскаем мотод обработки экшинов
-        $userCart->actionsWithCart($goods);
-        //считаем кол-во, сумму и вес
-        $userCart->calcSummaryInfo();
+        $userCart->actionsWithCart();
         
-        // echo "путь до файла: ";echo "<br>";
-        // echo $userCart->getPath();echo "<br>";
-        // echo "массив корзины в файле catalog.php: ";echo "<br>";
-        // echo "<pre>";
-        // var_dump($userCart->getArrCart());
-        // echo "</pre>";
-    ?>
-    <div class="filter">
-        <p>По категории</p>
-        <ul class="filter__categories">
-        <?php
-            //подключить файл CListByCategory
-            //require_once('../app/dataio/CListsBy.php');
-            //вызвать getListCategory($goods) - формируем массив категорий
-            \app\dataio\CListsBy::getListCategory($goods);
-            //подключить шаблон вывода списка по категориям
-            $path_to_template = "../app/views/lists/list_by_category.php"; //определили куда выводить
-            include($path_to_template); // выводим
-        ?>
-        </ul>
-        <p>По стоимости</p>
-        <?php
-            \app\dataio\CListsBy::getListCost($goods); //считаем кол-во товара до 10000тр и от 10000тр
-        ?>
-        <ul class="filter__cost">
-            <li>
-                <a href="/index.php?q=filter&datafilter=cost&filtertype=less&filtervalue=10000" data-price="less-10000">До 10 000р</a>
-                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_less;?></span>
-            </li>
-            <li>
-                <a href="/index.php?q=filter&datafilter=cost&filtertype=more&filtervalue=10000" data-price="more-10000">От 10 000р</a>
-                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_more;?></span>
-            </li>
-        </ul>
-        <p><a href="/index.php?q=catalog">Показать все товары</a></p>
-    </div>
-</aside>
-<section class="main">
-    <div class="sorting">
-        <span>Стомость</span>
-        <ul>
-            <li>
-                <a id="CostUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=cost">↑</a>
-            </li>
-            <li>
-                <a id="CostDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=cost">↓</a>
-            </li>
-        </ul>
-        <span>Вес</span>
-        <ul>
-            <li>
-                <a id="WeightUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=weight">↑</a>
-            </li>
-            <li>
-                <a id="WeightDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=weight">↓</a>
-            </li>
-        </ul>
-        <span>Популярность</span>
-        <ul>
-            <li>
-                <a id="VogueUp" href="/index.php?q=sortby&actionsort=sort_up&sort_field=vogue">↑</a>
-            </li>
-            <li>
-                <a id="VogueDown" href="/index.php?q=sortby&actionsort=sort_down&sort_field=vogue">↓</a>
-            </li>
-        </ul>
-        <a
-            href="/index.php?q=cart"
-            id="Cart"
-            data-action="open-cart">Корзина
-            <?php 
-            echo "( ".$userCart->getCol()." шт. На сумму: ".$userCart->getSum()." )";
-            ?>
-        </a>
-        <?php  
-            if($user->isAuth()) {
-                $str = $user->getName();
-                echo "<a href='/index.php?q=cabinet' id='UserCabinet'>".$str."</a>";
-            }
-            else {
-                //$str = 'Вход';
-                echo "<a href='/index.php?q=entrance' id='UserLogin' data-action=''>Вход</a>";
-            }
-        ?>
-        <!--
-        <a
-            href="/index.php?q=entrance"
-            id="UserLogin"
-            data-action=""><?php //echo $str;?>
-        </a>
-        -->
-        <?php
-            if($user->isAuth())
-                echo "<a href='/index.php?q=catalog&logout=1' style='padding-left:20px;'>Выход</a>";
-        ?>
-    </div>
-    <!--
-    <div class="catalog">
-        
-    </div>
-    -->
-    <div class="cart">
-        <h1>Корзина</h1>
-        <?php 
-            // foreach ($goods as $i => $item) {
-            //     if( isset($_SESSION['cart']) ) {
-            //         foreach ($_SESSION['cart'] as $key => $value) {
-            //             if($key == $item['id']) {
-            //                 $product = new CFruitProduct();//создаем объект
-            //                 $product->fromArray($item); //заполняем значениями из массива
-            //                 $product->render('cart'); //выводим в корзину
-            //             }
-            //         }
-            //     }
-            // }
-            //получаем массив корзины
-            $ourcart = $userCart->getArrCart();
-            // echo "массив корзины: ";echo "<br>";
-            // echo "<pre>";
-            // var_dump($ourcart);
-            // echo "</pre>";
-            foreach ($goods as $i => $item) {
-                if( isset($ourcart) ) {
-                    foreach ($ourcart as $key => $value) {
-                        if($value['id'] == $item['id']) {
-                            $product = new \app\product\CFruitProduct();//создаем объект
-                            $product->fromArray($item); //заполняем значениями из массива
-                            $product->render('cart',$value); //выводим в корзину. передаем $value, чтобы
-                            //считать кол-во и стоимость по нужному id
-                        }
-                    }
-                }
-            }
-        ?>
-        <div class='cart__order'>
-            <div class="cart__order-summaryInfo">
-                <span><?php echo "Общая стоимость: ".$userCart->getSum();?></span>
-                <span><?php echo "Общая вес: ".$userCart->getWeight();?></span>
-            </div>
-            <div class='cart__order-action'>
-                <a href="/index.php?q=order">Оформить заказ</a>
-            </div>
-        </div>
-    </div>
-    <div class="goods">
+	?>
+	<?php
+		//подключили файл проверки логина пользователя
+		//include('../app/views/entrance/entrance_check.php');
+		// echo "массив session<br>";
+		// echo "<pre>";
+		// var_dump($_SESSION);
+		// echo "</pre>";
+		//unset($_SESSION['cart']);
+	?>
+	<div class="header">
+		<div class="inner-header">
+			<div class="wrapper">
+				<?php 
+					//подключаем header
+					include('../app/views/header/header.php');
+				?>
+			</div>
+		</div>
+	</div><!--end class="header"-->
+	<!--слайдер - галерея изображений-->
+	<section>
+		<div class="wrapper slider-border">
+			<div id="slider-wrap">
+				<ul id="gallery">
+					<!--
+					<li>
+						<a href=""><img src="img/tomat.jpg"></a>
+					</li>
+					-->
+				</ul>
+			</div>
+			<div id="gallery-controls">
+				<a href="#" id="control-prev">
+					<img src="img/gallery/prev.png">
+				</a>
+				<p>Новые поступления</p>
+				<a href="#" id="control-next">
+					<img src="img/gallery/next.png">
+				</a>
+			</div>
+		</div>
+	</section>
+	<section>
+			<main>
+				<div class="wrapper row">
+					<section class="filter-section col-2">
+						<?php
+							//подключаем секцию фильтров
+							include('../app/views/filter/filter_section.php');
+						?>
+					</section>
+					<div class="content_sorting col-10">
+						<div class="flex-column">
+							<section class="sorting-section">
+								<?php
+									//подключаем секцию сортировок
+									include('../app/views/sorting/sorting_section.php');
+								?>
+							</section>
+							<section class="content-section">
+								<div class="cart">
+									<h1>Корзина</h1>
+										<?php
+											$cart = $userCart->getCart();
+											// echo "каозина пользователя: <br>";
+											// echo "<pre>";
+											// var_dump($cart);
+											// echo "</pre>";
+											if(count($cart)>0) {
+												foreach ($cart as $id => $item) {
+										            $product = new \app\product\CProduct();
+										            $product->fromArray($item); //заполняем значениями
+										            $product->render('cart'); //выводим
+										        }
+									    	}
+										?>
+	    							<div class='cart__order'>
+							            <div class="cart__order-summaryInfo">
+							                <span><?php echo "Общая стоимость: ".$userCart->getTotalCost();?></span>
+							                <span><?php echo "Общая вес: ".$userCart->getTotalWeight();?></span>
+							            </div>
+							            <div class='cart__order-action'>
+							                <a href="/index.php?q=order">Оформить заказ</a>
+							            </div>
+							        </div>
+						        </div>
+							</section>
+						</div><!--end "flex-column"-->
+					</div><!-- end "content_sorting"-->
+				</div>
+			</main>
+	</section>
+	<!-- форма и контакты -->
+	<section class="feedback">
+		<div class="wrapper">
+			<?php
+				//подключаем форму обратной связи и контакты
+				include('../app/views/contacts/contacts_section.php');
+			?>
+		</div>
+	</section>
+	<div class="footer">
+		<?php
+			//подключаем footer
+			include('../app/views/footer/footer.php');
+		?>
+	</div>
+	<!-- модальное окно - Входа и Регистрации-->
+	<div class="overlay" id="entrance">
+		<?php
+			//подключаем модальное окно
+			include('../app/views/modal_window/modal_window.php');
+		?>
+	</div>
 
-    </div>
-</section>
-<!--
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="js/eshop.js"></script>
--->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
 </body>
 </html>

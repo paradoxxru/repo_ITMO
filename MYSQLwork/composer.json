@@ -1,0 +1,9 @@
+{
+	"name": "dmitry/eshop",
+	"autoload": {
+		"psr-4": {
+			"app\\": "app/",
+			"app\\Auth\\": "app/auth"
+		}
+	}
+}

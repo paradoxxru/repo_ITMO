@@ -11,12 +11,12 @@
 <aside>
     <?php
         //require_once ("../app/user.php"); // видимо нужно перенести в самое начало документа
-        $user = new User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
+        $user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
         if(isset($_GET['logout'])) //если нажали выход, то logout
             $user->logout();
 
         //require_once ("../app/dataio/CUserCart.php");
-        $userCart = new CUserCart($user->getLogin());//создаем объект-корзину, определяя для какого пользователя
+        $userCart = new \app\dataio\CUserCart($user->getLogin());//создаем объект-корзину, определяя для какого пользователя
         //(аноним или нет) и читаем из файла корзины в массив корзины + собираем инфу о полной стоимости и кол-ву
         
         //запускаем мотод обработки экшинов
@@ -25,7 +25,7 @@
         $userCart->calcSummaryInfo();
         
         //require_once ("../app/dataio/CUserOrder.php");
-        $order = new CUserOrder($user->getLogin()); //создаем объект заказа
+        $order = new \app\dataio\CUserOrder($user->getLogin()); //создаем объект заказа
         
         echo "<pre>";
         echo "массив POST: ";echo "<br>";
@@ -39,7 +39,7 @@
             //подключить файл CListByCategory
             //require_once('../app/dataio/CListsBy.php');
             //вызвать getListCategory($goods) - формируем массив категорий
-            CListsBy::getListCategory($goods);
+            \app\dataio\CListsBy::getListCategory($goods);
             //подключить шаблон вывода списка по категориям
             $path_to_template = "../app/views/lists/list_by_category.php"; //определили куда выводить
             include($path_to_template); // выводим
@@ -47,16 +47,16 @@
         </ul>
         <p>По стоимости</p>
         <?php
-            CListsBy::getListCost($goods); //считаем кол-во товара до 10000тр и от 10000тр
+            \app\dataio\CListsBy::getListCost($goods); //считаем кол-во товара до 10000тр и от 10000тр
         ?>
         <ul class="filter__cost">
             <li>
                 <a href="/index.php?q=filter&datafilter=cost&filtertype=less&filtervalue=10000" data-price="less-10000">До 10 000р</a>
-                <span class="badge"><?php echo ClistsBy::$count_cost_less;?></span>
+                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_less;?></span>
             </li>
             <li>
                 <a href="/index.php?q=filter&datafilter=cost&filtertype=more&filtervalue=10000" data-price="more-10000">От 10 000р</a>
-                <span class="badge"><?php echo ClistsBy::$count_cost_more;?></span>
+                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_more;?></span>
             </li>
         </ul>
         <p><a href="/index.php?q=catalog">Показать все товары</a></p>

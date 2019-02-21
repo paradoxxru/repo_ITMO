@@ -10,9 +10,11 @@ class ComposerStaticInit3c38fbc1640424161192a2ca2c8b1c68
         'a' => 
         array (
             'app\\router\\' => 11,
+            'app\\request\\' => 12,
             'app\\product\\' => 12,
             'app\\dataio\\' => 11,
             'app\\controllers\\' => 16,
+            'app\\auth\\' => 9,
             'app\\' => 4,
         ),
     );
@@ -21,6 +23,10 @@ class ComposerStaticInit3c38fbc1640424161192a2ca2c8b1c68
         'app\\router\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/router',
+        ),
+        'app\\request\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/request',
         ),
         'app\\product\\' => 
         array (
@@ -33,6 +39,10 @@ class ComposerStaticInit3c38fbc1640424161192a2ca2c8b1c68
         'app\\controllers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app/controllers',
+        ),
+        'app\\auth\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/auth',
         ),
         'app\\' => 
         array (

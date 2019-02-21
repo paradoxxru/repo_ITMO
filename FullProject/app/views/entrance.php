@@ -71,11 +71,11 @@
         <ul class="filter__cost">
             <li>
                 <a href="/index.php?q=filter&datafilter=cost&filtertype=less&filtervalue=10000" data-price="less-10000">До 10 000р</a>
-                <span class="badge"><?php echo ClistsBy::$count_cost_less;?></span>
+                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_less;?></span>
             </li>
             <li>
                 <a href="/index.php?q=filter&datafilter=cost&filtertype=more&filtervalue=10000" data-price="more-10000">От 10 000р</a>
-                <span class="badge"><?php echo ClistsBy::$count_cost_more;?></span>
+                <span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_more;?></span>
             </li>
         </ul>
         <p><a href="/index.php?q=catalog">Показать все товары</a></p>

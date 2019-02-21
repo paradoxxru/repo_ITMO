@@ -1,5 +1,5 @@
 <?php
-$cat = CListsBy::$categories;
+$cat = \app\dataio\CListsBy::$categories;
 // echo "<pre>";
 // echo "массив категорий: ";echo "<br>";
 // var_dump($cat);

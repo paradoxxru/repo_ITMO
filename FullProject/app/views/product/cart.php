@@ -5,7 +5,7 @@
                 <a href="/index.php?q=cart&id=<?php echo $this->id; ?>&action=del_element">X</a>
             </div>
             <div class="cart__item-small_images">
-                <img src="assets/images/<?php echo $this->img;?>">
+                <img src="assets/<?php echo $this->img;?>">
             </div>
             <div class="cart__item-info">
                 <span class="cart__item-name"><?php echo "<b>Название: </b>".$this->name; ?></span>
@@ -18,12 +18,18 @@
                 <span class="cart__item-cost"><?php echo "<b>Цена: </b>".$this->cost; ?></span>
                 <span class="cart__item-summcost">
                 	<?php //echo "<b>Стомость: </b>".($this->cost)*($_SESSION['cart'][$this->id])?>
-                    <?php echo "<b>Стомость: </b>".($this->cost)*($value['count'])?>
+                    <?php echo "<b>Стомость: </b>".$this->summ_cost ;?>
                 </span>
                 <div>
-                    <a href="/index.php?q=cart&id=<?php echo $this->id;?>&action=deltocart">-</a>
-                    <span><?php echo "<b>Кол-во: </b>".$value['count']; ?></span>
-                    <a href="/index.php?q=cart&id=<?php echo $this->id;?>&action=addtocart">+</a>
+                    <a href="/index.php?q=cart<?php echo'&id='.$this->id
+                                            .'&weight='.$this->weight
+                                            .'&cost='.$this->cost
+                                            .'&action=deltocart'?>">-</a>
+                    <span><?php echo "<b>Кол-во: </b>".$this->count_in_cart ; ?></span>
+                    <a href="/index.php?q=cart<?php echo'&id='.$this->id
+                                            .'&weight='.$this->weight
+                                            .'&cost='.$this->cost
+                                            .'&action=addtocart'?>">+</a>
                 </div>
             </div>
         </div>
