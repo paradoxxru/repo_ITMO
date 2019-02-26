@@ -14,7 +14,7 @@ class CRouter
 			'filter' => "CFilterController",
 			'entrance' => "CEntranceController",
 			'order' => "COrderController"
-		];
+		]; // убрать entrance
 		
 		if(isset($params['q']) && isset($routes[$params['q']])) {
 		    // echo "if <br>";

@@ -55,7 +55,6 @@ class CUserCart {
 			// + проверять в сессии корзину и если она есть переносить(добавлять) в корзину пользователя
 			//и удалять корзину из сессии
 			if(isset($_SESSION['cart'])) {
-				//$dopcart = $this->arrToCartAnonim();
 				$this->combineCart();
 				unset($_SESSION['cart']);
 			}
@@ -67,14 +66,6 @@ class CUserCart {
 			}
 		}
 		$this->calcTotalInfo();
-		//определиться с логином(или по user_id), если аноним, то собирать товар в сессию
-		//если логинестя, то переносить(добавлять) товар из сессии в корзину
-
-
-		//может быть по результатам запроса(если это залогиненый пользователь)
-		//заполнять поля(массив) объекта
-		echo "логин пользователя :".$login."<br>";
-		echo "id пользователя :".$user_id."<br>";
 	}
 	//ф-ция соединяет корзину анонима и корзину пользователя(если она есть) при его логине
 	private function combineCart() {
@@ -85,17 +76,18 @@ class CUserCart {
 		else {
 			//обойти массив $this->cart и массив полученный $this->arrToCartAnonim() на соотв-ия id
 			$newcart = $this->arrToCartAnonim();
-			echo "массив newcart<br>";
-			echo "<pre>";
-			var_dump($newcart);
-			echo "</pre>";
+			// echo "массив newcart<br>";
+			// echo "<pre>";
+			// var_dump($newcart);
+			// echo "</pre>";
 			foreach ($this->cart as $key => $value) {
 				foreach ($newcart as $n => $item) {
 					//если есть совпадения то запросом поменять кол-во в базе корзины
 					if($value['id'] == $item['id']) {
 						echo "совпали id<br>";
 						$query = "UPDATE `cart` SET goods_count = goods_count + ".$item['count']
-								." WHERE user_id = ".$this->user_id." AND goods_id = ".$item['id'].";";
+								." WHERE user_id = ".$this->user_id." AND goods_id = ".$item['id']
+								." AND cart.status = 1;";
 						echo "строка запроса : ".$query.'<br>';
 						$this->pdo->query($query);
 						// и удалить элемент, так как далее его не будем обрабатывать
@@ -121,7 +113,7 @@ class CUserCart {
 	}
 	//ф-ция по запросу формирует массив корзины
 	private function arrToCart() {
-		$query = self::CARTREQUEST. self::FROM. self::JOIN .$this->getWhere().";";
+		$query = self::CARTREQUEST. self::FROM. self::JOIN .$this->getWhere()." AND cart.status =1;";
 		$resalt = $this->pdo->query($query)->fetchAll();
 		// echo "результат запроса корзины<br>";
 		// echo "<pre>";
@@ -174,7 +166,7 @@ class CUserCart {
 	//ф-ция считает общую сумму, кол-во и вес
 	private function calcTotalInfo() {
 		if($this->login !== 'anonim') {
-			$query = self::SUMMINFO. self::FROM. self::JOIN .$this->getWhere().";";
+			$query = self::SUMMINFO. self::FROM. self::JOIN .$this->getWhere()." AND cart.status =1;";
 			$resalt = $this->pdo->query($query)->fetchAll();
 			if(count($resalt) > 0) {
 				$this->total_cost = $resalt[0]['total_cost'];
@@ -213,12 +205,12 @@ class CUserCart {
 		if(isset($_GET['action']) && ($_GET['action'] === 'addtocart') && isset($_GET['id']) ) {
 			if($this->login !== 'anonim') {
 				//запрос на поиск такого товара в корзине пользователя
-				$where = $this->getWhere(). " AND goods_id = ".$_GET['id'].";";
+				$where = $this->getWhere(). " AND goods_id = ".$_GET['id']." AND status = 1;";
 				$query = self::CHECKCART. self::FROM. self::JOIN. $where;
 				$resalt = $this->pdo->query($query)->fetchAll();
 				if(count($resalt)>0) { //если товар есть
 					//то увеличить кол-во на 1
-					echo "надо увеличить кол-во<br>";
+					//echo "надо увеличить кол-во<br>";
 					//echo "where = ".$where."<br>";
 					$query = self::UPDATEPLUS.$where;
 					$this->pdo->query($query);
@@ -227,7 +219,7 @@ class CUserCart {
 				}
 				else { //если такого товара в корзине нет
 					//то внести его в корзину
-					echo "надо добавить товар в корзину<br>";
+					//echo "надо добавить товар в корзину<br>";
 					$query = "INSERT INTO cart VALUES (NULL,".$_GET['id'].", 1,".$this->user_id.", 1 );";
 					$this->pdo->query($query);
 					//и уменьшить кол-во товара в базе goods
@@ -264,7 +256,7 @@ class CUserCart {
 		} elseif(isset($_GET['action']) && ($_GET['action'] === 'deltocart') && isset($_GET['id']) ) {
 			if($this->login !== 'anonim') {
 				//запрос на поиск такого товара в корзине пользователя
-				$where = $this->getWhere(). " AND goods_id = ".$_GET['id'].";";
+				$where = $this->getWhere(). " AND goods_id = ".$_GET['id']." AND status = 1;";
 				$query = self::CHECKCART. self::FROM. self::JOIN. $where;
 				$resalt = $this->pdo->query($query)->fetchAll();
 				if(count($resalt)>0) { //если товар есть
@@ -290,7 +282,8 @@ class CUserCart {
 		//если нажали на "Х" (удалить из корзины)
 		} elseif(isset($_GET['action']) && ($_GET['action'] === 'del_element') && isset($_GET['id'])) {
 			if($this->login !== 'anonim') {
-				$query = "DELETE FROM cart WHERE user_id =".$this->user_id." AND goods_id =".$_GET['id'].";";
+				$query = "DELETE FROM cart WHERE user_id ="
+							.$this->user_id." AND goods_id =".$_GET['id']." AND status = 1;";
 				$this->pdo->query($query);
 				// добавить кол-во товара в базе goods
 			}
@@ -313,5 +306,66 @@ class CUserCart {
 		}
 		//подсчет полной стоимости, веса, кол-ва
 		$this->calcTotalInfo();
+	}
+	
+	//ф-ция возвращает кол-во товара в базе goods по id
+	public function getGoodsCount($id) {
+		$query = "SELECT goods.`count` FROM goods WHERE id=".$id.";";
+		return $this->pdo->query($query)->fetchAll();
+	}
+	// получить почту пользователя
+	private function getEmail() {
+		$query = "SELECT `user`.email FROM `user` WHERE id=".$this->user_id.";";
+		return $this->pdo->query($query)->fetchAll();
+	}
+	//послать письмо покупателю
+	public function sendMessage($delivery, $addr_delivery) {
+		//$to = $this->getEmail()[0]['email'];
+		//$to  = "<maksimov@gsom.pu.ru>";
+		$to = "<paradoxxru@list.ru>";
+		$subject = "заказ";
+		$message = "<p>Уважаемый(ая), ".$this->login." ваш заказ принят.</p><br><br>";
+		$message .= "<table style='border-collapse: separate; border-spacing: 2px; width: 100%;'>
+			<th>Название</th><th>Вес</th><th>Цена</th><th>Кол-во</th><th>Стоимость</th>";
+		foreach ($this->cart as $value) {
+			$message .= "<tr>
+						  <td style='border:1px solid;'>".$value['name']."</td>
+					      <td style='border:1px solid;'>Вес: ".($value['weight']/1000)." кг.</td>
+					      <td style='border:1px solid;'>".$value['cost']."</td>
+					      <td style='border:1px solid;'>".$value['count_in_cart']."</td>
+					      <td style='border:1px solid;'>".$value['summ_cost']."</td>
+						</td>";
+		}
+		$message .= "<tr><td></td><td></td><td>Всего:</td><td>Вес:</td><td>Общая сумма:</td><tr>
+						<tr>
+							<td style='border:none;'></td><td style='border:none;'></td>
+							<td style='border:1px solid;'>".$this->getTotalCount()."</td>
+							<td style='border:1px solid;'>".($this->getTotalWeight()/1000)." кг.</td>
+							<td style='border:1px solid;'>".$this->getTotalCost()." руб.</td>
+						<tr>
+					</table><br><br>";
+		if($delivery == 'delivery' && isset($addr_delivery)) {
+			$dostavka = 'доставка по адресу: '.$addr_delivery;
+		}
+		else {
+			$dostavka = 'самовывоз с адреса: СПб, ул. Б. Морская, д.5';
+		}
+		$message .= "Выбранный способ доставки - ".$dostavka;
+		//$headers  = "Content-type: text/html; charset=windows-1251 \r\n"; 
+		$headers = "Content-type: text/html; charset=UTF-8\r\n";
+		$headers .= "From: <paradoxxru@list.ru>\r\n"; 
+		//$headers .= "Reply-To: reply-to@example.com\r\n";
+		if(isset($to) && isset($subject) && isset($message)) {
+			mail($to, $subject, $message, $headers);
+		}
+	}
+	// послать письмо продавцу из формы обратной связи
+	public function sendMessageToSeller($message, $from) {
+		$to = "<paradoxxru@list.ru>";
+		$subject = "письмо от посетителя сайта";
+		$message = $message . "<br><br> Письмо от ".$from."<br>";
+		$headers = "Content-type: text/html; charset=UTF-8\r\n";
+		$headers .= "From: <paradoxxru@list.ru>\r\n";
+		mail($to, $subject, $message, $headers);
 	}
 }

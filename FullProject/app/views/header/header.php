@@ -1,7 +1,7 @@
 <header>
 	<ul class="hdr-list">
 		<li>
-			<a href="index.html"><img src="assets/images/baraholka6.jpg" alt="logo"></a>
+			<a href="index.php?q=catalog"><img src="assets/images/baraholka6.jpg" alt="logo"></a>
 		</li>
 		<li class="about">
 			интернет-магазин<br/>Для Всех и Каждого
@@ -28,8 +28,8 @@
 					      <li><a href='/index.php?q=catalog&logout=1'>Выход</a></li>";
 				}
 				else {
-					echo '<li><a href="#entrance">Войти</a></li>
-						<li><a href="index.html">Регистрация</a></li>';
+					echo '<li><a href="?registration=0#entrance">Войти</a></li>
+						<li><a href="?registration=1#entrance">Регистрация</a></li>';
 				}
 			?>
 		</ul>

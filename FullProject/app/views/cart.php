@@ -19,15 +19,16 @@
         //запцскаем мотод обработки экшинов
         $userCart->actionsWithCart();
         
-	?>
-	<?php
-		//подключили файл проверки логина пользователя
-		//include('../app/views/entrance/entrance_check.php');
-		// echo "массив session<br>";
-		// echo "<pre>";
-		// var_dump($_SESSION);
-		// echo "</pre>";
-		//unset($_SESSION['cart']);
+        //если поля формы обратной связи заполненны, то отправить письмо продавцу
+        if(
+        	isset($_POST['send-message']) 
+        	&& isset($_POST['emailField']) 
+        	&& isset($_POST['username'])
+        	&& $_POST['send-message'] == 'send_message'
+        ) {
+        	$userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
+        }
+        
 	?>
 	<div class="header">
 		<div class="inner-header">
@@ -42,24 +43,10 @@
 	<!--слайдер - галерея изображений-->
 	<section>
 		<div class="wrapper slider-border">
-			<div id="slider-wrap">
-				<ul id="gallery">
-					<!--
-					<li>
-						<a href=""><img src="img/tomat.jpg"></a>
-					</li>
-					-->
-				</ul>
-			</div>
-			<div id="gallery-controls">
-				<a href="#" id="control-prev">
-					<img src="img/gallery/prev.png">
-				</a>
-				<p>Новые поступления</p>
-				<a href="#" id="control-next">
-					<img src="img/gallery/next.png">
-				</a>
-			</div>
+			<?php
+				//подключение слайдера
+				include('../app/views/slider/slider.php');
+			?>
 		</div>
 	</section>
 	<section>
@@ -83,6 +70,7 @@
 								<div class="cart">
 									<h1>Корзина</h1>
 										<?php
+										//print mail("name@my.ru","header","text");
 											$cart = $userCart->getCart();
 											// echo "каозина пользователя: <br>";
 											// echo "<pre>";
@@ -90,6 +78,16 @@
 											// echo "</pre>";
 											if(count($cart)>0) {
 												foreach ($cart as $id => $item) {
+													//получить кол-во товара "в наличии"
+													$count = $userCart->getGoodsCount($item['id']);
+													$item['in_stok'] = $count[0]['count'];
+													//если кол-во товара в безе < кол-ва в корзине
+													if($item['count_in_cart'] > $count[0]['count']) {
+														//установим класс(нужен при выводе)
+														$item['class'] = 'deficit';
+													} else {
+														$item['class'] = 'normal';
+													}
 										            $product = new \app\product\CProduct();
 										            $product->fromArray($item); //заполняем значениями
 										            $product->render('cart'); //выводим
@@ -99,12 +97,21 @@
 	    							<div class='cart__order'>
 							            <div class="cart__order-summaryInfo">
 							                <span><?php echo "Общая стоимость: ".$userCart->getTotalCost();?></span>
-							                <span><?php echo "Общая вес: ".$userCart->getTotalWeight();?></span>
+							                <span><?php echo "Общая вес: ".$userCart->getTotalWeight()/1000;?></span>
 							            </div>
-							            <div class='cart__order-action'>
-							                <a href="/index.php?q=order">Оформить заказ</a>
+							            <?php
+							            	if($user->isAuth()) {
+							   		echo"<div class='cart__order-action'>
+							                <a href='/index.php?q=order'>Оформить заказ</a>
 							            </div>
-							        </div>
+							        </div>";
+							            	} else {
+							   echo "</div>
+							   		<div class='cart__order-message'>
+							            <p>Для оформления заказа войдите или зарегистрируйтесь</p>
+							        </div>";
+							            	}
+							            ?>
 						        </div>
 							</section>
 						</div><!--end "flex-column"-->

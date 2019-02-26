@@ -29,13 +29,13 @@ $(document).ready(function(){
 	//сделать вставку в li нужных элементов(вернуть из php по запросу из базы)
 	//var new_gallery = $('#gallery');
 	//new_gallery.empty();
-	for(var i=1;i<15;i++) {
-		$('#gallery').append($('<li>',{
-			append: $('<a>',{href:"#",
-						append: $('<img>',{src:'img/goods/' + i + '.jpg'})
-					})
-			}));
-	}
+	// for(var i=1;i<15;i++) {
+	// 	$('#gallery').append($('<li>',{
+	// 		append: $('<a>',{href:"#",
+	// 					append: $('<img>',{src:'img/goods/' + i + '.jpg'})
+	// 				})
+	// 		}));
+	// }
 	// Галлерея
 	if($("#gallery").length){ //проверка есть ли элементы списка
 		var totalImages = $("#gallery > li").length; //сколько всего элементов списка(картинок)

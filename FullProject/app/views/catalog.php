@@ -10,27 +10,24 @@
 </head>
 <body>
 	<?php
-		//$user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
 		$user = new \app\auth\CUser($pdo);
         if(isset($_GET['logout'])) //если нажали выход, то logout
             $user->logout();
-
-
-        //$userCart = new \app\dataio\CUserCart($user->getLogin());//создаем объект-корзину
+        //создаем объект-корзину
         $userCart = new \app\dataio\CUserCart($pdo,$user->getLogin(),$user->getUserId());
 
         //запцскаем мотод обработки экшинов
         $userCart->actionsWithCart();
-        //считаем кол-во, сумму и вес
-        //$userCart->calcSummaryInfo();
-	?>
-	<?php
-		//подключили файл проверки логина пользователя
-		//include('../app/views/entrance/entrance_check.php');
-		// echo "массив session<br>";
-		// echo "<pre>";
-		// var_dump($_SESSION);
-		// echo "</pre>";
+
+		//если поля формы обратной связи заполненны, то отправить письмо продавцу
+        if(
+        	isset($_POST['send-message']) 
+        	&& isset($_POST['emailField']) 
+        	&& isset($_POST['username'])
+        	&& $_POST['send-message'] == 'send_message'
+        ) {
+        	$userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
+        }
 	?>
 	<div class="header">
 		<div class="inner-header">
@@ -45,24 +42,10 @@
 	<!--слайдер - галерея изображений-->
 	<section>
 		<div class="wrapper slider-border">
-			<div id="slider-wrap">
-				<ul id="gallery">
-					<!--
-					<li>
-						<a href=""><img src="img/tomat.jpg"></a>
-					</li>
-					-->
-				</ul>
-			</div>
-			<div id="gallery-controls">
-				<a href="#" id="control-prev">
-					<img src="img/gallery/prev.png">
-				</a>
-				<p>Новые поступления</p>
-				<a href="#" id="control-next">
-					<img src="img/gallery/next.png">
-				</a>
-			</div>
+			<?php
+				//подключение слайдера
+				include('../app/views/slider/slider.php');
+			?>
 		</div>
 	</section>
 	<section>
@@ -117,7 +100,6 @@
 			//подключаем footer
 			include('../app/views/footer/footer.php');
 		?>
-		<?php echo "md5(123): ".md5('123'); ;?>
 	</div>
 	<!-- модальное окно - Входа и Регистрации-->
 	<div class="overlay" id="entrance">

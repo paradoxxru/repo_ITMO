@@ -21,8 +21,16 @@
 
         //запцскаем мотод обработки экшинов
         $userCart->actionsWithCart();
-        //считаем кол-во, сумму и вес
-        //$userCart->calcSummaryInfo();
+		
+		//если поля формы обратной связи заполненны, то отправить письмо продавцу
+        if(
+        	isset($_POST['send-message']) 
+        	&& isset($_POST['emailField']) 
+        	&& isset($_POST['username'])
+        	&& $_POST['send-message'] == 'send_message'
+        ) {
+        	$userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
+        }       
 	?>
 	<?php
 		//подключили файл проверки логина пользователя
@@ -45,24 +53,10 @@
 	<!--слайдер - галерея изображений-->
 	<section>
 		<div class="wrapper slider-border">
-			<div id="slider-wrap">
-				<ul id="gallery">
-					<!--
-					<li>
-						<a href=""><img src="img/tomat.jpg"></a>
-					</li>
-					-->
-				</ul>
-			</div>
-			<div id="gallery-controls">
-				<a href="#" id="control-prev">
-					<img src="img/gallery/prev.png">
-				</a>
-				<p>Новые поступления</p>
-				<a href="#" id="control-next">
-					<img src="img/gallery/next.png">
-				</a>
-			</div>
+			<?php
+				//подключение слайдера
+				include('../app/views/slider/slider.php');
+			?>
 		</div>
 	</section>
 	<section>
@@ -83,7 +77,7 @@
 								?>
 							</section>
 							<section class="content-section">
-								<h1>Фильтр по: </h1>
+								<h1>Фильтр по <?php echo \app\dataio\ClistsBy::getFilterName();?> </h1>
     							<div class="filterby">
 									<?php
 										// echo "массив всех товаров: <br>";

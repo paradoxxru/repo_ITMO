@@ -10,19 +10,24 @@
 </head>
 <body>
 	<?php
-		//$user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
 		$user = new \app\auth\CUser($pdo);
         if(isset($_GET['logout'])) //если нажали выход, то logout
             $user->logout();
 
-
-        //$userCart = new \app\dataio\CUserCart($user->getLogin());//создаем объект-корзину
         $userCart = new \app\dataio\CUserCart($pdo,$user->getLogin(),$user->getUserId());
 
         //запцскаем мотод обработки экшинов
         $userCart->actionsWithCart();
-        //считаем кол-во, сумму и вес
-        //$userCart->calcSummaryInfo();
+        
+        //если поля формы обратной связи заполненны, то отправить письмо продавцу
+        if(
+        	isset($_POST['send-message']) 
+        	&& isset($_POST['emailField']) 
+        	&& isset($_POST['username'])
+        	&& $_POST['send-message'] == 'send_message'
+        ) {
+        	$userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
+        }
 	?>
 	<?php
 		//подключили файл проверки логина пользователя
@@ -45,24 +50,10 @@
 	<!--слайдер - галерея изображений-->
 	<section>
 		<div class="wrapper slider-border">
-			<div id="slider-wrap">
-				<ul id="gallery">
-					<!--
-					<li>
-						<a href=""><img src="img/tomat.jpg"></a>
-					</li>
-					-->
-				</ul>
-			</div>
-			<div id="gallery-controls">
-				<a href="#" id="control-prev">
-					<img src="img/gallery/prev.png">
-				</a>
-				<p>Новые поступления</p>
-				<a href="#" id="control-next">
-					<img src="img/gallery/next.png">
-				</a>
-			</div>
+			<?php
+				//подключение слайдера
+				include('../app/views/slider/slider.php');
+			?>
 		</div>
 	</section>
 	<section>
@@ -83,7 +74,7 @@
 								?>
 							</section>
 							<section class="content-section">
-								<h1>Сортировка по </h1>
+								<h1>Сортировка по <?php echo \app\dataio\ClistsBy::getSortName();?></h1>
     							<div class="sortby">
 									<?php
 										// echo "массив всех товаров: <br>";

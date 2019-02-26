@@ -9,7 +9,7 @@ class CUser {
 	private $user_name;
 	private $user_mail;
 	private $user_phone;
-	private $user_adder;
+	private $user_addres;
 	private $is_auth = false; // авторизован или анонимный
 	private $permissions = [	//пример массива разрешений для пользователя
 		'view_profile'=> false
@@ -20,16 +20,27 @@ class CUser {
 		//провести авторизацию
 		//сначало проверим авторизован ли польз - проверям есть ли токен и совпадает ли он
 		if(!$this->isAuth()) {
-			//если не авторизован, то пытаемся залогинеть
+			//если не авторизован, то проверяем post параметры на наличие регистрационных данных
+			if(isset($_POST['email']) 
+				&& isset($_POST['name']) 
+				&& isset($_POST['addres']) 
+				&& isset($_POST['phone'])
+				&& isset($_POST['login'])
+				&& isset($_POST['password']))
+			{
+				$this->registration();
+			}
+			//если не авторизован и нет данных регистрации, то пытаемся залогинить
 			if(isset($_POST['login']) && isset($_POST['password'])) {
 				$this->login($_POST['login'], $_POST['password']);
 			}
+
 		}
 	}
 	// проверка авторизован ли пользователь
 	public function isAuth() {
 		//если в $this->user_id есть значение, то значит пользователь залогинен
-		//(чтобы не делать еще раз проверку по сессии, например на других страницах)
+		//(чтобы не делать еще раз проверку по сессии, например если нужна проверка где-то еще на странице)
 		if($this->user_id !== null) return true;
 
 		if(
@@ -46,7 +57,9 @@ class CUser {
 			$this->user_id = $_SESSION['user']['user_id'];
 			$this->login = $_SESSION['user']['login'];
 			$this->user_name = $_SESSION['user']['name'];
+			$this->user_addres = $_SESSION['user']['addres'];
 			//заполнить остальные поля
+			// по запросу из базы
 			return true;
 		}
 		return false;
@@ -65,10 +78,6 @@ class CUser {
 		
 		$resalt->execute(); //выполнить запрос
 		$resalt = $resalt->fetchAll();
-		// echo "результат запроса логина и пароля<br>";
-		// echo "<pre>";
-		// var_dump($resalt);
-		// echo "</pre>";
 
 		//если пользователя нашли по логу и паролю(то есть если размер массива > 0), то логинем
 		if(count($resalt) >0) {
@@ -77,7 +86,7 @@ class CUser {
 			$this->user_name = $resalt[0]['name'];
 			$this->user_mail = $resalt[0]['email'];
 			$this->user_phone = $resalt[0]['phone'];
-			$this->user_adders = $resalt[0]['addres'];
+			$this->user_addres = $resalt[0]['addres'];
 			//сформируем токен
 			$this->token = md5($login . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 			//сохраним так же в СЕССИЮ
@@ -85,14 +94,26 @@ class CUser {
 					'login' => $this->login,
 					'user_id' => $this->user_id,
 					'token' => $this->token,
-					'name' => $this->user_name
+					'name' => $this->user_name,
+					'addres' => $this->user_addres
 			];
 		}
 		
 	}
 	// регистрация
 	public function registration() {
-
+		$query = "INSERT INTO `user` VALUES (NULL,'".$_POST['login']."','"
+													.md5($_POST['password'])."','"
+													.$_POST['email']."','"
+													.$_POST['phone']."','"
+													.$_POST['name']."','"
+													.$_POST['addres']."');";
+		echo "pзапрос - добавление пользователя<br>";
+		echo $query."<br>";
+		$this->pdo->query($query); //добавляем пользователя в базу `user`
+		// + по запросу из базы заполнить поля объекта и + сохранить в сесию
+		// по сути это тоже самое что и login($login,$password)
+		$this->login($_POST['login'],md5($_POST['password']));
 	}
 	public function logout() {
 		$this->user_id = null;
@@ -108,5 +129,8 @@ class CUser {
 	}
 	public function getUserId() {
 		return $this->user_id;
+	}
+	public function getAddres() {
+		return $this->user_addres;
 	}
 }

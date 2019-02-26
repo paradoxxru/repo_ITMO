@@ -1,18 +1,18 @@
 <div class="all-contacts row">
 	<!-- левая секция (ввод данных)-->
 	<section class="contacts-left_section col-8">
-		<form>					
+		<form method="POST">					
 			<!-- flex контейнер 1.2.a (поля ввода)-->
 			<div class="input-fields row">
 				<!-- ввод имени-->
 				<div class="item-flex">
 					<label for="nameField">Name</label>
-					<input type="text" name="username" id="nameField" placeholder="введите имя" required=""> <!--*в чем разница между placeholder и value - почему если указан value, то он светиться внутри поля вместо placeholder -->
+					<input type="text" name="username" id="nameField" placeholder="введите имя" required> 
 				</div>
 				<!-- ввод почты-->
 				<div class="item-flex">
 					<label for="emailField">Email</label>
-					<input type="email" name="emailField" id="emailField" placeholder="введите почту" required="">
+					<input type="email" name="emailField" id="emailField" placeholder="введите почту" required>
 				</div>
 				<!-- ввод сообщения -->
 				<div class="message">
@@ -23,7 +23,7 @@
 			<!-- flex контейнер 1.2.b (кнопки действий)-->
 			<div class="action-button row">
 				<div>
-					<input class="send-message" type="submit" name="" value="send message">
+					<input class="send-message" type="submit" name="send-message" value="send_message">
 				</div>
 				<div>
 					<input class="clear-form" type="reset" value="clear">

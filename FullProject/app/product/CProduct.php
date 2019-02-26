@@ -15,40 +15,9 @@ class CProduct  //был abstract
     private $receipt_data = "";
     private $count_in_cart = 0;
     private $summ_cost = 0;
+    private $class = '';
+    private $in_stok = '';
 
-
-    // public function fillRandom() {
-    //     $this->weight = rand(1,2) > 1
-    //         ? rand(1, 20)/10
-    //         : rand(1, 20);
-    //     $this->cost = rand(1,2) > 1
-    //         ? rand(1, 20) * 100
-    //         : rand(1, 20) * 1000;
-    //     $this->vogue = rand(1,100);
-    //     $this->count = rand(1, 50);
-    //     $this->category = WordGenerator::randomCategory();
-    //     $this->name = WordGenerator::randomSentence(rand(2,4), WordGenerator::UL);
-    //     $this->description = WordGenerator::randomText(rand(4, 10), WordGenerator::ULP);
-    //     $this->img = "im" . rand(1, 6) . ".svg";
-    // }
-    // public function __construct($id = false)
-    // {
-    //     if($id !== false) {
-    //         if($id === "random") {
-    //             $this->fillRandom();
-    //         } else {
-    //             $this->name = '';
-    //             $this->weight = 0;
-    //             $this->count = 0;
-    //             $this->cost = 0;
-    //             $this->description = '';
-    //             $this->vogue = 0;
-    //             $this->category = '';
-    //             $this->img = '';
-    //             $this->id = $id;
-    //         }
-    //     }
-    // }
 
     public function __get($name)
     {

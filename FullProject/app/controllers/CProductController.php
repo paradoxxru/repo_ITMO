@@ -7,13 +7,11 @@ class CProductController implements IPageController
 	public function setPermissions($permissions) { //разрешения
 		// TODO: Implement setPermissions() method.
 	}
-	public function render() { //формирование страницы
-		// TODO: Implement render() method.
-
-		//сформировать массив товаров
-		$parser = \app\dataio\CConfParser::getInstance('../app/config/db_product.yaml'); //создает объект нужного класса
-		$parser->read(); //читаем из файла в массив
-		$goods = $parser->getAllParams();
+	public function render($pdo) { //формирование страницы
+		//нужно подключить класс запросов, выполнить запрос и получить массив-ответ
+		$request = new \app\request\CRequestGoods($pdo);
+		//получаем массив всех товаров
+		$arr_goods = $request->getArray();
 
 		//определить раздел куда вводить
 		$path_to_template = "../app/views/product.php";

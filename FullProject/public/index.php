@@ -15,7 +15,6 @@ try {
 	die("<h1>Error</h1>");
 }
 
-
 // 1) аутентификация: получить текущего пользователя
 //require_once ("../app/user.php");
 $user = new \app\User();

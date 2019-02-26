@@ -6,6 +6,8 @@ ini_set('display_errors', 1);
 require_once('config.php');
 
 session_start(); //запускаем сессию
+//время жизни сессии
+// в php.ini session.gc.maxlifetime()	- в милисикундах
 
 //создание подключения к базе данных
 //DPO - это класс для подключения баз данных
@@ -371,11 +373,32 @@ $user = new \app\Auth\User($pdo);
 // $user->login('admin', '123');
 // echo $user->getUserName()."<br>";
 if(isset($_GET['action']) && $_GET['action'] === 'logout') $user->logout();
+$message = '';
 if($user->isAuth()) {
+	//если авторизовался через регистрацию
+	
+	if($user->getRegStatus() === \app\auth\User::REG_SUCCESS) {
+		$message = "<p>вы успешно зарег</p>";
+	}
     include "./view/auth/logout.php";
 } else {
+	if($user->getRegStatus() === \app\auth\User::REG_FAILED) {
+		$message = "<p>ошибка регистрации</p>";
+	}
     include "./view/auth/login.php";
 }
+
+		//последняя лекция
+//регистрация + привелегии + аватарка
+$user_delete = $user->hasPermission('user_delete') ? 'true' : 'false';
+$user_list = $user->hasPermission('user_list') ? 'true' : 'false';
+$user_read = $user->hasPermission('user_read') ? 'true' : 'false';
+echo "<table>"
+		."<tr><td>user_delete</td><td>".$user_delete."</td></tr>"
+		."<tr><td>user_list</td><td>".$user_list."</td></tr>"
+		."<tr><td>user_read</td><td>".$user_read."</td></tr>"
+		."</table>";
+
 
 
 $pdo = null; //чистим переменную, освобождаем память
