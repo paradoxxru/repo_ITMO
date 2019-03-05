@@ -1,30 +1,35 @@
-// $(document).ready(function() {
-// 	console.log($('.slider'));
-// 	 $(".slider").each(function () { // обрабатываем каждый слайдер
-// 		  var obj = $(this);
-// 		  $(obj).append("<div class='nav'></div>");
-// 		  $(obj).find("li").each(function () {
-// 		   $(obj).find(".nav").append("<span rel='"+$(this).index()+"'></span>"); // добавляем блок навигации
-// 		   $(this).addClass("slider"+$(this).index());
-// 		  });
-// 		  $(obj).find("span").first().addClass("on"); // делаем активным первый элемент меню
-// 	 });
-// });
-// function sliderJS (obj, sl) { // slider function
-// 	 var ul = $(sl).find("ul"); // находим блок
-// 	 var bl = $(sl).find("li.slider"+obj); // находим любой из элементов блока
-// 	 var step = $(bl).width(); // ширина объекта
-// 	 $(ul).animate({marginLeft: "-"+step*obj}, 500); // 500 это скорость перемотки
+var anchor;
+//получаем строку с параметрами из запроса(?q=catalog&id=25&weight=1800&cost=520&action=addtocart&anchor=anchor25a)
+var loc_search = $(location).attr('search');
+//обрезаем по знак ?(q=catalog&id=25&weight=1800&cost=520&action=addtocart&anchor=anchor25a)
+var str = loc_search.split('?')[1];
+//разбиваем строку(по &) на массив подстрок
+if(str !== undefined) {
+	var str2 = str.split('&');
+	var len = str2.length;
+	// console.log(loc_search);
+	// console.log(str);
+	// console.log(str2);
+	var arr_param = [];
+	if(str2 !== undefined) {
+		for(var i=0; i<len; i++) {
+			//разбиваем каждую строку массива на подстроки по =
+			var params = str2[i].split('=');
+			arr_param[params[0]] = params[1];//на всякий случай делаем массив параметров
+			//проверяем есть ли среди параметров anchor и если есть берем его значение
+			if(params[0] === 'anchor'){
+				anchor = params[1];
+			}
+		}
+	}
+}
+// console.log(arr_param);
+// console.log('выводим якорь')
+// console.log(anchor);
+// if () {
+// 	console.log();
+// 	var anchor = $_GET['anchor'];
 // }
-// $(document).on("click", ".slider .nav span", function() { // slider click navigate
-// 	 var sl = $(this).closest(".slider"); // находим, в каком блоке был клик
-// 	 $(sl).find("span").removeClass("on"); // убираем активный элемент
-// 	 $(this).addClass("on"); // делаем активным текущий
-// 	 var obj = $(this).attr("rel"); // узнаем его номер
-// 	 sliderJS(obj, sl); // слайдим
-// 	 return false;
-// });
-
 $(document).ready(function(){ 
 	//сделать вставку в li нужных элементов(вернуть из php по запросу из базы)
 	//var new_gallery = $('#gallery');
@@ -36,15 +41,23 @@ $(document).ready(function(){
 	// 				})
 	// 		}));
 	// }
+	// var loc = $(location.hash);
+	// var anchor = loc.attr('id');
+	// if(anchor) {
+	// 	location.hash = anchor;
+	// }
+	//window.scrollTo(loc);
+	// console.log(loc);
+	// console.log(anchor);
 	// Галлерея
 	if($("#gallery").length){ //проверка есть ли элементы списка
 		var totalImages = $("#gallery > li").length; //сколько всего элементов списка(картинок)
 		//imageWidth полная ширина элемента
 		var imageWidth = $("#gallery > li:first").outerWidth(true); //outerWidth - ширина элемента
 		// (элемент + padding + border) , а если outerWidth(true) - это еще + margin
-		console.log('полная ширина элемента :'+ imageWidth);
+		//console.log('полная ширина элемента :'+ imageWidth);
 		var totalWidth = imageWidth * totalImages;//полная ширина галереи
-		console.log('полная ширина галереи: '+ totalWidth);
+		//console.log('полная ширина галереи: '+ totalWidth);
 		var visibleImages = Math.round($("#slider-wrap").width() / imageWidth); //берем ширину видимой области
 		// и делим на ширину элемента, округляем к ближайшему цнлому - получили сколько элементов влезет в видимую область
 		var visibleWidth = visibleImages * imageWidth; //ширина всех видимых элементов(картинок)
@@ -75,5 +88,12 @@ $(document).ready(function(){
 		});
 		
 	}
+	//если в get параметрах был "якорь", то переходим к нему
+	if(anchor) {
+		location.hash = anchor;
+	}
+
+	//меняем класс для подсветки вкладок("История покупок" и "Личные данные")
+	
 
 });

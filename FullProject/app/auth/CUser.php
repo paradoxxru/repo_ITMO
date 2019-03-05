@@ -14,6 +14,7 @@ class CUser {
 	private $permissions = [	//пример массива разрешений для пользователя
 		'view_profile'=> false
 	];
+	private $avatar;
 
 	public function __construct($pdo) {
 		$this->pdo = $pdo;
@@ -58,7 +59,9 @@ class CUser {
 			$this->login = $_SESSION['user']['login'];
 			$this->user_name = $_SESSION['user']['name'];
 			$this->user_addres = $_SESSION['user']['addres'];
-			//заполнить остальные поля
+			$this->user_phone = $_SESSION['user']['phone'];
+			$this->user_mail = $_SESSION['user']['mail'];
+			$this->avatar = $_SESSION['user']['avatar'];
 			// по запросу из базы
 			return true;
 		}
@@ -87,6 +90,7 @@ class CUser {
 			$this->user_mail = $resalt[0]['email'];
 			$this->user_phone = $resalt[0]['phone'];
 			$this->user_addres = $resalt[0]['addres'];
+			$this->avatar = $resalt[0]['avatar_type'];
 			//сформируем токен
 			$this->token = md5($login . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 			//сохраним так же в СЕССИЮ
@@ -95,7 +99,10 @@ class CUser {
 					'user_id' => $this->user_id,
 					'token' => $this->token,
 					'name' => $this->user_name,
-					'addres' => $this->user_addres
+					'addres' => $this->user_addres,
+					'phone' => $this->user_phone,
+					'mail' => $this->user_mail,
+					'avatar' => $this->avatar
 			];
 		}
 		
@@ -107,14 +114,56 @@ class CUser {
 													.$_POST['email']."','"
 													.$_POST['phone']."','"
 													.$_POST['name']."','"
-													.$_POST['addres']."');";
-		echo "pзапрос - добавление пользователя<br>";
-		echo $query."<br>";
+													.$_POST['addres']."',
+													NULL);"; // полледнее поле это аватарка(ее расширенине)
+		// echo "pзапрос - добавление пользователя<br>";
+		// echo $query."<br>";
 		$this->pdo->query($query); //добавляем пользователя в базу `user`
 		// + по запросу из базы заполнить поля объекта и + сохранить в сесию
 		// по сути это тоже самое что и login($login,$password)
 		$this->login($_POST['login'],md5($_POST['password']));
 	}
+	//смена личных данных пользователя
+	public function changeSettings() {
+		echo "массив post<br>";
+		echo "<pre>";
+		var_dump($_POST);
+		echo "</pre>";
+
+		echo "<br>массив files <br>";
+		echo "<pre>";
+		var_dump($_FILES);
+		echo "</pre>";
+		if(isset($_POST['changeLogin']) && $_POST['changeLogin'] !== $this->getLogin()) {
+			$query = "UPDATE `user` SET login = '".$_POST['changeLogin']."' WHERE id = ".$this->user_id.";";
+			echo "запрос на смену логина<br>";
+			echo $query."<br>";
+			$this->pdo->query($query);
+		}
+		if(isset($_POST['changeName']) && $_POST['changeName'] !== $this->getUserName()) {
+			$query = "UPDATE `user` SET name = '".$_POST['changeName']."' WHERE id = ".$this->user_id.";";
+			echo "запрос на смену имени<br>";
+			echo $query."<br>";
+			$this->pdo->query($query);
+		}
+		if(isset($_POST['changePhone']) && $_POST['changePhone'] !== $this->getPhone()) {
+			$query = "UPDATE `user` SET phone = '".$_POST['changePhone']."' WHERE id = ".$this->user_id.";";
+			$this->pdo->query($query);
+		}
+		if(isset($_POST['changeMail']) && $_POST['changeMail'] !== $this->getMail()) {
+			$query = "UPDATE `user` SET email = '".$_POST['changeMail']."' WHERE id = ".$this->user_id.";";
+			$this->pdo->query($query);
+		}
+		if(isset($_POST['changeAddres']) && $_POST['changeAddres'] !== $this->getAddres()) {
+			$query = "UPDATE `user` SET addres = '".$_POST['changeAddres']."' WHERE id = ".$this->user_id.";";
+		}
+		if(isset($_FILES['changeAvatar'])) {
+
+		}
+		//сделать обновления
+		//$this->login($_POST['login'],md5($_POST['password']));
+	}
+	
 	public function logout() {
 		$this->user_id = null;
 		$this->token = null;
@@ -132,5 +181,14 @@ class CUser {
 	}
 	public function getAddres() {
 		return $this->user_addres;
+	}
+	public function getMail() {
+		return $this->user_mail;
+	}
+	public function getPhone() {
+		return $this->user_phone;
+	}
+	public function getAvatar() {
+		return $this->avatar;
 	}
 }

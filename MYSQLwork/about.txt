@@ -786,6 +786,9 @@ CREATE TABLE `user` (
 	PRIMARY KEY(id)
 );
 
+//добавить поле avatar_type в таблицу пользователей
+ALTER TABLE `user` ADD COLUMN avatar_type varchar(5);
+
 пользователи
 1) 
 INSERT INTO `user`
@@ -804,6 +807,15 @@ CREATE TABLE cart (
 	status int UNSIGNED NOT NULL,
 	PRIMARY KEY(id)
 );	
+// добавить в таюлицу корзины поле - дата заказа(для истории заказов)
+ALTER TABLE cart ADD COLUMN order_data DATE;
+//изменить параметры поля с DATE на DATETIME
+ALTER TABLE cart MODIFY order_data DATETIME;
+
+//запрос смены статуса в корзине на 2 и добавление даты заказа
+UPDATE cart SET status = 2, order_data = NOW()
+WHERE user_id = 2;
+
 корзина
 1) INSERT INTO cart VALUES 
 				(NULL, 1, 3, 2, 1),
@@ -880,6 +892,17 @@ DELETE FROM cart WHERE user_id = 2 AND goods_id = 3;
 
 //очистить корзину
 TRUNCATE table cart;
+
+//получить историю заказов пользователя
+1) установить сколько было заказов - по разным датам заказов(получаем эксклюзивные даты заказов пользователя)
+SELECT  DISTINCT order_data, user_id
+FROM cart WHERE user_id = 2 AND status = 2;
+2) запрос истории заказов(по дате заказа и id пользователя)
+SELECT goods.id as 'goods_id', goods.cost, goods.name, cart.goods_count, `user`.id as 'user_id', cart.order_data
+FROM goods
+LEFT JOIN cart ON cart.goods_id = goods.id
+LEFT JOIN `user` ON `user`.id = cart.user_id
+WHERE cart.user_id = 1 AND cart.order_data = '2019-03-02 01:45:31';
 
 //запрос кол-ва товара в базе goods с определенным id
 SELECT goods.`count` FROM goods WHERE id = 3;
@@ -1397,7 +1420,21 @@ ORDER BY receipt_data;
 8) номер заказа
 9) модальное окно
 
+// создать базу "История заказов"
+CREATE TABLE history (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+	user_id INT UNSIGNED NOT NULL,
+	goods_id INT UNSIGNED NOT NULL,
+	count int default 0,
+	order_date DATE,
+	PRIMARY KEY (id) 
+);
 
+// запрос на историю заказов пользователя
+SELECT * FROM history WHERE user_id = 1;
+
+
+//последняя лекция 
 alter table `user` add column avatar_type varchar(8);
 
 UPDATE table `user` SET avatar_type = '{$ext}' WHERE id = {$this->user_id};

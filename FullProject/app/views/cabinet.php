@@ -10,16 +10,31 @@
 </head>
 <body>
 	<?php
-		//$user = new \app\User(); //создаем, проверяем залогинен ли, записываем инфу в поля объекта
 		$user = new \app\auth\CUser($pdo);
         if(isset($_GET['logout'])) //если нажали выход, то logout
             $user->logout();
-
+        //создаем объект-корзину
         $userCart = new \app\dataio\CUserCart($pdo,$user->getLogin(),$user->getUserId());
-        //запцскаем мотод обработки экшинов
+
+        //запускаем мотод обработки экшинов
         $userCart->actionsWithCart();
-        
-        //если поля формы обратной связи заполненны, то отправить письмо продавцу
+
+        //создать объект "личный кабинет пользователя"
+        $cabinet = new \app\dataio\CUserCabinet($pdo,$user->getUserId());
+
+        //если поля формы смены личных данных пользователя заполнены(хотябы часть из них)
+        if(
+        	isset($_POST['changeLogin']) 
+        	|| isset($_POST['changeName']) 
+        	|| isset($_FILES['changeAvatar']) 
+        	|| isset($_POST['changePhone'])
+        	|| isset($_POST['changeMail']) 
+        	|| isset($_POST['changeAddres'])
+        ) {
+        	$user->changeSettings();
+        }
+
+		//если поля формы обратной связи заполненны, то отправить письмо продавцу
         if(
         	isset($_POST['send-message']) 
         	&& isset($_POST['emailField']) 
@@ -28,7 +43,6 @@
         ) {
         	$userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
         }
-        
 	?>
 	<div class="header">
 		<div class="inner-header">
@@ -67,52 +81,13 @@
 								?>
 							</section>
 							<section class="content-section">
-								<div class="cart">
-									<h1>Корзина</h1>
-										<?php
-										//print mail("name@my.ru","header","text");
-											$cart = $userCart->getCart();
-											// echo "каозина пользователя: <br>";
-											// echo "<pre>";
-											// var_dump($cart);
-											// echo "</pre>";
-											if(count($cart)>0) {
-												foreach ($cart as $id => $item) {
-													//получить кол-во товара "в наличии"
-													$count = $userCart->getGoodsCount($item['id']);
-													$item['in_stok'] = $count[0]['count'];
-													//если кол-во товара в безе < кол-ва в корзине
-													if($item['count_in_cart'] > $count[0]['count']) {
-														//установим класс(нужен при выводе)
-														$item['class'] = 'deficit';
-													} else {
-														$item['class'] = 'normal';
-													}
-										            $product = new \app\product\CProduct();
-										            $product->fromArray($item); //заполняем значениями
-										            $product->render('cart'); //выводим
-										        }
-									    	}
-										?>
-	    							<div class='cart__order'>
-							            <div class="cart__order-summaryInfo">
-							                <span><?php echo "Общая стоимость: ".$userCart->getTotalCost()." руб.";?></span><br>
-							                <span><?php echo "Общая вес: ".$userCart->getTotalWeight()/1000 ." кг.";?></span>
-							            </div>
-							            <?php
-							            	if($user->isAuth()) {
-							   		echo"<div class='cart__order-action'>
-							                <a href='/index.php?q=order'>Оформить заказ</a>
-							            </div>
-							        </div>";
-							            	} else {
-							   echo "</div>
-							   		<div class='cart__order-message'>
-							            <p>Для оформления заказа войдите или зарегистрируйтесь</p>
-							        </div>";
-							            	}
-							            ?>
-						        </div>
+								<h1>Личный кабинет</h1>
+    							<div class="cabinet">
+									<?php
+										//подключить личный кабинет
+										include('../app/views/cabinet/user_cabinet.php');
+									?>
+    							</div>	
 							</section>
 						</div><!--end "flex-column"-->
 					</div><!-- end "content_sorting"-->

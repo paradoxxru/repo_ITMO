@@ -3,7 +3,7 @@
 ?>
 
 <div class="goods__item">
-    <span class="goods__item-name">
+    <span id='<?php echo "anchor".$this->id."a";?>' class="goods__item-name">
     	<?php
     	 echo "<b>Название: </b>". $this->name;
     	?>
@@ -19,6 +19,7 @@
     <a href="/index.php?q=product<?php echo'&id='.$this->id
                                             .'&weight='.$this->weight
                                             .'&cost='.$this->cost
-                                            .'&action=addtocart'?>">В корзину</a>
+                                            .'&action=addtocart'
+                                            .'&anchor=anchor'.$this->id.'a';?>">В корзину</a>
     <a href="/index.php?q=catalog">Назад в каталог</a>
 </div>

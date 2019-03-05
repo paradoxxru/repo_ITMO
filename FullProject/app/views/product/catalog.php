@@ -18,5 +18,5 @@
                                             .'&weight='.$this->weight
                                             .'&cost='.$this->cost
                                             .'&action=addtocart'
-                                            .'#anchor'.$this->id.'a';?>">В корзину</a>
+                                            .'&anchor=anchor'.$this->id.'a';?>">В корзину</a>
 </div>

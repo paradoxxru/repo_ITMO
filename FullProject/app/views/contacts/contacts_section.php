@@ -23,7 +23,7 @@
 			<!-- flex контейнер 1.2.b (кнопки действий)-->
 			<div class="action-button row">
 				<div>
-					<input class="send-message" type="submit" name="send-message" value="send_message">
+					<input class="send-message" type="submit" name="send-message" value="send message">
 				</div>
 				<div>
 					<input class="clear-form" type="reset" value="clear">

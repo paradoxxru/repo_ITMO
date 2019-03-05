@@ -84,11 +84,11 @@ class CUserCart {
 				foreach ($newcart as $n => $item) {
 					//если есть совпадения то запросом поменять кол-во в базе корзины
 					if($value['id'] == $item['id']) {
-						echo "совпали id<br>";
+						//echo "совпали id<br>";
 						$query = "UPDATE `cart` SET goods_count = goods_count + ".$item['count']
 								." WHERE user_id = ".$this->user_id." AND goods_id = ".$item['id']
 								." AND cart.status = 1;";
-						echo "строка запроса : ".$query.'<br>';
+						//echo "строка запроса : ".$query.'<br>';
 						$this->pdo->query($query);
 						// и удалить элемент, так как далее его не будем обрабатывать
 						unset($newcart[$n]);
@@ -155,11 +155,6 @@ class CUserCart {
 		// echo "</pre>";
 		return $cart_anonim;
 	}
-
-	//ф-ция обновляет/изменяет данные в базе
-	private function cartToDB(){
-
-	}
 	public function getCart() {
 		return $this->cart;
 	}
@@ -220,7 +215,7 @@ class CUserCart {
 				else { //если такого товара в корзине нет
 					//то внести его в корзину
 					//echo "надо добавить товар в корзину<br>";
-					$query = "INSERT INTO cart VALUES (NULL,".$_GET['id'].", 1,".$this->user_id.", 1 );";
+					$query = "INSERT INTO cart VALUES (NULL,".$_GET['id'].", 1,".$this->user_id.", 1, NULL );";
 					$this->pdo->query($query);
 					//и уменьшить кол-во товара в базе goods
 
@@ -368,4 +363,19 @@ class CUserCart {
 		$headers .= "From: <paradoxxru@list.ru>\r\n";
 		mail($to, $subject, $message, $headers);
 	}
+	// смена статуса в корзине на 2(перевод в историю заказа) + добавить дату заказа
+	public function changeStatusAndDate() {
+		//изиенить статус и добавить дату заказа
+		if(!empty($this->user_id)) {
+			//сначала получить дату и время(чтобы у всех позиций не отличались секунды)
+			$time = time();//определяем время(оно по Гринвичу)
+			$time += 3 * 3600; // Добавляем 3 часа к времени по Гринвичу
+			$date = date('Y-m-d H:i:s', $time);
+			//подставить в запрос
+			$query = "UPDATE cart SET status = 2, order_data ='".$date."'"
+					." WHERE user_id =".$this->user_id." AND status = 1;";
+			$this->pdo->query($query);
+		}
+	}
+	
 }

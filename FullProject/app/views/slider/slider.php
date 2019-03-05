@@ -28,10 +28,10 @@
 </div>
 <div id="gallery-controls">
 	<a href="#" id="control-prev">
-		<img src="img/gallery/prev.png">
+		<img src="assets/images/gallery/prev.png">
 	</a>
 	<p>НОВЫЕ ПОСТУПЛЕНИЯ</p>
 	<a href="#" id="control-next">
-		<img src="img/gallery/next.png">
+		<img src="assets/images/gallery/next.png">
 	</a>
 </div>

@@ -1,7 +1,7 @@
 <?php
 namespace app\product;
 
-class CProduct  //был abstract 
+class CProduct 
 {
     private $weight = 0;
     private $cost = 0;
@@ -17,6 +17,7 @@ class CProduct  //был abstract
     private $summ_cost = 0;
     private $class = '';
     private $in_stok = '';
+    private $order_date = '';
 
 
     public function __get($name)

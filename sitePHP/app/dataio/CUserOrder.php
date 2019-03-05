@@ -72,7 +72,7 @@ class CUserOrder
 		return $this->numberOrder = ''.date('Ymd').'.'.microtime(true).'';
 		// и здесь записывать файл заказа + рассылать письма + писать в историю и удалять корзину
 	}
-	//чтение из yaml
+	//чтение из yaml(работает НЕПРАВИЛЬНО)
 	public function readYAML() {
 		$this->path_to_history = '../app/config/userHistories/test.yaml';
 		$this->lines = file($this->path_to_history);

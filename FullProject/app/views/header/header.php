@@ -15,9 +15,9 @@
 	</ul>
 	<div class="info-block">
 		<ul class="net-icons">
-			<li><a href="index.html" class="fab fa-twitter"></a></li>
-			<li><a href="index.html" class="fab fa-facebook-f"></a></li>
-			<li><a href="index.html" class="fab fa-instagram"></a></li>
+			<li><a href="" class="fab fa-twitter"></a></li>
+			<li><a href="" class="fab fa-facebook-f"></a></li>
+			<li><a href="" class="fab fa-instagram"></a></li>
 		</ul>
 		<span class="tel">+7 921 335 95 89</span>
 		<ul class="registration">

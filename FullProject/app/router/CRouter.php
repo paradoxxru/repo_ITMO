@@ -12,7 +12,7 @@ class CRouter
 			'product' => "CProductController",
 			'sortby' => "CSortController",
 			'filter' => "CFilterController",
-			'entrance' => "CEntranceController",
+			'cabinet' => "CCabinetController",
 			'order' => "COrderController"
 		]; // убрать entrance
 		

@@ -2,7 +2,7 @@
 
 ?>
 
-<div class="sortby__item">
+<div id='<?php echo "anchor".$this->id."a";?>' class="sortby__item">
     <span class="sortby__item-name">
     	<?php
     	 echo $this->name;
@@ -14,6 +14,6 @@
     <span class="sortby__item-vogue"><?php echo "<b>Популярность: </b>". $this->vogue; ?></span>
     <!--<span class="sortby__item-id">--><?php //echo "<b>ID: </b>". $this->id; ?><!--</span>-->
     <a href="/index.php?q=product&id=<?php echo $this->id; ?>">Подробнее</a>
-    <a href="/index.php?q=sortby&actionsort=<?php echo $_GET['actionsort'];?>&sort_field=<?php echo $_GET['sort_field'];?>&id=<?php echo $this->id; ?>&action=addtocart">В корзину</a>
+    <a href="/index.php?q=sortby&actionsort=<?php echo $_GET['actionsort'];?>&sort_field=<?php echo $_GET['sort_field'];?>&id=<?php echo $this->id; ?>&action=addtocart&anchor=anchor<?php echo $this->id.'a' ;?>">В корзину</a>
     
 </div>

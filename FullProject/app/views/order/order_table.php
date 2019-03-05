@@ -1,4 +1,4 @@
-<h1><span><?php echo $user->getUserName(); ;?></span>, Ваш заказ</h1>
+<h1><span><?php echo $user->getUserName(); ;?></span>, Ваш заказ<?php if(isset($_POST['d'])) echo " принят"; ;?></h1>
 	<?php
 		//получить массив заказа(он же пока массив корзины)
 		$order = $userCart->getCart();
@@ -84,21 +84,28 @@
 				</div>';
 		} else {
 			echo "<div>
-					<h3>Ваш заказ принят</h3>
+					<h3>Состав заказа отправлен на указанную вами почту</h3>
 				</div>";
-				echo "_POST['d'] ". $_POST['d'].'<br>';
-				if(isset($_POST['d']) && $_POST['d'] == 'delivery' && empty($_POST['addr'])) {
+				//echo "_POST['d'] ". $_POST['d'].'<br>';
+				if(isset($_POST['d']) && $_POST['d'] === 'delivery' && empty($_POST['addr'])) {
 					$_POST['addr'] = $user->getAddres();
 				}
-				echo " массив пост<br>";
-				echo "<pre>";
-				var_dump($_POST);
-				echo "</pre>";
+				// echo " массив пост<br>";
+				// echo "<pre>";
+				// var_dump($_POST);
+				// echo "</pre>";
 				
+				//занести инфу в таблицу - история заказов(возможно не нужна, см. ниже)
+				if(isset($_POST['d'])) {
+					$cabinet->addHistory($userCart->getCart());
+				}
+
 				// + посылать письмо продавцу и покупателю о заказе
-				$userCart->sendMessage($_POST['d'], $_POST['addr']);
+				if(isset($_POST['d']))
+					$userCart->sendMessage($_POST['d'], $_POST['addr']);
 				// + уменьшать кол-во товара в базе goods
-				// + перевести статус заказа на 2
+				// + перевести статус заказа на 2(этим же должна очиститься корзина) + добавить дату заказа
+				$userCart->changeStatusAndDate();
 		}
 	?>
 </div>
