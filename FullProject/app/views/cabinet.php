@@ -30,6 +30,7 @@
         	|| isset($_POST['changePhone'])
         	|| isset($_POST['changeMail']) 
         	|| isset($_POST['changeAddres'])
+        	|| isset($_POST['UserPass'])
         ) {
         	$user->changeSettings();
         }

@@ -70,8 +70,17 @@ class CUserCart {
 	//ф-ция соединяет корзину анонима и корзину пользователя(если она есть) при его логине
 	private function combineCart() {
 		//если корзина пользователя пуста, то заполняем ее из массива $_SESSION['cart']
-		if(count($this->cart) == 0 )
-			$this->cart = $this->arrToCartAnonim(); // + записать инфу в базу
+		if(count($this->cart) == 0 ) {
+			// echo "корзина пользователя была пуста<br>";
+			$this->cart = $this->arrToCartAnonim();
+			if(count($this->cart) > 0) {
+				foreach ($this->cart as $key => $value) {
+					$query = "INSERT INTO cart VALUES(NULL, ".$value['id'].", ".$value['count'].",
+														".$this->user_id.", 1, NULL);";
+					$this->pdo->query($query);
+				}
+			}
+		}
 		//иначе нужно добавить 
 		else {
 			//обойти массив $this->cart и массив полученный $this->arrToCartAnonim() на соотв-ия id
@@ -87,7 +96,7 @@ class CUserCart {
 						//echo "совпали id<br>";
 						$query = "UPDATE `cart` SET goods_count = goods_count + ".$item['count']
 								." WHERE user_id = ".$this->user_id." AND goods_id = ".$item['id']
-								." AND cart.status = 1;";
+								." AND status = 1;";
 						//echo "строка запроса : ".$query.'<br>';
 						$this->pdo->query($query);
 						// и удалить элемент, так как далее его не будем обрабатывать
@@ -95,11 +104,11 @@ class CUserCart {
 					}
 				}
 			}
-			// оставшиеся элементы корзины из полученные из сессии добавляем в базу корзины
+			// оставшиеся элементы корзины полученные из сессии добавляем в базу корзины
 			sort($newcart);
 			foreach ($newcart as $key => $value) {
 				$query = "INSERT INTO cart VALUES (NULL,".$value['id'].",".$value['count']
-								.",".$this->user_id.", 1);";
+								.",".$this->user_id.", 1, NULL);";
 				$this->pdo->query($query);
 			}
 			

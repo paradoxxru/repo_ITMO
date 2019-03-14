@@ -134,34 +134,96 @@ class CUser {
 		echo "<pre>";
 		var_dump($_FILES);
 		echo "</pre>";
-		if(isset($_POST['changeLogin']) && $_POST['changeLogin'] !== $this->getLogin()) {
-			$query = "UPDATE `user` SET login = '".$_POST['changeLogin']."' WHERE id = ".$this->user_id.";";
-			echo "запрос на смену логина<br>";
-			echo $query."<br>";
-			$this->pdo->query($query);
-		}
-		if(isset($_POST['changeName']) && $_POST['changeName'] !== $this->getUserName()) {
-			$query = "UPDATE `user` SET name = '".$_POST['changeName']."' WHERE id = ".$this->user_id.";";
-			echo "запрос на смену имени<br>";
-			echo $query."<br>";
-			$this->pdo->query($query);
-		}
-		if(isset($_POST['changePhone']) && $_POST['changePhone'] !== $this->getPhone()) {
-			$query = "UPDATE `user` SET phone = '".$_POST['changePhone']."' WHERE id = ".$this->user_id.";";
-			$this->pdo->query($query);
-		}
-		if(isset($_POST['changeMail']) && $_POST['changeMail'] !== $this->getMail()) {
-			$query = "UPDATE `user` SET email = '".$_POST['changeMail']."' WHERE id = ".$this->user_id.";";
-			$this->pdo->query($query);
-		}
-		if(isset($_POST['changeAddres']) && $_POST['changeAddres'] !== $this->getAddres()) {
-			$query = "UPDATE `user` SET addres = '".$_POST['changeAddres']."' WHERE id = ".$this->user_id.";";
-		}
-		if(isset($_FILES['changeAvatar'])) {
+		if(isset($_POST['confirmPass']) && $this->confirmPass($_POST['confirmPass'])) {
+			if(isset($_POST['repeatConfirmPass']) && $this->confirmPass($_POST['repeatConfirmPass'])) {
+				if(isset($_POST['changeLogin']) && $_POST['changeLogin'] !== $this->getLogin()) {
+					$query = "UPDATE `user` SET login = '".$_POST['changeLogin']."' WHERE id = ".$this->user_id.";";
+					echo "запрос на смену логина<br>";
+					echo $query."<br>";
+					$this->pdo->query($query);
+					//+ сменить логин в объекте и в сессии
+				}
+				if(isset($_POST['changeName']) && $_POST['changeName'] !== $this->getUserName()) {
+					$query = "UPDATE `user` SET name = '".$_POST['changeName']."' WHERE id = ".$this->user_id.";";
+					echo "запрос на смену имени<br>";
+					echo $query."<br>";
+					$this->pdo->query($query);
+					//+ сменить имя в объекте и в сессии
+				}
+				if(isset($_POST['changePhone']) && $_POST['changePhone'] !== $this->getPhone()) {
+					$query = "UPDATE `user` SET phone = '".$_POST['changePhone']."' WHERE id = ".$this->user_id.";";
+					$this->pdo->query($query);
+					//+ сменить телефон в объекте и в сессии
+				}
+				if(isset($_POST['changeMail']) && $_POST['changeMail'] !== $this->getMail()) {
+					$query = "UPDATE `user` SET email = '".$_POST['changeMail']."' WHERE id = ".$this->user_id.";";
+					$this->pdo->query($query);
+					//+ сменить почту в объекте и в сессии
+				}
+				if(isset($_POST['changeAddres']) && $_POST['changeAddres'] !== $this->getAddres()) {
+					$query = "UPDATE `user` SET addres = '".$_POST['changeAddres']."' WHERE id = ".$this->user_id.";";
+					$this->pdo->query($query);
+					//+ сменить адрес в объекте и в сессии
+				}
+				if(isset($_FILES['changeAvatar'])) {
+					//если данные об аватарке есть, то удалять старые аватарки
+					if(!empty($this->avatar)) {
+						if(file_exists(__DIR__."/../../public/assets/images/avatars/". $this->avatar)) {
+							unlink(__DIR__."/../../public/assets/images/avatars/". $this->avatar);
+						}
+					}
+					//формируем новое имя файла
+					$new_path_file = __DIR__."/../../public/assets/images/avatars/".$this->user_id.".";
+							// user_id уникален, поэтому можем использовать в имени
+					//вытаскиваем расширение(могут быть точки в имени файла)
+					$old_file_name = $_FILES['changeAvatar']['name'];
+					$old_file_name = explode('.', $old_file_name);
+					 //метод array_pop вытаскивает последний элемент массива
+					// получаем расширение
+					$ext = array_pop($old_file_name);
+					//добавляем расширение к новому имени файла
+					$new_path_file .= $ext;
+					echo "путь ". $new_path_file."<br>";
+					//теперь перенесьти в нужную папку(из временной папки(путь к ней в том же $_FILES))
+					move_uploaded_file($_FILES['changeAvatar']['tmp_name'], $new_path_file);
+					//сохранить инфу в базу данных(можем хранить только расширение, так как имя это id)
+					$query = "UPDATE `user` SET avatar_type = '".$ext."' WHERE id = {$this->user_id};";
+					$this->pdo->query($query);
+					// в поле объекта записываем имя файла аватарки
+					$this->avatar = $this->user_id . '.' . $ext;
+					//обновить сессию
+					$_SESSION['user']['avatar'] = $this->avatar;
 
+
+				}
+				if(isset($_POST['changePass']) && $_POST['changePass'] !== '' && strlen($_POST['changePass']) > 3) {
+					// меняем пароль в базе
+				}
+			//сделать обновления - может быть здесь и так
+			//$this->login($_POST['login'],md5($_POST['password']));
+			}
 		}
-		//сделать обновления
-		//$this->login($_POST['login'],md5($_POST['password']));
+	}
+	//проверить(сравнить) введенный пароль в форме смены личных данных
+	private function confirmPass($pass_for_confirm) {
+		//echo "полученный пароль: ".$pass_for_confirm."<br>";
+		//преобразовать принятый пароль через md5
+		$pass_for_confirm = md5($pass_for_confirm);
+		//echo "пароль после md5: ".$pass_for_confirm."<br>";
+		//запросить из базы пароль пользователя (по id)
+		$query = "SELECT password FROM `user` WHERE id = ".$this->user_id.";";
+		//echo "запрос к базе: ".$query."<br>";
+		$pass = $this->pdo->query($query)->fetchAll();
+		// echo "результат запроса пароля из базы:<br>";
+		// echo "<pre>";
+		// var_dump($pass);
+		// echo "</pre>";
+		if($pass[0]['password'] === $pass_for_confirm)
+			return true;
+		else {
+			echo "<script>alert('не верный пароль');</script>";
+			return false;
+		}
 	}
 	
 	public function logout() {

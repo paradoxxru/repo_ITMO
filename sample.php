@@ -27,13 +27,13 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']
 <head></head>
 <body>
 <p>Запросы</p>
-<a href="/" class="ajax">Ajax с html в результате</a><br>
-<a href="/" class="ajax json">Ajax с json в результате</a>
+<a href="/sample.php" class="ajax">Ajax с html в результате</a><br>
+<a href="/sample.php" class="ajax json">Ajax с json в результате</a>
 <p>Результат:</p>
 <div class="result"></div>
 <p>Результат (pre):</p>
 <pre class="result-pre"></pre>
-<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js_for_sample/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function(){
         console.log('11111');
@@ -42,12 +42,14 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']
             // Определяем параметр, чтобы сообщить серверу, какой результат хотим получить
             var type = $(this).hasClass('json') ? 'json' : 'html';
             $.post('/sample.php', {message: "Этот запрос сделан через ajax", result_type: type}, function (data){
-//                console.log(data);
+                console.log('выводим data');
+                console.log(data);
                 // Преобразовать текстовый json результат в объект
                 if(type == "json") {
                     $('.result-pre').text(data);
                     data = JSON.parse(data);
                     $('.result').html(data.html);
+                    console.log('выводим data после парсинга');
                     console.log(data);
                 } else {
                     $('.result').html(data);

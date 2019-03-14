@@ -6,7 +6,7 @@
 		<?php
 			$avatar = $user->getAvatar();
 			if($avatar)
-				$src = $avatar;
+				$src = $user->getUserId().".".$avatar;
 			else
 				$src = 'no_foto2.png';
 		?>

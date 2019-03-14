@@ -773,6 +773,26 @@ header:after, footer:after {
 	height:  150px;
 	margin-right: 20px;
 }
+/*Личный кабинет - изменение личных данных пользователя*/
+.content-changeSettings {
+	display: flex;
+	flex-direction: column;
+}
+.settings {
+	margin: 20px auto;
+}
+.content-changeSettings label {
+	display: inline-block;
+	min-width: 194px;
+	text-align: end;
+	padding-right: 10px;
+}
+.settings div {
+	margin:10px 0;
+}
+.settings .user-img, .submit_change {
+	text-align: center;
+}
 
 			/* - Адаптивность - */
 @media (min-width: 320px) and (max-width: 767px) {

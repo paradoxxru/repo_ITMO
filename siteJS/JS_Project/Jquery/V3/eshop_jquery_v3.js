@@ -86,7 +86,7 @@ $(document).ready(function(event) {
 			//обработка всех кликов по элементам с классом do-action
 	$(document).on('click','.do-action[data-action=show_basket]', showBasket); // то есть при клике на
 	// элемент с классом do-action и который иимеет атрибут data-action равный show_basket запустится
-	// ф-ция showBasket. В этой ф-ции слик будет доступен по this
+	// ф-ция showBasket. В этой ф-ции клик будет доступен по this
 	$(document).on('click','.do-action[data-action=filter]', filterBy);
 	$(document).on('click','.do-action[data-action=put_in_basket]', putInBasket);
 	$(document).on('click','.do-action[data-action=show_one_item]', showOneItem);
