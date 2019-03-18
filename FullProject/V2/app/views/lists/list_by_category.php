@@ -12,10 +12,10 @@ foreach ($cat as $key => $value) {
 	// echo "<li>
 	// 		<a href='/index.php?q=filter&actionfilter=filter_category&datacategory="
 	// 		 .$key."' data-category='".$key."'>".$key."</a>
-	// 		<span class='badge'>".$cat[$key] ."</span></li>";
+	// 		<span>".$cat[$key] ."</span></li>";
 		echo "<li>
 			<a href='/index.php?q=filter&datafilter=category&filtertype=equal&filtervalue=".$key."'>".$key."</a>
-			<span class='badge'>".$cat[$key] ."</span>
+			<span>".$cat[$key] ."</span>
 			</li>";
         }
 ?>

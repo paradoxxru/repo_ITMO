@@ -21,11 +21,11 @@
 		    <ul class="filter__cost">
 		        <li>
 					<a href="/index.php?q=filter&datafilter=cost&filtertype=less&filtervalue=5000" data-price="less-5000">До 5 000р</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_less;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_cost_less;?></span>
 				</li>
 				<li>
 					<a href="/index.php?q=filter&datafilter=cost&filtertype=more&filtervalue=5000" data-price="more-5000">От 5 000р</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_cost_more;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_cost_more;?></span>
 				</li>
 		    </ul>
 		</li>
@@ -37,11 +37,11 @@
 		    <ul class="filter_weight">
 		        <li>
 					<a href="/index.php?q=filter&datafilter=weight&filtertype=less&filtervalue=5000" data-price="less-5000">До 5 кг</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_weight_less;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_weight_less;?></span>
 				</li>
 				<li>
 					<a href="/index.php?q=filter&datafilter=weight&filtertype=more&filtervalue=5000" data-price="more-5000">От 5 кг</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_weight_more;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_weight_more;?></span>
 				</li>
 		    </ul>
 		</li>
@@ -54,12 +54,12 @@
 		        <li>
 					<a href="/index.php?q=filter&datafilter=vogue&filtertype=less&filtervalue=5" data-price="less-5000">До 5
 					</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_vogue_less;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_vogue_less;?></span>
 				</li>
 				<li>
 					<a href="/index.php?q=filter&datafilter=vogue&filtertype=more&filtervalue=5" data-price="more-5000">От 5
 					</a>
-					<span class="badge"><?php echo \app\dataio\ClistsBy::$count_vogue_more;?></span>
+					<span><?php echo \app\dataio\ClistsBy::$count_vogue_more;?></span>
 				</li>
 		    </ul>
 		</li>

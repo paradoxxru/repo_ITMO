@@ -14,7 +14,8 @@ else {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+	<!--<meta charset="UTF-8">-->
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type"> 
 	<title>ESHOP</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous"> 
@@ -36,6 +37,15 @@ else {
 			<?php
 				//подключение слайдера
 				include('../app/views/slider/slider.php');
+			?>
+		</div>
+	</section>
+	<!-- секция поиска по запросу пользователя -->
+	<section>
+		<div class="wrapper">
+			<?php
+				//подключение секции поиска
+				include('../app/views/search_section/search_section.php');
 			?>
 		</div>
 	</section>

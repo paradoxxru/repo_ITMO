@@ -39,6 +39,15 @@ else {
 			?>
 		</div>
 	</section>
+	<!-- секция поиска по запросу пользователя -->
+	<section>
+		<div class="wrapper">
+			<?php
+				//подключение секции поиска
+				include('../app/views/search_section/search_section.php');
+			?>
+		</div>
+	</section>
 	<section>
 			<main>
 				<div class="wrapper row">
@@ -99,7 +108,6 @@ else {
 			//подключаем footer
 			include('../app/views/footer/footer.php');
 		?>
-		<?php echo "md5(123): ".md5('123'); ;?>
 	</div>
 	<!-- модальное окно - Входа и Регистрации-->
 	<div class="overlay" id="entrance">

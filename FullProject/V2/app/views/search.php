@@ -12,10 +12,9 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']
 else {
 ?>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-	<!--<meta charset="UTF-8">-->
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type"> 
+	<meta charset="UTF-8">
 	<title>ESHOP</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous"> 
@@ -67,27 +66,71 @@ else {
 								?>
 							</section>
 							<section class="content-section">
-								<h1>Фильтр по <?php echo \app\dataio\ClistsBy::getFilterName();?> </h1>
-    							<div class="filterby">
-									<?php
-										// echo "массив всех товаров: <br>";
-										// echo "<pre>";
-										// var_dump($arr_goods);
-										// echo "</pre>";
-										foreach ($new_goods as $id => $item) {
-											if($item['count'] == 0) {
-												$item['class_filterby_item'] = "filterby__item opacity";
-												$item['class_for_a'] = 'do-action display_none';
-											} else {
-												$item['class_filterby_item'] = "filterby__item";
-												$item['class_for_a'] = 'do-action';
-											}
-
-								            $product = new \app\product\CProduct();
-								            $product->fromArray($item); //заполняем значениями
-								            $product->render('filter_page'); //выводим
-								        }
-									?>
+								<h1>Результаты поиска по запросу: "<?php echo $request_user ;?>"</h1>
+    							<div class="search_results">
+    								<h2>Совпадения в названиях товаров:
+    									<i> (<?php echo count($search_by_name) ;?>)</i>
+    								</h2>
+    								<div class="search_results_byname">
+    									<?php if(count($search_by_name) > 0) { ?>
+    									<table class='table_result_byname'>
+											<tr>
+												<th>Вид</th>
+												<th>Название</th>
+												<th>Описание</th>
+												<th>Наличие</th>
+												<th>Цена</th>
+											</tr>
+    										<?php
+	    										foreach ($search_by_name as $key => $item) {
+	    											//искать совпадение в строке, менять строку, перезаписывать элемент
+	    											$up = mb_strtoupper($request_user, 'utf-8');
+	    											$replace = '<b class="deficit">'.$up.'</b>';
+	    											$new_name = preg_replace("/$request_user/ui", 
+	    																		$replace, 
+	    																		$item['name']);
+	    											$item['name'] = $new_name;
+	    											$product = new \app\product\CProduct();
+										            $product->fromArray($item); //заполняем значениями
+										            $product->render('search_item'); //выводим
+	    										}
+    										?>
+    									</table>
+    									<?php
+    									}
+    									?>
+    								</div>
+									<h2>Совпадения в описаниях товаров:
+    									<i> (<?php echo count($search_by_descrip) ;?>)</i>
+    								</h2>
+									<div class="search_results_bydescrip">
+										<?php if(count($search_by_descrip) > 0) { ?>
+										<table class='table_result_byname'>
+											<tr>
+												<th>Вид</th>
+												<th>Название</th>
+												<th>Описание</th>
+												<th>Наличие</th>
+												<th>Цена</th>
+											</tr>
+    										<?php
+	    										foreach ($search_by_descrip as $key => $item) {
+	    											$up = mb_strtoupper($request_user, 'utf-8');
+	    											$replace = '<b class="deficit">'.$up.'</b>';
+	    											$new_descr = preg_replace("/$request_user/ui", 
+	    																		$replace, 
+	    																		$item['description']);
+	    											$item['description'] = $new_descr;
+	    											$product = new \app\product\CProduct();
+										            $product->fromArray($item); //заполняем значениями
+										            $product->render('search_item'); //выводим
+	    										}
+    										?>
+    									</table>
+    									<?php
+    									}
+    									?>
+									</div>
     							</div>	
 							</section>
 						</div><!--end "flex-column"-->

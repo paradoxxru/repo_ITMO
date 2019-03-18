@@ -35,7 +35,6 @@ class CUser {
 			if(isset($_POST['login']) && isset($_POST['password'])) {
 				$this->login($_POST['login'], $_POST['password']);
 			}
-
 		}
 	}
 	// проверка авторизован ли пользователь
@@ -70,7 +69,6 @@ class CUser {
 			$this->user_phone = $_SESSION['user']['phone'];
 			$this->user_mail = $_SESSION['user']['mail'];
 			$this->avatar = $_SESSION['user']['avatar'];
-			// по запросу из базы
 			return true;
 		}
 		return false;
@@ -81,7 +79,7 @@ class CUser {
 		$query = "SELECT  * FROM `user` WHERE login = :login AND password = :password;";
 		// :login - то есть будет подставлена переменная
 
-		//передаем запрос, параметры(лог и пасс) и получаем массив(нумерованный + ассоц)
+		//передаем запрос, параметры(лог и пасс) и получим массив(нумерованный + ассоц)
 		$password = md5($password);
 		$resalt = $this->pdo->prepare($query); // подготовка запроса
 		$resalt->bindParam('login', $login); // передаем первый параметр
@@ -98,7 +96,9 @@ class CUser {
 			$this->user_mail = $resalt[0]['email'];
 			$this->user_phone = $resalt[0]['phone'];
 			$this->user_addres = $resalt[0]['addres'];
-			$this->avatar = $this->user_id .".". $resalt[0]['avatar_type']; //имя файла аватарки
+			if(isset($resalt[0]['avatar_type'])) {
+				$this->avatar = $this->user_id .".". $resalt[0]['avatar_type']; //имя файла аватарки
+			}
 			//сформируем токен
 			$this->token = md5($login . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 			//сохраним так же в СЕССИЮ
@@ -112,37 +112,38 @@ class CUser {
 					'mail' => $this->user_mail,
 					'avatar' => $this->avatar
 			];
-		}
+		} 
+		// else {
+		// 	print("<script language=javascript>window.alert('не верные данные');</script>");
+		// }
 		
 	}
 	// регистрация
 	public function registration() {
-		$query = "INSERT INTO `user` VALUES (NULL,'".$_POST['login']."','"
-													.md5($_POST['password'])."','"
-													.$_POST['email']."','"
-													.$_POST['phone']."','"
-													.$_POST['name']."','"
-													.$_POST['addres']."',
-													NULL);"; // полледнее поле это аватарка(ее расширенине)
-		// echo "pзапрос - добавление пользователя<br>";
-		// echo $query."<br>";
-		$this->pdo->query($query); //добавляем пользователя в базу `user`
-		// + по запросу из базы заполнить поля объекта и + сохранить в сесию
-		// по сути это тоже самое что и login($login,$password)
-		$this->login($_POST['login'],md5($_POST['password']));
+		//проверить что логина в базе нет
+		$query = "SELECT * FROM `user` WHERE login='".$_POST['login']."';";
+		$result = $this->pdo->query($query)->fetchAll();
+		//если такого логина нет, то можем регистрировать
+		if(count($result) == 0 ) {
+			$query = "INSERT INTO `user` VALUES (NULL,'".$_POST['login']."','"
+														.md5($_POST['password'])."','"
+														.$_POST['email']."','"
+														.$_POST['phone']."','"
+														.$_POST['name']."','"
+														.$_POST['addres']."',
+														NULL);"; // полледнее поле это аватарка(ее расширенине)
+			// echo "pзапрос - добавление пользователя<br>";
+			// echo $query."<br>";
+			$this->pdo->query($query); //добавляем пользователя в базу `user`
+			// + по запросу из базы заполнить поля объекта и + сохранить в сесию
+			// по сути это тоже самое что и login($login,$password)
+			$this->login($_POST['login'],md5($_POST['password']));
+		} else {
+			print("<script language=javascript>window.alert('такой логин уже есть');</script>");
+		}
 	}
 	//смена личных данных пользователя
 	public function changeSettings() {
-
-		// echo "массив post<br>";
-		// echo "<pre>";
-		// var_dump($_POST);
-		// echo "</pre>";
-
-		// echo "<br>массив files <br>";
-		// echo "<pre>";
-		// var_dump($_FILES);
-		// echo "</pre>";
 		if(isset($_POST['confirmPass']) && $_POST['confirmPass'] !== "" && $this->confirmPass($_POST['confirmPass'])) {
 			if(isset($_POST['repeatConfirmPass']) && $this->confirmPass($_POST['repeatConfirmPass'])) {
 				if(isset($_POST['changeLogin']) && $_POST['changeLogin'] !== $this->getLogin()) {
@@ -230,14 +231,8 @@ class CUser {
 					//echo $query."<br>";
 					$this->pdo->query($query);
 				}
-			//сделать обновления - может быть здесь и так
-			//$this->login($_POST['login'],md5($_POST['password']));
 			}
 		}
-		// echo "массив session<br>";
-		// echo "<pre>";
-		// var_dump($_SESSION);
-		// echo "</pre>";
 	}
 	//проверить(сравнить) введенный пароль в форме смены личных данных
 	private function confirmPass($pass_for_confirm) {

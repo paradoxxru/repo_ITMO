@@ -13,7 +13,8 @@ class CRouter
 			'sortby' => "CSortController",
 			'filter' => "CFilterController",
 			'cabinet' => "CCabinetController",
-			'order' => "COrderController"
+			'order' => "COrderController",
+			'search_page' =>"CSearchController"
 		]; // убрать entrance
 		
 		if(isset($params['q']) && isset($routes[$params['q']])) {

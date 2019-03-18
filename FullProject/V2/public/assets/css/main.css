@@ -16,6 +16,9 @@ a {
 }
 body {
 	font: 13px OpenSans, Tahoma, sans-serif;
+	/*background: url('../images/background/back.png');
+	background-repeat: no-repeat; 
+	background-size: cover;*/
 }
 				/*General end*/
 
@@ -32,7 +35,7 @@ body {
 	float:left;
 }
 .hdr-list li:last-child {
-	margin-left: 150px;
+	margin-left: 20px;
 }
 .hdr-list li a img {
 	width: 98px;
@@ -320,6 +323,41 @@ main img, .slider img {
 
 /*end slider*/
 
+/* панель поиска по запросу пользователя*/
+.search {
+	height: 50px;
+	background: #975825;
+	margin: 10px 0;
+	border-bottom: 1px dotted #fff;
+	border-top: 1px dotted #fff;
+	text-align: right;
+	line-height: 2rem;
+}
+.search_block {
+	margin: 10px;
+}
+.search_block span {
+	color: #fff;
+	margin-right: 10px;
+}
+.search_block button {
+	background: #fff;
+	color: #975825;
+	padding: 4px;
+	box-shadow: none;
+	border: 1px solid #fff;
+}
+.search_block button:hover {
+	background: #975825;
+	color: #fff;
+	border: 1px solid #fff;
+}
+.search_block input {
+	padding: 4px;
+}
+
+/* конец - панель поиска*/
+
 /*сетка на flex */
 .row{
 	display: flex;
@@ -464,6 +502,7 @@ main img, .slider img {
 .catalog__item a:hover, .filterby__item a:hover, .sortby__item a:hover, .goods__item a:hover {
 	background: #975825;
 	color: #fff;
+	padding: 0 2px;
 }
 .display_none {
 	display: none;
@@ -475,6 +514,10 @@ main img, .slider img {
     margin: 30px 0 0 20px;
     align-items: center;
 }
+.goods__item-description {
+	width: 50%;
+	text-align: center;
+}
 .content-section {
 	border-left: 1px dotted #975825;
 	min-height: 620px; 
@@ -482,7 +525,10 @@ main img, .slider img {
 }
 .content-section h1 {
 	text-align: center;
-	margin-bottom: 10px;
+	margin-bottom: 30px;
+}
+.content-section h1 i {
+	color: #975825;
 }
 /*корзина*/
 .cart {
@@ -752,15 +798,15 @@ header:after, footer:after {
 	border-bottom: 1px dotted #975825;
 	margin-bottom: 1rem;
 }
-.content_userHistory td img {
+.content_userHistory td img, .table_result_byname td img {
 	width: 30px;
 	height: 30px;
 }
-.table_histiry td {
+.table_histiry td, .table_result_byname td {
 	text-align: center;
 	padding: 0.5rem 0;
 }
-.history_descr {
+.history_descr, .search_descr {
 	width: 60%;
 }
 .sum_info td {
@@ -873,7 +919,19 @@ header:after, footer:after {
 	color: #fff;
 }
 
+/*страница поиска по запросу пользователя*/
+.search_results h2 {
+	margin: 10px;
+	color: #975825;
+}
+
 			/* - Адаптивность - */
+@media (min-width: 320px) and (max-width: 420px) {
+	.search_block span {
+		display: none;
+	}
+}
+
 @media (min-width: 320px) and (max-width: 767px) {
 body {
 	font-size: 10px;
@@ -1172,5 +1230,8 @@ body {
 @media (min-width: 906px) and (max-width: 1170px) {
 .allCatalog a {
 	padding: 0;
+}
+.hdr-list li:last-child {
+	margin-left: 20px;
 }
 }

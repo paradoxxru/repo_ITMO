@@ -1,7 +1,6 @@
 <?php
 namespace app\controllers;
 
-//require_once('../app/controllers/IPageController.php');
 class CFilterController implements IPageController
 {
 	public function setPermissions($permissions) { //разрешения
@@ -12,8 +11,12 @@ class CFilterController implements IPageController
 		$request = new \app\request\CRequestGoods($pdo);
 		//получаем массив всех товаров
 		$arr_goods = $request->getArray();
+		// echo "массив товаров<br>";
+		// echo "<pre>";
+		// var_dump($arr_goods);
+		// echo "</pre>";
 
-		//производим фильтрацию (НУЖНО ли проверять на "непустые значения $_GET")
+		//производим фильтрацию 
 		$type = $_GET['filtertype'];	//тип фильтра(равно, больше, меньше)
 		$value = $_GET['filtervalue'];	//значение с которым сравнивать(конкретная категория, стоимость от/до 1000)
 		$data = $_GET['datafilter'];	//значение по которому сравнивать(категория, стоимость)

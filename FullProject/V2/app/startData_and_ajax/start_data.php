@@ -13,7 +13,7 @@
         isset($_POST['send-message']) 
         && isset($_POST['emailField']) 
         && isset($_POST['username'])
-        && $_POST['send-message'] == 'send_message'
+        && $_POST['send-message'] == 'send message'
     ) {
         $userCart->sendMessageToSeller($_POST['message'], $_POST['emailField']);
     }
